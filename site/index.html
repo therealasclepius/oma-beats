@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#eae7dc" />
+    <meta
+      name="description"
+      content="Oma Beats is a standalone desktop sampler and beat sequencer. Chop samples, play 128 pads, shape built-in synths, and make something yours."
+    />
+    <meta property="og:title" content="Oma Beats — Make room for the beat." />
+    <meta
+      property="og:description"
+      content="A hands-on desktop sampler. Eight pad banks. Twelve synths. Your next idea."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://oma-beats.vercel.app/" />
+    <meta property="og:url" content="https://oma-beats.vercel.app/" />
+    <title>Oma Beats — Make room for the beat.</title>
+    <link rel="icon" href="./assets/mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./fonts.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./demo-engine.js" defer></script>
+    <script src="./site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="navigation wrap">
+      <a class="wordmark" href="#" aria-label="Oma Beats home"
+        ><svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M1 1h6v6H1zm8 0h6v6H9zm8 0h6v6h-6zM1 9h6v6H1zm8 0h6v6H9zm8 0h6v6h-6zM1 17h6v6H1zm8 0h6v6H9zm8 0h6v6h-6z"
+          /></svg
+        >oma<span>beats</span></a
+      >
+      <nav aria-label="Main">
+        <a href="#instrument">Try a beat</a><a href="#inside">The app</a
+        ><a class="nav-install" href="#install"
+          >Get Oma Beats
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 4v15m-6-6 6 6 6-6" /></svg
+        ></a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero wrap" aria-labelledby="title">
+        <h1 id="title">Make room<br />for the <em>beat.</em></h1>
+        <div class="hero-intro">
+          <p>
+            A hands-on desktop sampler and sequencer. <br />Chop a sample. Play it your way.
+            <br />Find the loop you can’t leave alone.
+          </p>
+          <a class="button primary" href="#install"
+            >Get the desktop app
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14m-6-6 6 6-6 6" /></svg></a
+          ><span class="availability">Linux · Windows · macOS</span>
+        </div>
+      </section>
+      <section class="instrument wrap" id="instrument" aria-labelledby="demo-heading">
+        <div class="instrument-shell">
+          <div class="instrument-top">
+            <div>
+              <h2 id="demo-heading">Take a little loop.</h2>
+              <p>Then make it yours. This is a playable browser demo.</p>
+            </div>
+            <div class="model-label" aria-hidden="true">OMA / PLAY</div>
+          </div>
+          <div class="transport">
+            <div class="transport-left">
+              <button id="play" class="play" disabled>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="m8 5 11 7-11 7z" /></svg
+                ><span>Play beat</span></button
+              ><label class="tempo"
+                >TEMPO
+                <span
+                  ><input
+                    id="tempo"
+                    type="number"
+                    min="60"
+                    max="180"
+                    value="86"
+                    aria-label="Tempo in beats per minute"
+                  />
+                  BPM</span
+                ></label
+              >
+            </div>
+            <div class="styles" role="group" aria-label="Demo style">
+              <button class="selected" data-style="trap" aria-pressed="true">
+                After hours <span>TRAP</span></button
+              ><button data-style="house" aria-pressed="false">
+                Side street <span>HOUSE</span></button
+              ><button data-style="mellow" aria-pressed="false">
+                Soft focus <span>MELLOW</span>
+              </button>
+            </div>
+          </div>
+          <div class="demo-body">
+            <div class="pad-section">
+              <div class="module-heading"><span>PLAY THE PADS</span><span>A / 01—16</span></div>
+              <div id="pads" class="pads"></div>
+              <p class="pad-hint">
+                Click a pad or use <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd>
+              </p>
+            </div>
+            <div class="sequencer-section">
+              <div class="module-heading">
+                <span>CHANGE THE PATTERN</span
+                ><button id="reset" class="text-button">Reset loop</button>
+              </div>
+              <p class="scroll-hint">
+                Swipe to see all 16 steps
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 12h18M7 8l-4 4 4 4m10-8 4 4-4 4" />
+                </svg>
+              </p>
+              <div
+                class="sequencer-scroll"
+                tabindex="0"
+                aria-label="16-step sequencer, scroll horizontally on small screens"
+              >
+                <div id="sequencer" class="sequencer"></div>
+              </div>
+              <div class="sequencer-footer">
+                <span id="demo-status" role="status">Ready when you are.</span
+                ><label class="volume"
+                  >Volume
+                  <input
+                    id="volume"
+                    aria-label="Demo volume"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="0.45"
+                /></label>
+              </div>
+            </div>
+          </div>
+          <div class="machine-foot">
+            <span><i class="status-dot"></i> ORIGINAL SYNTHESIZED SOUNDS</span
+            ><span>Click a step to add or remove a hit.</span><span>16 STEPS / 1 BAR</span>
+          </div>
+        </div>
+        <p class="demo-caption">
+          A taste of the workflow. <a href="#install">The desktop app is where you go deeper.</a
+          ><span>Your demo edits stay in this tab.</span>
+        </p>
+        <noscript
+          ><p>
+            Enable JavaScript to play the demo. You can still download the desktop app below.
+          </p></noscript
+        >
+      </section>
+      <section class="inside wrap" id="inside" aria-labelledby="inside-heading">
+        <div class="inside-heading">
+          <h2 id="inside-heading">Small window.<br /><em>Wide open.</em></h2>
+          <p>
+            From the first hit to the last little adjustment. Everything close enough to keep you in
+            the idea.
+          </p>
+        </div>
+        <div class="feature-list">
+          <article class="feature">
+            <div class="feature-title">
+              <h3>Find the good part.</h3>
+              <span>Sample & chop</span>
+            </div>
+            <p>
+              Drop in your audio. Find transients or place your own cuts. Zoom in, shape the attack,
+              reverse a slice, and put the pieces on your pads.
+            </p>
+            <div class="feature-mark waveform" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+              ><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </article>
+          <article class="feature">
+            <div class="feature-title">
+              <h3>Keep adding layers.</h3>
+              <span>128 pads · 8 banks</span>
+            </div>
+            <p>
+              Drums over here. Chops over there. Play banks together, or set a bank to mono when one
+              sound should cut the next. Undo is always close.
+            </p>
+            <div class="feature-mark bank-mark" aria-hidden="true">
+              <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span
+              ><span>G</span><span>H</span>
+            </div>
+          </article>
+          <article class="feature">
+            <div class="feature-title">
+              <h3>Give it a melody.</h3>
+              <span>12 built-in synths</span>
+            </div>
+            <p>
+              Start with a bass, lead, key, or pad. Choose your scale, turn the filter, and shape
+              the envelope. Load sixteen notes into a bank and play.
+            </p>
+            <div class="feature-mark keyboard-mark" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </article>
+        </div>
+        <div class="save-note">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 3h13l4 4v14H3V3zm4 0v6h8V3M7 21v-8h10v8" />
+          </svg>
+          <p>
+            <strong>Make it. Keep it. Come back to it.</strong> Autosave for the moment. Portable
+            projects for later. WAV export when it’s ready.
+          </p>
+          <a href="https://github.com/therealasclepius/oma-beats#make-a-beat"
+            >Read the guide
+            <svg class="inline-icon icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 18 18 6M7 6h11v11" /></svg
+          ></a>
+        </div>
+      </section>
+      <section class="install" id="install" aria-labelledby="install-heading">
+        <div class="wrap install-inner">
+          <div class="install-intro">
+            <h2 id="install-heading">Your next beat<br />starts <em>here.</em></h2>
+            <p>
+              Six drum kits. Twelve synths. Room for your own sounds.<br />Works offline. No account
+              needed.
+            </p>
+            <span class="release-label">OMA BEATS 0.2.0 · PREVIEW RELEASE</span>
+          </div>
+          <div class="install-options">
+            <div class="omarchy-install">
+              <div class="install-title">
+                <h3>At home on Omarchy.</h3>
+                <span>LINUX / x86_64</span>
+              </div>
+              <p>
+                Run this in your terminal. It installs the standalone app and adds it to your
+                launcher.
+              </p>
+              <div class="command">
+                <code id="install-command"
+                  >curl -fsSL https://oma-beats.vercel.app/install.sh | bash</code
+                ><button id="copy" aria-label="Copy Omarchy install command">
+                  Copy
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 8h12v13H8zM16 8V3H3v13h5" />
+                  </svg>
+                </button>
+              </div>
+              <div class="command-footer">
+                <a href="./install.sh">Inspect install script</a
+                ><span id="copy-status" role="status">No administrator password needed.</span>
+              </div>
+            </div>
+            <div class="downloads">
+              <h3>Or download your build.</h3>
+              <a
+                href="https://github.com/therealasclepius/oma-beats/releases/download/v0.2.0/Oma-Beats-0.2.0-linux-x86_64.AppImage"
+                ><span>Linux <small>x86_64 · AppImage</small></span
+                ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" /></svg></a
+              ><a
+                href="https://github.com/therealasclepius/oma-beats/releases/download/v0.2.0/Oma-Beats-0.2.0-win-x64.exe"
+                ><span>Windows <small>x64 · Installer</small></span
+                ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" /></svg></a
+              ><a
+                href="https://github.com/therealasclepius/oma-beats/releases/download/v0.2.0/Oma-Beats-0.2.0-mac-arm64.dmg"
+                ><span>macOS <small>Apple Silicon · DMG</small></span
+                ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" /></svg
+              ></a>
+              <p class="build-note">
+                Unsigned preview builds. Your system may show a security prompt.<br /><a
+                  href="https://github.com/therealasclepius/oma-beats/releases/tag/v0.2.0"
+                  >Release notes & checksums</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="questions wrap" aria-labelledby="questions-heading">
+        <h2 id="questions-heading">A few things<br />before you start.</h2>
+        <div class="answers">
+          <details>
+            <summary>
+              Is this a plugin or a standalone app?<svg
+                class="disclosure-icon icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <p>
+              Oma Beats is a standalone desktop app. You don’t need a DAW to use it. It doesn’t
+              currently run as a VST/AU plugin or host external plugins; the twelve synth
+              instruments are built in.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I bring my own sample packs?<svg
+                class="disclosure-icon icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <p>
+              Yes. Unzip your pack, then choose Browse packs → Import pack folder in the app. You
+              can also drag audio onto a pad. Splice and other third-party packs aren’t included;
+              download your sounds through your own account and follow their licenses.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I sample a YouTube clip?<svg
+                class="disclosure-icon icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <p>
+              The desktop app has an optional YouTube importer with clip boundaries and a direct
+              path to the chop editor. It requires yt-dlp and FFmpeg installed separately. Only
+              import audio you have permission to use.
+              <a href="https://github.com/therealasclepius/oma-beats#optional-youtube-importer"
+                >Read the setup guide.</a
+              >
+            </p>
+          </details>
+          <details>
+            <summary>
+              Where do my projects go?<svg
+                class="disclosure-icon icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <p>
+              Autosave and your imported library stay on your device. Save a portable .omabeats
+              project to keep a named backup with its audio included, or export a stereo WAV. The
+              website demo is separate and doesn’t save to the desktop app.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+    <footer class="footer wrap">
+      <a class="wordmark" href="#" aria-label="Oma Beats home"
+        >oma<span>beats</span><span class="footer-dot" aria-hidden="true"></span
+      ></a>
+      <p>Less between you and the beat.</p>
+      <a href="https://github.com/therealasclepius/oma-beats"
+        >Find it on GitHub
+        <svg class="inline-icon icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 18 18 6M7 6h11v11" /></svg
+      ></a>
+    </footer>
+  </body>
+</html>

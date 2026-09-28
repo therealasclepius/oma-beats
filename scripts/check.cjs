@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-for (const folder of ['app', 'desktop', 'scripts', 'test']) {
+for (const folder of ['app', 'desktop', 'scripts', 'site', 'test']) {
   for (const file of fs.readdirSync(folder)) {
     if (!/\.(c?js)$/.test(file)) continue;
     const result = spawnSync(process.execPath, ['--check', path.join(folder, file)], {

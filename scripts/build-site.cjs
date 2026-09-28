@@ -1,0 +1,11 @@
+'use strict';
+const fs = require('node:fs');
+const path = require('node:path');
+const root = path.resolve(__dirname, '..');
+const out = path.join(root, 'dist/site');
+fs.rmSync(out, { recursive: true, force: true });
+fs.mkdirSync(out, { recursive: true });
+fs.cpSync(path.join(root, 'site'), out, { recursive: true });
+fs.copyFileSync(path.join(root, 'install.sh'), path.join(out, 'install.sh'));
+fs.writeFileSync(path.join(out, '.nojekyll'), '');
+console.log('Built public website in dist/site (only site/ and install.sh).');

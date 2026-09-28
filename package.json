@@ -23,7 +23,8 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder --publish never",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "build:site": "node scripts/build-site.cjs"
   },
   "devDependencies": {
     "electron": "44.4.5",

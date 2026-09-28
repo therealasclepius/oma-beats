@@ -26,3 +26,12 @@ backups/
 *.deb
 *.dmg
 *.exe
+
+# Design review evidence and local-only skill state.
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/build/
+.impeccable/config.local.json
+
+.vercel/
+.vercel

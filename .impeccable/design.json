@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-28T23:08:27.247546+00:00",
+  "title": "Design System: Oma Beats",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0150 94.21)",
+          "oklch(26.43% 0.0150 94.21)",
+          "oklch(37.86% 0.0150 94.21)",
+          "oklch(49.29% 0.0150 94.21)",
+          "oklch(60.71% 0.0150 94.21)",
+          "oklch(72.14% 0.0150 94.21)",
+          "oklch(83.57% 0.0150 94.21)",
+          "oklch(95% 0.0150 94.21)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0165 148.76)",
+          "oklch(26.43% 0.0165 148.76)",
+          "oklch(37.86% 0.0165 148.76)",
+          "oklch(49.29% 0.0165 148.76)",
+          "oklch(60.71% 0.0165 148.76)",
+          "oklch(72.14% 0.0165 148.76)",
+          "oklch(83.57% 0.0165 148.76)",
+          "oklch(95% 0.0165 148.76)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.0298 127.03)",
+          "oklch(26.43% 0.0298 127.03)",
+          "oklch(37.86% 0.0298 127.03)",
+          "oklch(49.29% 0.0298 127.03)",
+          "oklch(60.71% 0.0298 127.03)",
+          "oklch(72.14% 0.0298 127.03)",
+          "oklch(83.57% 0.0298 127.03)",
+          "oklch(95% 0.0298 127.03)"
+        ]
+      },
+      "sage": {
+        "role": "secondary",
+        "displayName": "Sage",
+        "tonalRamp": [
+          "oklch(15% 0.0328 124.56)",
+          "oklch(26.43% 0.0328 124.56)",
+          "oklch(37.86% 0.0328 124.56)",
+          "oklch(49.29% 0.0328 124.56)",
+          "oklch(60.71% 0.0328 124.56)",
+          "oklch(72.14% 0.0328 124.56)",
+          "oklch(83.57% 0.0328 124.56)",
+          "oklch(95% 0.0328 124.56)"
+        ]
+      },
+      "orange": {
+        "role": "primary",
+        "displayName": "Orange",
+        "tonalRamp": [
+          "oklch(15% 0.1634 34.99)",
+          "oklch(26.43% 0.1634 34.99)",
+          "oklch(37.86% 0.1634 34.99)",
+          "oklch(49.29% 0.1634 34.99)",
+          "oklch(60.71% 0.1634 34.99)",
+          "oklch(72.14% 0.1634 34.99)",
+          "oklch(83.57% 0.1634 34.99)",
+          "oklch(95% 0.1634 34.99)"
+        ]
+      },
+      "bright": {
+        "role": "primary",
+        "displayName": "Bright",
+        "tonalRamp": [
+          "oklch(15% 0.1747 35.55)",
+          "oklch(26.43% 0.1747 35.55)",
+          "oklch(37.86% 0.1747 35.55)",
+          "oklch(49.29% 0.1747 35.55)",
+          "oklch(60.71% 0.1747 35.55)",
+          "oklch(72.14% 0.1747 35.55)",
+          "oklch(83.57% 0.1747 35.55)",
+          "oklch(95% 0.1747 35.55)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.0207 113.01)",
+          "oklch(26.43% 0.0207 113.01)",
+          "oklch(37.86% 0.0207 113.01)",
+          "oklch(49.29% 0.0207 113.01)",
+          "oklch(60.71% 0.0207 113.01)",
+          "oklch(72.14% 0.0207 113.01)",
+          "oklch(83.57% 0.0207 113.01)",
+          "oklch(95% 0.0207 113.01)"
+        ]
+      },
+      "dark": {
+        "role": "neutral",
+        "displayName": "Dark",
+        "tonalRamp": [
+          "oklch(15% 0.0185 154.66)",
+          "oklch(26.43% 0.0185 154.66)",
+          "oklch(37.86% 0.0185 154.66)",
+          "oklch(49.29% 0.0185 154.66)",
+          "oklch(60.71% 0.0185 154.66)",
+          "oklch(72.14% 0.0185 154.66)",
+          "oklch(83.57% 0.0185 154.66)",
+          "oklch(95% 0.0185 154.66)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Primary Hover",
+        "tonalRamp": [
+          "oklch(15% 0.1392 34.94)",
+          "oklch(26.43% 0.1392 34.94)",
+          "oklch(37.86% 0.1392 34.94)",
+          "oklch(49.29% 0.1392 34.94)",
+          "oklch(60.71% 0.1392 34.94)",
+          "oklch(72.14% 0.1392 34.94)",
+          "oklch(83.57% 0.1392 34.94)",
+          "oklch(95% 0.1392 34.94)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "pad": {
+        "role": "secondary",
+        "displayName": "Pad",
+        "tonalRamp": [
+          "oklch(15% 0.0208 121.87)",
+          "oklch(26.43% 0.0208 121.87)",
+          "oklch(37.86% 0.0208 121.87)",
+          "oklch(49.29% 0.0208 121.87)",
+          "oklch(60.71% 0.0208 121.87)",
+          "oklch(72.14% 0.0208 121.87)",
+          "oklch(83.57% 0.0208 121.87)",
+          "oklch(95% 0.0208 121.87)"
+        ]
+      },
+      "step": {
+        "role": "secondary",
+        "displayName": "Step",
+        "tonalRamp": [
+          "oklch(15% 0.0426 127.08)",
+          "oklch(26.43% 0.0426 127.08)",
+          "oklch(37.86% 0.0426 127.08)",
+          "oklch(49.29% 0.0426 127.08)",
+          "oklch(60.71% 0.0426 127.08)",
+          "oklch(72.14% 0.0426 127.08)",
+          "oklch(83.57% 0.0426 127.08)",
+          "oklch(95% 0.0426 127.08)"
+        ]
+      },
+      "step-on": {
+        "role": "secondary",
+        "displayName": "Step On",
+        "tonalRamp": [
+          "oklch(15% 0.0509 133.99)",
+          "oklch(26.43% 0.0509 133.99)",
+          "oklch(37.86% 0.0509 133.99)",
+          "oklch(49.29% 0.0509 133.99)",
+          "oklch(60.71% 0.0509 133.99)",
+          "oklch(72.14% 0.0509 133.99)",
+          "oklch(83.57% 0.0509 133.99)",
+          "oklch(95% 0.0509 133.99)"
+        ]
+      },
+      "style-selected": {
+        "role": "secondary",
+        "displayName": "Style Selected",
+        "tonalRamp": [
+          "oklch(15% 0.0266 123.46)",
+          "oklch(26.43% 0.0266 123.46)",
+          "oklch(37.86% 0.0266 123.46)",
+          "oklch(49.29% 0.0266 123.46)",
+          "oklch(60.71% 0.0266 123.46)",
+          "oklch(72.14% 0.0266 123.46)",
+          "oklch(83.57% 0.0266 123.46)",
+          "oklch(95% 0.0266 123.46)"
+        ]
+      },
+      "instrument-rule": {
+        "role": "neutral",
+        "displayName": "Instrument Rule",
+        "tonalRamp": [
+          "oklch(15% 0.0361 127.41)",
+          "oklch(26.43% 0.0361 127.41)",
+          "oklch(37.86% 0.0361 127.41)",
+          "oklch(49.29% 0.0361 127.41)",
+          "oklch(60.71% 0.0361 127.41)",
+          "oklch(72.14% 0.0361 127.41)",
+          "oklch(83.57% 0.0361 127.41)",
+          "oklch(95% 0.0361 127.41)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Uppercase website hero; see responsive overrides in Layout and Typography."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Editorial section headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Feature row headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Feature explanatory prose."
+      },
+      "intro": {
+        "displayName": "Intro",
+        "purpose": "Hero introductory copy."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Functional instrument group labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "instrument",
+        "value": "0 8px 24px #29342218, inset 0 -6px 0 #8b987e",
+        "purpose": "Tactile instrument casing."
+      },
+      {
+        "name": "pad",
+        "value": "0 3px 4px #46523924, inset 0 -3px 0 #acb69f",
+        "purpose": "Shallow playable pad depth."
+      },
+      {
+        "name": "step-on",
+        "value": "inset 0 -3px 0 #36492b",
+        "purpose": "Enabled sequence step."
+      }
+    ],
+    "motion": [
+      {
+        "name": "primary-background",
+        "value": "background 0.18s",
+        "purpose": "Primary action hover."
+      },
+      {
+        "name": "pad-response",
+        "value": "background 0.08s, transform 0.08s",
+        "purpose": "Pad sounding state; hit displacement 2px."
+      },
+      {
+        "name": "step-response",
+        "value": "background 0.08s",
+        "purpose": "Sequence state feedback."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none !important; transition: none !important; scroll-behavior: auto;",
+        "purpose": "Disable interpolation and pad transform; retain instantaneous state feedback."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-min",
+        "value": "1500px"
+      },
+      {
+        "name": "compact-max",
+        "value": "1100px"
+      },
+      {
+        "name": "tablet-max",
+        "value": "850px"
+      },
+      {
+        "name": "mobile-max",
+        "value": "560px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "description": "Website installation action.",
+      "html": "<a class=\"ds-primary\" href=\"#install\">Get the desktop app<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-primary{font-family:Barlow,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:34px;padding:17px 24px;font-weight:600;font-size:16px;text-decoration:none;border-radius:5px;background:var(--orange,#b73d1e);color:#fff;transition:background .18s}.ds-primary:hover{background:#963219}.ds-primary:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Play transport",
+      "kind": "button",
+      "description": "Resting playback control; aria-pressed represents playback state.",
+      "html": "<button class=\"ds-play\" aria-pressed=\"false\"><svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"m8 5 11 7-11 7z\"/></svg>Play beat</button>",
+      "css": ".ds-play{font-family:Barlow,sans-serif;background:var(--ink,#2c342d);color:var(--paper,#eae7dc);border:0;padding:15px 18px;display:flex;align-items:center;gap:10px;border-radius:5px;font-weight:600;min-width:142px;justify-content:center;cursor:pointer}.ds-play:hover{background:#414b3a}.ds-play[aria-pressed=\"true\"]{background:var(--orange,#b73d1e);color:#fff}.ds-play:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}.ds-play:disabled{opacity:.6;cursor:wait}",
+      "refersTo": "button-play"
+    },
+    {
+      "name": "Demo style",
+      "kind": "chip",
+      "description": "A selected demo composition with its genre.",
+      "html": "<button class=\"ds-style\" aria-pressed=\"true\">After hours<span>TRAP</span></button>",
+      "css": ".ds-style{font-family:Barlow,sans-serif;border:1px solid transparent;background:transparent;color:var(--ink,#2c342d);border-radius:4px;padding:9px 15px;text-align:left;font-weight:600;font-size:14px;cursor:pointer}.ds-style span{display:block;font-size:12px;letter-spacing:.1em;margin-top:4px;color:#4d5945}.ds-style[aria-pressed=\"true\"]{border-color:#89977a;background:#d8dfcc}.ds-style:hover{background:#d3dbc7}.ds-style:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}",
+      "refersTo": "style-selector"
+    },
+    {
+      "name": "Tempo readout",
+      "kind": "input",
+      "description": "Editable tempo, 60\u2013180 BPM.",
+      "html": "<label class=\"ds-tempo\">TEMPO<span><input type=\"number\" min=\"60\" max=\"180\" value=\"86\" aria-label=\"Tempo in beats per minute\"> BPM</span></label>",
+      "css": ".ds-tempo{font-family:Barlow,sans-serif;color:var(--ink,#2c342d);font-size:12px;letter-spacing:.08em;font-weight:600;display:grid;gap:1px}.ds-tempo span{display:flex;align-items:baseline;font-size:12px}.ds-tempo input{font-family:Barlow,sans-serif;background:transparent;color:var(--ink,#2c342d);border:0;border-bottom:1px solid #94a184;font-size:29px;font-weight:600;width:67px;padding:0;appearance:textfield}.ds-tempo input::-webkit-inner-spin-button{appearance:none}.ds-tempo input:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}",
+      "refersTo": "tempo-input"
+    },
+    {
+      "name": "Website navigation",
+      "kind": "nav",
+      "description": "Editorial anchor navigation; smallest screens retain installation.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><a href=\"#instrument\">Try a beat</a><a href=\"#inside\">The app</a><a class=\"ds-nav-install\" href=\"#install\">Get Oma Beats<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"M12 4v15m-6-6 6 6 6-6\"/></svg></a></nav>",
+      "css": ".ds-nav{font-family:Barlow,sans-serif;display:flex;align-items:center;gap:34px;font-size:15px;font-weight:600;color:var(--ink,#2c342d)}.ds-nav a{color:inherit;text-decoration:none}.ds-nav a:hover{color:var(--orange,#b73d1e)}.ds-nav-install{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--ink,#2c342d);padding-block:10px}.ds-nav a:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(max-width:560px){.ds-nav{gap:0}.ds-nav>a:not(.ds-nav-install){display:none}.ds-nav-install{font-size:12px;gap:6px}}"
+    },
+    {
+      "name": "Instrument shell",
+      "kind": "card",
+      "description": "Sage equipment container; editorial cards do not inherit its depth.",
+      "html": "<section class=\"ds-instrument\"><h2>Take a little loop.</h2><p>Then make it yours. This is a playable browser demo.</p></section>",
+      "css": ".ds-instrument{font-family:Barlow,sans-serif;padding:30px 34px 20px;background:var(--sage,#c4cdb6);color:var(--ink,#2c342d);border-radius:14px;box-shadow:0 8px 24px #29342218,inset 0 -6px 0 #8b987e}.ds-instrument h2{font-size:29px;letter-spacing:-.025em;margin:0 0 6px;font-weight:600}.ds-instrument p{margin:0;font-size:14px;color:#44513d}@media(max-width:560px){.ds-instrument{padding:22px 17px 16px;border-radius:10px}.ds-instrument h2{font-size:25px}.ds-instrument p{font-size:13px;line-height:1.5;max-width:27ch}}",
+      "refersTo": "instrument"
+    },
+    {
+      "name": "Playable pad",
+      "kind": "button",
+      "description": "A sound pad; the hit class is driven by audio interaction.",
+      "html": "<button class=\"ds-pad\" aria-label=\"Play Kick\"><b>01</b><span>Kick</span></button>",
+      "css": ".ds-pad{font-family:Barlow,sans-serif;height:61px;position:relative;border:0;border-radius:5px;background:#dce1d2;color:var(--ink,#2c342d);box-shadow:0 3px 4px #46523924,inset 0 -3px 0 #acb69f;text-align:left;padding:9px 8px;display:flex;flex-direction:column;justify-content:space-between;transition:background .08s,transform .08s;cursor:pointer}.ds-pad b{font-size:12px;font-weight:500;color:#59654f}.ds-pad span{font-size:12px;font-weight:600}.ds-pad:hover{background:#e9edde}.ds-pad.ds-hit{background:var(--bright,#d6512e);color:#fff;transform:translateY(2px)}.ds-pad.ds-hit b{color:#fff}.ds-pad:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-pad{transition:none}.ds-pad.ds-hit{transform:none}}",
+      "refersTo": "pad"
+    },
+    {
+      "name": "Sequencer step",
+      "kind": "button",
+      "description": "Enabled step; current class represents the playback position.",
+      "html": "<button class=\"ds-step\" aria-label=\"Kick, step 1\" aria-pressed=\"true\"></button>",
+      "css": ".ds-step{height:40px;min-width:24px;border:0;background:#b0bda0;border-radius:3px;padding:0;position:relative;transition:background .08s;cursor:pointer}.ds-step:hover{background:#97aa84}.ds-step[aria-pressed=\"true\"]{background:#485a3d;box-shadow:inset 0 -3px 0 #36492b}.ds-step[aria-pressed=\"true\"]::after{content:\"\";width:4px;height:4px;background:#d8e1cb;border-radius:50%;position:absolute;top:7px;left:50%;transform:translateX(-50%)}.ds-step.ds-current{background:#d39c7b}.ds-step.ds-current[aria-pressed=\"true\"]{background:var(--bright,#d6512e);box-shadow:inset 0 -3px 0 #ab4225}.ds-step:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-step{transition:none}}",
+      "refersTo": "sequencer-step"
+    },
+    {
+      "name": "Copy command",
+      "kind": "button",
+      "description": "Small sage action on the dark installation field.",
+      "html": "<button class=\"ds-copy\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V4H4v12h4\"/></svg>Copy</button>",
+      "css": ".ds-copy{font-family:Barlow,sans-serif;background:var(--sage,#c4cdb6);color:var(--dark,#28322b);padding:10px 12px;border:0;border-radius:3px;display:flex;align-items:center;gap:9px;font-size:12px;cursor:pointer}.ds-copy:hover{background:#e0e8d6}.ds-copy:focus-visible{outline:3px solid #e89a70;outline-offset:5px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A record sleeve you can play",
+    "overview": "The website expresses Oma Beats as a record sleeve that opens into a working instrument: broad cream paper, a sage control surface, dark olive text, and orange actions. Condensed display lettering creates the expressive scale; quiet body typography leaves room for a dense, usable music interface. The shared brand commitment is the established cream, sage, and orange identity.\n\nThis record scopes its normative tokens and component rules to `site/index.html`, `site/style.css`, `site/fonts.css`, and `site/site.js`. The desktop app under `app/` is a separate incumbent surface: it retains Inter/Liberation Sans, monospace readouts, cream gradients, sage LCDs, and its own controls and depth. Do not treat the website's Barlow pairing, size ramp, or exact colors as a migration instruction for the app.",
+    "keyCharacteristics": [
+      "Cream editorial space around a sage instrument.",
+      "Condensed display type paired with readable Barlow controls.",
+      "Orange for emphasis, actions, and active playback.",
+      "Code-drawn music diagrams, SVG icons, and real interactive states."
+    ],
+    "rules": [
+      {
+        "name": "The Actuation Rule",
+        "body": "Use orange for a deliberate emphasis, action, or sounding state; keep the broad equipment surface sage.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Use Barlow Condensed for editorial headings and Barlow for instructions and controls. The instrument title uses Barlow, even though it is an h2.",
+        "section": "typography"
+      },
+      {
+        "name": "The Equipment Depth Rule",
+        "body": "Reserve tactile inset edges and soft shadows for the instrument and its playable parts; keep editorial rows flat.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve the cream, sage, and orange brand relationship across surfaces.",
+      "Do use the website tokens only within the website scope unless an app change is explicitly requested.",
+      "Do use inline SVG icons and code-drawn waveform, pad-bank, and keyboard diagrams.",
+      "Do preserve visible focus, accessible control names, and immediate reduced-motion playback indicators.",
+      "Do keep the small-screen sequencer horizontally scrollable inside its own track."
+    ],
+    "donts": [
+      "Don't introduce decorative kickers or eyebrows as a reusable heading pattern; compact labels belong to actual controls or product metadata.",
+      "Don't use orange as an all-over equipment background.",
+      "Don't replace working controls with a static mockup or trigger audio automatically.",
+      "Don't add raster decoration to this code-led website or substitute glyphs for its SVG icons.",
+      "Don't turn the website's exact first-page composition into a rule for every future surface."
+    ]
+  }
+}

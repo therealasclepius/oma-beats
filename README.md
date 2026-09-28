@@ -15,7 +15,15 @@ A standalone desktop sampler and beat sequencer. Build a drum pattern, chop a sa
 
 ## Run the desktop app
 
-Download a build from the repository's **Actions → Build and test → Artifacts**. Linux builds are portable AppImages, Windows builds are NSIS installers, and macOS builds are DMGs/ZIPs. Extract the downloaded artifact first.
+Download a build from [Releases](https://github.com/therealasclepius/oma-beats/releases/tag/v0.2.0), or visit the [Oma Beats website](https://oma-beats.vercel.app/) to try the browser demo. Linux builds are portable AppImages, Windows builds are NSIS installers, and macOS builds are DMGs/ZIPs.
+
+On Omarchy or another Linux x86_64 desktop, the user-local installer verifies the AppImage checksum and adds a launcher entry:
+
+```sh
+curl -fsSL https://oma-beats.vercel.app/install.sh | bash
+```
+
+[Inspect the installer](install.sh) before running it. No administrator password is needed. Projects and imported samples are preserved.
 
 On Linux, mark the AppImage executable in your file manager, then open it. From a terminal:
 
@@ -108,3 +116,16 @@ This is a standalone beatmaking app, not a VST3/AU plugin or a full multitrack D
 ## Source and dependency licenses
 
 The source is publicly viewable, but is not currently offered under an open-source license (`UNLICENSED`). Third-party dependencies retain their own licenses. Packaged Electron distributions include Electron/Chromium license notices. Imported samples retain their publishers' licenses and are deliberately excluded from source control and app packaging.
+
+## Public website
+
+`site/` contains a static, responsive product page and an original synthesized beat demo. It makes no network requests for audio, never autoplays, and stores demo edits only in memory. The desktop app is a separate download.
+
+```sh
+npm run build:site
+python -m http.server 18745 --bind 127.0.0.1 --directory dist/site
+```
+
+The Pages workflow publishes only `site/` and `install.sh`, excluding design briefs, private sounds, projects, and app data. Fonts are self-hosted Barlow and Barlow Condensed under their included SIL Open Font Licenses.
+
+The production website is hosted on Vercel with GitHub deployment integration. `vercel.json` builds `dist/site`; `.vercelignore` excludes desktop code, personal data, and local design evidence from CLI uploads. GitHub Pages is also available as a mirror.
