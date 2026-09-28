@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Oma Beats</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main class="machine">
+      <header>
+        <div class="brand">
+          <span class="mark">▦</span>
+          <div>
+            <h1>OMA <b>BEATS</b></h1>
+            <p>DESKTOP SAMPLER & SEQUENCER</p>
+          </div>
+        </div>
+        <div class="project">
+          <input
+            id="projectName"
+            aria-label="Project name"
+            value="Late night sketch"
+            maxlength="60"
+          /><span id="saveState">LOCAL SESSION</span>
+        </div>
+        <div class="file-actions">
+          <div class="history-controls">
+            <button id="undoEdit" title="Undo (Ctrl+Z)">↶ Undo</button
+            ><button id="redoEdit" title="Redo (Ctrl+Shift+Z)">↷ Redo</button>
+          </div>
+          <button id="newProject">New</button><button id="openProject">Open</button
+          ><button id="saveProject">Save project</button
+          ><button class="orange" id="export">Export WAV ↗</button>
+        </div>
+      </header>
+      <section class="transport">
+        <div class="transport-buttons">
+          <button id="play" class="play" title="Play / stop (Space)">▶ Play</button
+          ><button id="record" title="Record pad hits into the pattern">● Record</button>
+        </div>
+        <label class="number-control"
+          >TEMPO <input id="bpm" type="number" value="90" min="40" max="240" /><span
+            >BPM</span
+          ></label
+        ><label class="swing"
+          >SWING <input id="swing" type="range" min="0" max="60" value="0" /><output id="swingValue"
+            >0%</output
+          ></label
+        ><label class="scope-control"
+          >PLAY<select id="playScope" aria-label="Sequencer playback scope">
+            <option value="bank">This bank</option>
+            <option value="all">All banks</option>
+          </select></label
+        >
+        <div class="patterns">
+          <span>SEQUENCE</span>
+          <div id="patterns"></div>
+        </div>
+        <label class="master"
+          >VOLUME
+          <input
+            id="master"
+            aria-label="Master volume"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.7"
+        /></label>
+      </section>
+      <section class="source-strip">
+        <div><b>FIND YOUR NEXT FLIP</b><span>YouTube clip or local audio → chops → pads</span></div>
+        <button id="resumeWorkshop">Last sample</button
+        ><button id="browsePacks">Browse packs</button
+        ><button id="getSamples" class="orange">＋ Get samples</button>
+      </section>
+      <div class="workspace">
+        <section class="pad-section">
+          <div class="section-label">
+            <h2>PERFORMANCE PADS</h2>
+            <select id="kitSelect" aria-label="Drum kit"></select>
+          </div>
+          <div class="bank-selector">
+            <span>PAD BANK</span>
+            <div id="padBanks"></div>
+            <span>128 SLOTS</span>
+          </div>
+          <div id="pads" class="pads"></div>
+          <div class="pad-footer">
+            <span>Click or play with your keyboard</span><button id="demo">Load demo beat</button>
+          </div>
+        </section>
+        <section class="sample-section">
+          <div class="lcd">
+            <div class="lcd-top">
+              <span id="padNumber">PAD 01</span><span id="audioState">READY TO PLAY</span>
+            </div>
+            <h2 id="sampleName">Deep kick</h2>
+            <canvas id="waveform" aria-label="Selected sample waveform"></canvas>
+            <div class="lcd-bottom">
+              <span id="sampleInfo"></span><span id="position">01 / 16</span>
+            </div>
+          </div>
+          <div class="sample-actions">
+            <button id="loadSample">＋ Load sample</button><button id="chop">Chop → 16 pads</button
+            ><button id="reverse">⇄ Reverse</button>
+          </div>
+          <div class="parameters">
+            <label
+              >LEVEL <input id="gain" type="range" min="0" max="1.5" step="0.01" /><output
+                id="gainValue"
+              ></output></label
+            ><label
+              >PITCH <input id="pitch" type="range" min="-24" max="24" step="1" /><output
+                id="pitchValue"
+              ></output></label
+            ><label
+              >START <input id="start" type="range" min="0" max="0.99" step="0.001" /><output
+                id="startValue"
+              ></output></label
+            ><label
+              >END <input id="end" type="range" min="0.01" max="1" step="0.001" /><output
+                id="endValue"
+              ></output
+            ></label>
+          </div>
+          <div class="chop-play-modes">
+            <button id="choke" title="In this bank, each pad cuts off the previous sound">
+              Mono bank</button
+            ><button id="chromatic">Keyboard → pads</button>
+          </div>
+          <div class="sample-hint">
+            Drop audio onto a pad, then open the chop editor.<br />Find transients or place cues by
+            hand. Save project to keep your kit.
+          </div>
+        </section>
+      </div>
+      <section class="sequencer">
+        <div class="section-label">
+          <h2>STEP SEQUENCER <span id="patternLabel">/ A</span></h2>
+          <div><span>1 BAR · 16 STEPS</span><button id="clear">Clear pattern</button></div>
+        </div>
+        <div id="sequencer"></div>
+      </section>
+      <footer>
+        <span><i></i> MADE FOR YOUR DESKTOP</span
+        ><span>SPACE play / stop · Pads: 1234 / QWER / ASDF / ZXCV</span
+        ><button id="help">Quick guide</button>
+      </footer>
+    </main>
+    <div id="toast" role="status"></div>
+    <input id="sampleFile" type="file" accept="audio/*" hidden /><input
+      id="projectFile"
+      type="file"
+      accept=".omabeats,.json,application/json"
+      hidden
+    />
+    <dialog id="guide">
+      <h2>Your beat starts here.</h2>
+      <p>
+        Hit the pads or use the matching keyboard keys. Click the small squares to build a pattern,
+        then press Space to play.
+      </p>
+      <p>
+        <b>Record:</b> turn on Record and start playback. Your pad hits are quantized to the nearest
+        step. Switch between patterns A–D to make variations.
+      </p>
+      <p>
+        <b>Samples:</b> select a pad and load or drop an audio file. Adjust its start, end, pitch,
+        and level. The Chop editor finds transients, splits evenly, or lets you place and drag
+        markers. Choose where to assign your chops. Mono chops cuts off the preceding sound.
+        Keyboard → pads spreads one sound across 16 semitone pitches.
+      </p>
+      <p>
+        <b>Save:</b> your session saves locally, including samples. Save project creates a portable
+        backup including your loaded samples. Export WAV renders four repetitions of the selected
+        pattern with an effect-free stereo mix and a tail.
+      </p>
+      <p>Built-in sounds are synthesized locally. No account or internet needed.</p>
+      <button id="closeHelp" class="orange">Let’s make a beat</button>
+    </dialog>
+    <dialog id="chopEditor">
+      <div class="chop-header">
+        <div>
+          <span class="eyebrow">SAMPLE WORKSHOP</span>
+          <h2 id="chopTitle">Chop your sample</h2>
+        </div>
+        <span id="cueCount"></span><button id="closeChopper">Done / cancel</button>
+      </div>
+      <div class="chop-tools">
+        <button id="findChops" class="orange">✦ Find chops</button
+        ><button id="evenChops">Split evenly</button><button id="randomChops">Random</button
+        ><label
+          >MAX CUES
+          <select id="chopCount">
+            <option>4</option>
+            <option>8</option>
+            <option selected>16</option>
+          </select></label
+        ><label
+          >SENSITIVITY <input id="sensitivity" type="range" min="0" max="100" value="65" /></label
+        ><button id="undoChop">Undo</button>
+      </div>
+      <canvas id="chopOverview" aria-label="Full sample overview; click to navigate"></canvas>
+      <div class="chop-wave-wrap">
+        <canvas id="chopWave" aria-label="Sample chop waveform"></canvas>
+        <div class="wave-caption">
+          <span id="chopTime"></span
+          ><span>Click to seek · Shift-click / double-click to add · Drag markers</span>
+        </div>
+      </div>
+      <div class="chop-navigation">
+        <input
+          id="waveScroll"
+          aria-label="Scroll waveform"
+          type="range"
+          min="0"
+          max="0"
+          step="0.0001"
+          value="0"
+        /><button id="zoomOut" aria-label="Zoom out">−</button><span id="zoomReadout">1×</span
+        ><button id="zoomIn" aria-label="Zoom in">＋</button><button id="zoomFit">Fit</button>
+      </div>
+      <div id="cueList"></div>
+      <div class="cue-edit">
+        <button id="previewSample">▶ Preview source</button
+        ><button id="auditionCue">▶ Selected cue</button
+        ><button id="addCue">＋ Cue at cursor</button><button id="deleteCue">Delete cue</button
+        ><label>START (SEC)<input id="cueStart" type="number" step="0.001" /></label
+        ><label>END (SEC)<input id="cueEnd" type="number" step="0.001" /></label>
+      </div>
+      <div class="cue-sound">
+        <div>
+          <span id="cueControlTitle">CUE 01</span><button id="cueReset">Reset sound</button>
+        </div>
+        <div class="cue-knobs">
+          <label
+            >LEVEL<input id="cue-gain" type="range" min="0" max="1.5" step="0.01" /><output
+              id="cue-gain-value"
+            ></output></label
+          ><label
+            >PITCH<input id="cue-pitch" type="range" min="-24" max="24" step="1" /><output
+              id="cue-pitch-value"
+            ></output></label
+          ><label
+            >LOW-PASS FILTER<input
+              id="cue-cutoff"
+              type="range"
+              min="0"
+              max="100"
+              step="0.1" /><output id="cue-cutoff-value"></output></label
+          ><label
+            >ATTACK / FADE IN<input
+              id="cue-attack"
+              type="range"
+              min="0"
+              max="2"
+              step="0.001" /><output id="cue-attack-value"></output></label
+          ><label
+            >RELEASE / FADE OUT<input
+              id="cue-release"
+              type="range"
+              min="0"
+              max="5"
+              step="0.001" /><output id="cue-release-value"></output></label
+          ><button id="cueReverse">⇄ Reverse</button>
+        </div>
+      </div>
+      <div class="chop-bottom">
+        <p>
+          Space previews · M drops a cue while listening.<br />Edits stay in this workshop until you
+          apply them.
+        </p>
+        <label
+          >FIRST PAD IN THIS BANK
+          <select id="chopDestination"></select></label
+        ><button id="applyChops" class="orange">Apply chops to pads</button>
+      </div>
+    </dialog>
+    <dialog id="sampleImporter">
+      <div class="import-heading">
+        <div>
+          <span class="eyebrow">BRING YOUR OWN SOUND</span>
+          <h2>From a link to a beat.</h2>
+        </div>
+        <button id="closeImporter">Close</button>
+      </div>
+      <label class="url-label"
+        >YOUTUBE VIDEO<input
+          id="youtubeUrl"
+          type="url"
+          placeholder="Paste a YouTube video link"
+          autocomplete="off"
+      /></label>
+      <div class="import-range">
+        <label>START TIME<input id="youtubeStart" value="0:00" placeholder="1:24" /></label
+        ><label
+          >CLIP LENGTH (SECONDS)<input
+            id="youtubeDuration"
+            type="number"
+            min="1"
+            max="120"
+            value="30" /></label
+        ><button id="importYoutube" class="orange">Import → chop</button>
+      </div>
+      <p id="importStatus" role="status">
+        Choose up to 120 seconds. Your clip opens directly in the chop editor.
+      </p>
+      <div class="library-row">
+        <label
+          >SAVED SAMPLES<select id="sampleLibrary" aria-label="Saved samples">
+            <option value="">Loading saved samples…</option>
+          </select></label
+        ><button id="openLibrarySample">Open → chop</button>
+      </div>
+      <div id="localDrop">
+        <div>
+          <b>Already have a sample?</b>
+          <p>Drop an audio file here, or choose one from your computer.</p>
+        </div>
+        <button id="localImport">Load audio</button>
+      </div>
+    </dialog>
+    <input id="workshopFile" type="file" accept="audio/*" hidden />
+    <dialog id="packBrowser">
+      <div class="import-heading">
+        <div>
+          <span class="eyebrow">YOUR SOUND LIBRARY</span>
+          <h2>Drums, bass & inspiration.</h2>
+        </div>
+        <div>
+          <button id="importPackFolder" hidden>＋ Import pack folder</button
+          ><button id="closePackBrowser">Close</button>
+        </div>
+      </div>
+      <div class="pack-filters">
+        <input
+          id="packSearch"
+          type="search"
+          placeholder="Search kicks, hats, bass, pack names…"
+          aria-label="Search samples"
+        /><select id="packFilter" aria-label="Sample pack">
+          <option value="">All packs</option></select
+        ><select id="typeFilter" aria-label="Sample type">
+          <option value="">All sounds</option>
+        </select>
+      </div>
+      <div class="pack-target">
+        <label
+          >LOAD INTO
+          <select id="packTarget" aria-label="Destination pad"></select></label
+        ><span id="packPreviewStatus">Preview is off</span
+        ><button id="stopPackPreview">■ Stop preview</button>
+      </div>
+      <div id="packRows"></div>
+      <div class="pack-pagination">
+        <span id="packResultCount"></span><button id="packPrevious">← Previous</button
+        ><button id="packNext">Next →</button>
+      </div>
+      <p class="pack-credit">
+        <span id="packSource"></span>
+        <a id="packSourceLink" target="_blank" rel="noreferrer">Publisher & license ↗</a>
+      </p>
+    </dialog>
+    <script src="desktop.js"></script>
+    <script src="history.js"></script>
+    <script src="packs.js"></script>
+    <script src="importer.js"></script>
+    <script src="chop.js"></script>
+    <script src="kits.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+{
+  "name": "oma-beats",
+  "productName": "Oma Beats",
+  "version": "0.1.0",
+  "description": "A desktop sampler and beat sequencer with 128 pads and a hands-on chop editor.",
+  "main": "desktop/main.cjs",
+  "author": "therealasclepius",
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/therealasclepius/oma-beats.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev:web": "node scripts/dev-server.cjs",
+    "test": "node --test test/*.test.cjs",
+    "check": "node scripts/check.cjs",
+    "smoke": "electron . --smoke-test",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --publish never",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "electron": "44.4.5",
+    "electron-builder": "26.15.3",
+    "prettier": "3.9.9"
+  },
+  "build": {
+    "appId": "com.oma.beats",
+    "asar": true,
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "app/**",
+      "desktop/**",
+      "package.json",
+      "!app/packs/**",
+      "!**/*.map"
+    ],
+    "artifactName": "Oma-Beats-${version}-${os}-${arch}.${ext}",
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "AudioVideo",
+      "icon": "build/icon.png",
+      "executableName": "oma-beats",
+      "maintainer": "therealasclepius",
+      "desktop": {
+        "entry": {
+          "StartupWMClass": "oma-beats",
+          "Keywords": "music;sampler;sequencer;drums;"
+        }
+      },
+      "syncDesktopName": true
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.music",
+      "icon": "build/icon.png"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "desktopName": "oma-beats.desktop"
+}
