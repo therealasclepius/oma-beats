@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-28T23:19:11.257113+00:00",
+  "generatedAt": "2026-09-28T23:33:37.515664+00:00",
   "title": "Design System: Oma Beats",
   "extensions": {
     "colorMeta": {
@@ -143,76 +143,6 @@
           "oklch(83.57% 0.0000 89.88)",
           "oklch(95% 0.0000 89.88)"
         ]
-      },
-      "pad": {
-        "role": "secondary",
-        "displayName": "Pad",
-        "tonalRamp": [
-          "oklch(15% 0.0208 121.87)",
-          "oklch(26.43% 0.0208 121.87)",
-          "oklch(37.86% 0.0208 121.87)",
-          "oklch(49.29% 0.0208 121.87)",
-          "oklch(60.71% 0.0208 121.87)",
-          "oklch(72.14% 0.0208 121.87)",
-          "oklch(83.57% 0.0208 121.87)",
-          "oklch(95% 0.0208 121.87)"
-        ]
-      },
-      "step": {
-        "role": "secondary",
-        "displayName": "Step",
-        "tonalRamp": [
-          "oklch(15% 0.0426 127.08)",
-          "oklch(26.43% 0.0426 127.08)",
-          "oklch(37.86% 0.0426 127.08)",
-          "oklch(49.29% 0.0426 127.08)",
-          "oklch(60.71% 0.0426 127.08)",
-          "oklch(72.14% 0.0426 127.08)",
-          "oklch(83.57% 0.0426 127.08)",
-          "oklch(95% 0.0426 127.08)"
-        ]
-      },
-      "step-on": {
-        "role": "secondary",
-        "displayName": "Step On",
-        "tonalRamp": [
-          "oklch(15% 0.0509 133.99)",
-          "oklch(26.43% 0.0509 133.99)",
-          "oklch(37.86% 0.0509 133.99)",
-          "oklch(49.29% 0.0509 133.99)",
-          "oklch(60.71% 0.0509 133.99)",
-          "oklch(72.14% 0.0509 133.99)",
-          "oklch(83.57% 0.0509 133.99)",
-          "oklch(95% 0.0509 133.99)"
-        ]
-      },
-      "style-selected": {
-        "role": "secondary",
-        "displayName": "Style Selected",
-        "tonalRamp": [
-          "oklch(15% 0.0266 123.46)",
-          "oklch(26.43% 0.0266 123.46)",
-          "oklch(37.86% 0.0266 123.46)",
-          "oklch(49.29% 0.0266 123.46)",
-          "oklch(60.71% 0.0266 123.46)",
-          "oklch(72.14% 0.0266 123.46)",
-          "oklch(83.57% 0.0266 123.46)",
-          "oklch(95% 0.0266 123.46)"
-        ]
-      },
-      "instrument-rule": {
-        "role": "neutral",
-        "displayName": "Instrument Rule",
-        "tonalRamp": [
-          "oklch(15% 0.0361 127.41)",
-          "oklch(26.43% 0.0361 127.41)",
-          "oklch(37.86% 0.0361 127.41)",
-          "oklch(49.29% 0.0361 127.41)",
-          "oklch(60.71% 0.0361 127.41)",
-          "oklch(72.14% 0.0361 127.41)",
-          "oklch(83.57% 0.0361 127.41)",
-          "oklch(95% 0.0361 127.41)"
-        ]
       }
     },
     "typographyMeta": {
@@ -238,29 +168,14 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Functional instrument group labels."
+        "purpose": "Compact product metadata on the marketing surface."
       }
     },
     "shadows": [
       {
-        "name": "instrument",
-        "value": "0 8px 24px #29342218, inset 0 -6px 0 #8b987e",
-        "purpose": "Tactile instrument casing."
-      },
-      {
-        "name": "pad",
-        "value": "0 3px 4px #46523924, inset 0 -3px 0 #acb69f",
-        "purpose": "Shallow playable pad depth."
-      },
-      {
-        "name": "step-on",
-        "value": "inset 0 -3px 0 #36492b",
-        "purpose": "Enabled sequence step."
-      },
-      {
         "name": "app-preview",
         "value": "0 12px 36px #29342224",
-        "purpose": "Separates an authentic renderer capture from the paper page."
+        "purpose": "Separates the real playable renderer or its loading fallback from the paper page."
       }
     ],
     "motion": [
@@ -270,19 +185,9 @@
         "purpose": "Primary action hover."
       },
       {
-        "name": "pad-response",
-        "value": "background 0.08s, transform 0.08s",
-        "purpose": "Pad sounding state; hit displacement 2px."
-      },
-      {
-        "name": "step-response",
-        "value": "background 0.08s",
-        "purpose": "Sequence state feedback."
-      },
-      {
         "name": "reduced-motion",
         "value": "animation: none !important; transition: none !important; scroll-behavior: auto;",
-        "purpose": "Disable interpolation and pad transform; retain instantaneous state feedback."
+        "purpose": "Disable interpolation on the marketing page; embedded app behavior remains scoped to its own stylesheet."
       }
     ],
     "breakpoints": [
@@ -314,83 +219,43 @@
       "refersTo": "button-primary"
     },
     {
-      "name": "Play transport",
-      "kind": "button",
-      "description": "Resting playback control; aria-pressed represents playback state.",
-      "html": "<button class=\"ds-play\" aria-pressed=\"false\"><svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"m8 5 11 7-11 7z\"/></svg>Play beat</button>",
-      "css": ".ds-play{font-family:Barlow,sans-serif;background:var(--ink,#2c342d);color:var(--paper,#eae7dc);border:0;padding:15px 18px;display:flex;align-items:center;gap:10px;border-radius:5px;font-weight:600;min-width:142px;justify-content:center;cursor:pointer}.ds-play:hover{background:#414b3a}.ds-play[aria-pressed=\"true\"]{background:var(--orange,#b73d1e);color:#fff}.ds-play:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}.ds-play:disabled{opacity:.6;cursor:wait}",
-      "refersTo": "button-play"
-    },
-    {
-      "name": "Demo style",
-      "kind": "chip",
-      "description": "A selected demo composition with its genre.",
-      "html": "<button class=\"ds-style\" aria-pressed=\"true\">After hours<span>TRAP</span></button>",
-      "css": ".ds-style{font-family:Barlow,sans-serif;border:1px solid transparent;background:transparent;color:var(--ink,#2c342d);border-radius:4px;padding:9px 15px;text-align:left;font-weight:600;font-size:14px;cursor:pointer}.ds-style span{display:block;font-size:12px;letter-spacing:.1em;margin-top:4px;color:#4d5945}.ds-style[aria-pressed=\"true\"]{border-color:#89977a;background:#d8dfcc}.ds-style:hover{background:#d3dbc7}.ds-style:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}",
-      "refersTo": "style-selector"
-    },
-    {
-      "name": "Tempo readout",
-      "kind": "input",
-      "description": "Editable tempo, 60–180 BPM.",
-      "html": "<label class=\"ds-tempo\">TEMPO<span><input type=\"number\" min=\"60\" max=\"180\" value=\"86\" aria-label=\"Tempo in beats per minute\"> BPM</span></label>",
-      "css": ".ds-tempo{font-family:Barlow,sans-serif;color:var(--ink,#2c342d);font-size:12px;letter-spacing:.08em;font-weight:600;display:grid;gap:1px}.ds-tempo span{display:flex;align-items:baseline;font-size:12px}.ds-tempo input{font-family:Barlow,sans-serif;background:transparent;color:var(--ink,#2c342d);border:0;border-bottom:1px solid #94a184;font-size:29px;font-weight:600;width:67px;padding:0;appearance:textfield}.ds-tempo input::-webkit-inner-spin-button{appearance:none}.ds-tempo input:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}",
-      "refersTo": "tempo-input"
-    },
-    {
       "name": "Website navigation",
       "kind": "nav",
       "description": "Editorial anchor navigation; smallest screens retain the hero download link.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><a href=\"#instrument\">Try a beat</a><a href=\"#inside\">The app</a><a class=\"ds-nav-install\" href=\"#download\">Download<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"M12 4v15m-6-6 6 6 6-6\"/></svg></a></nav>",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><a href=\"#app-preview\">Try a beat</a><a href=\"#inside\">The app</a><a class=\"ds-nav-install\" href=\"#download\">Download<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"M12 4v15m-6-6 6 6 6-6\"/></svg></a></nav>",
       "css": ".ds-nav{font-family:Barlow,sans-serif;display:flex;align-items:center;gap:34px;font-size:15px;font-weight:600;color:var(--ink,#2c342d)}.ds-nav a{color:inherit;text-decoration:none}.ds-nav a:hover{color:var(--orange,#b73d1e)}.ds-nav-install{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--ink,#2c342d);padding-block:10px}.ds-nav a:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(max-width:560px){.ds-nav{gap:0}.ds-nav>a:not(.ds-nav-install){display:none}.ds-nav-install{font-size:12px;gap:6px}}"
-    },
-    {
-      "name": "Instrument shell",
-      "kind": "card",
-      "description": "Sage equipment container inside the optional browser demo; editorial cards do not inherit its depth.",
-      "html": "<section class=\"ds-instrument\"><h2>Take a little loop.</h2><p>Then make it yours. This is a playable browser demo.</p></section>",
-      "css": ".ds-instrument{font-family:Barlow,sans-serif;padding:30px 34px 20px;background:var(--sage,#c4cdb6);color:var(--ink,#2c342d);border-radius:14px;box-shadow:0 8px 24px #29342218,inset 0 -6px 0 #8b987e}.ds-instrument h2{font-size:29px;letter-spacing:-.025em;margin:0 0 6px;font-weight:600}.ds-instrument p{margin:0;font-size:14px;color:#44513d}@media(max-width:560px){.ds-instrument{padding:22px 17px 16px;border-radius:10px}.ds-instrument h2{font-size:25px}.ds-instrument p{font-size:13px;line-height:1.5;max-width:27ch}}",
-      "refersTo": "instrument"
-    },
-    {
-      "name": "Playable pad",
-      "kind": "button",
-      "description": "A sound pad; the hit class is driven by audio interaction.",
-      "html": "<button class=\"ds-pad\" aria-label=\"Play Kick\"><b>01</b><span>Kick</span></button>",
-      "css": ".ds-pad{font-family:Barlow,sans-serif;height:61px;position:relative;border:0;border-radius:5px;background:#dce1d2;color:var(--ink,#2c342d);box-shadow:0 3px 4px #46523924,inset 0 -3px 0 #acb69f;text-align:left;padding:9px 8px;display:flex;flex-direction:column;justify-content:space-between;transition:background .08s,transform .08s;cursor:pointer}.ds-pad b{font-size:12px;font-weight:500;color:#59654f}.ds-pad span{font-size:12px;font-weight:600}.ds-pad:hover{background:#e9edde}.ds-pad.ds-hit{background:var(--bright,#d6512e);color:#fff;transform:translateY(2px)}.ds-pad.ds-hit b{color:#fff}.ds-pad:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-pad{transition:none}.ds-pad.ds-hit{transform:none}}",
-      "refersTo": "pad"
-    },
-    {
-      "name": "Sequencer step",
-      "kind": "button",
-      "description": "Enabled step; current class represents the playback position.",
-      "html": "<button class=\"ds-step\" aria-label=\"Kick, step 1\" aria-pressed=\"true\"></button>",
-      "css": ".ds-step{height:40px;min-width:24px;border:0;background:#b0bda0;border-radius:3px;padding:0;position:relative;transition:background .08s;cursor:pointer}.ds-step:hover{background:#97aa84}.ds-step[aria-pressed=\"true\"]{background:#485a3d;box-shadow:inset 0 -3px 0 #36492b}.ds-step[aria-pressed=\"true\"]::after{content:\"\";width:4px;height:4px;background:#d8e1cb;border-radius:50%;position:absolute;top:7px;left:50%;transform:translateX(-50%)}.ds-step.ds-current{background:#d39c7b}.ds-step.ds-current[aria-pressed=\"true\"]{background:var(--bright,#d6512e);box-shadow:inset 0 -3px 0 #ab4225}.ds-step:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-step{transition:none}}",
-      "refersTo": "sequencer-step"
     },
     {
       "name": "Copy command",
       "kind": "button",
       "description": "Small sage action on the dark installation field.",
       "html": "<button class=\"ds-copy\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V4H4v12h4\"/></svg>Copy</button>",
-      "css": ".ds-copy{font-family:Barlow,sans-serif;background:var(--sage,#c4cdb6);color:var(--dark,#28322b);padding:10px 12px;border:0;border-radius:3px;display:flex;align-items:center;gap:9px;font-size:12px;cursor:pointer}.ds-copy:hover{background:#e0e8d6}.ds-copy:focus-visible{outline:3px solid #e89a70;outline-offset:5px}"
+      "css": ".ds-copy{font-family:Barlow,sans-serif;background:var(--sage,#c4cdb6);color:var(--dark,#28322b);padding:10px 12px;border:0;border-radius:3px;display:flex;align-items:center;gap:9px;font-size:12px;cursor:pointer}.ds-copy:hover{background:#e0e8d6}.ds-copy:focus-visible{outline:3px solid #e89a70;outline-offset:5px}",
+      "refersTo": "button-copy"
     },
     {
-      "name": "Optional browser demo disclosure",
+      "name": "Save note",
+      "kind": "card",
+      "description": "Flat sage supporting strip beneath editorial feature rows.",
+      "html": "<aside class=\"ds-note\"><p><strong>Make it. Keep it. Come back to it.</strong>Autosave for the moment. Portable projects for later. WAV export when it’s ready.</p><a href=\"https://github.com/therealasclepius/oma-beats#make-a-beat\">Read the guide</a></aside>",
+      "css": ".ds-note{font-family:Barlow,sans-serif;display:flex;gap:18px;align-items:center;background:#dadfce;color:var(--ink,#2c342d);padding:21px 25px;border-radius:5px}.ds-note p{margin:0;font-size:14px;line-height:1.6;max-width:70ch}.ds-note strong{display:block;font-weight:600}.ds-note a{color:inherit;font-size:13px;white-space:nowrap;margin-left:auto}.ds-note a:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(max-width:560px){.ds-note{display:block;padding:20px}.ds-note p{font-size:13px}.ds-note a{display:inline-block;margin-top:12px;font-size:12px}}"
+    },
+    {
+      "name": "FAQ disclosure",
       "kind": "custom",
-      "description": "Closed native disclosure for the secondary browser demo; the site stops playback when closed and gates shortcuts to its open, visible state.",
-      "html": "<details class=\"ds-demo-disclosure\"><summary><span>Try a quick beat in your browser</span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></summary><p>This is a playable browser demo.</p></details>",
-      "css": ".ds-demo-disclosure{font-family:Barlow,sans-serif;color:var(--ink,#2c342d);border-block:1px solid var(--line,#c5c7b8)}.ds-demo-disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 0;font-size:20px;font-weight:600;list-style:none;cursor:pointer}.ds-demo-disclosure>summary::-webkit-details-marker{display:none}.ds-demo-disclosure svg{color:var(--orange,#b73d1e)}.ds-demo-disclosure[open]>summary svg{transform:rotate(180deg)}.ds-demo-disclosure>summary:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(max-width:560px){.ds-demo-disclosure>summary{font-size:18px}}"
+      "description": "Native disclosure for supporting product answers; the live app itself remains directly visible.",
+      "html": "<details class=\"ds-faq\"><summary>Is this a plugin or a standalone app?<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></summary><p>Oma Beats is a standalone desktop app. You don’t need a DAW to use it.</p></details>",
+      "css": ".ds-faq{font-family:Barlow,sans-serif;color:var(--ink,#2c342d);border-bottom:1px solid var(--line,#c5c7b8);padding-bottom:24px}.ds-faq summary{position:relative;cursor:pointer;font-weight:600;font-size:17px;list-style:none;padding-right:28px}.ds-faq summary::-webkit-details-marker{display:none}.ds-faq svg{position:absolute;right:0;top:0;color:var(--orange,#b73d1e)}.ds-faq[open] svg{transform:rotate(180deg)}.ds-faq p{font-size:15px;line-height:1.7;color:var(--muted,#59614f);margin:16px 0 0;max-width:70ch}.ds-faq summary:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(max-width:560px){.ds-faq summary{font-size:16px}}"
     }
   ],
   "narrative": {
     "northStar": "A record sleeve you can play",
-    "overview": "The website expresses Oma Beats as a record sleeve around authentic product evidence and an optional working instrument: broad cream paper, a sage control surface, dark olive text, and orange actions. Condensed display lettering creates the expressive scale; quiet body typography leaves room for a dense, usable music interface. The shared brand commitment is the established cream, sage, and orange identity.\n\nThis record scopes its normative tokens and component rules to `site/index.html`, `site/style.css`, `site/fonts.css`, and `site/site.js`. The desktop app under `app/` is a separate incumbent surface: it retains Inter/Liberation Sans, monospace readouts, cream gradients, sage LCDs, and its own controls and depth. Do not treat the website's Barlow pairing, size ramp, or exact colors as a migration instruction for the app.",
+    "overview": "The website expresses Oma Beats as a record sleeve around the actual playable product interface: broad cream paper, a sage control surface, dark olive text, and orange actions. Condensed display lettering creates the expressive scale; quiet body typography leaves room for a dense, usable music interface. The shared brand commitment is the established cream, sage, and orange identity.\n\nThis record scopes its normative marketing tokens and component rules to `site/index.html`, `site/style.css`, `site/fonts.css`, and `site/site.js`. The playable preview embeds the real app renderer in an iframe at `/play/`, generated by `scripts/build-site.cjs` with browser-only integration in `site/browser-preview.js` and `site/browser-preview.css`. The app under `app/` remains a separate incumbent visual surface, including when embedded: it retains Inter/Liberation Sans, monospace readouts, cream gradients, sage LCDs, and its own controls and depth. Do not treat the website's Barlow pairing, size ramp, or exact colors as a migration instruction for the app.",
     "keyCharacteristics": [
       "Cream editorial space around a sage instrument.",
-      "Condensed display type paired with readable Barlow controls.",
+      "Condensed display type paired with readable Barlow marketing copy.",
       "Orange for emphasis, actions, and active playback.",
-      "Authentic app captures, code-drawn music diagrams, SVG icons, and real interactive states."
+      "The live app renderer, an authentic capture fallback, code-drawn music diagrams, and SVG marketing icons."
     ],
     "rules": [
       {
@@ -400,27 +265,27 @@
       },
       {
         "name": "The Two Voices Rule",
-        "body": "Use Barlow Condensed for editorial headings and Barlow for instructions and controls. The instrument title uses Barlow, even though it is an h2.",
+        "body": "Use Barlow Condensed for editorial headings and Barlow for marketing instructions and actions. Preserve the app’s own typography inside the embedded renderer.",
         "section": "typography"
       },
       {
         "name": "The Equipment Depth Rule",
-        "body": "Reserve tactile inset edges for the instrument and its playable parts; soft shadows may also separate an authentic app preview from the page. Keep editorial rows flat.",
+        "body": "Preserve the app’s own tactile depth inside the renderer; use the soft preview shadow at its page boundary. Keep editorial rows flat.",
         "section": "elevation"
       }
     ],
     "dos": [
       "Do preserve the cream, sage, and orange brand relationship across surfaces.",
       "Do use the website tokens only within the website scope unless an app change is explicitly requested.",
-      "Do use authentic renderer captures for product previews, with intrinsic proportions, descriptive alt text, and a full-size link.",
+      "Do use the real renderer for playable product previews, with an authentic loading/no-JavaScript capture and a full-size player link.",
       "Do use inline SVG icons and code-drawn waveform, pad-bank, and keyboard diagrams.",
-      "Do preserve visible focus, accessible control names, and immediate reduced-motion playback indicators.",
+      "Do preserve visible focus and accessible control names; keep marketing reduced-motion behavior and app behavior scoped to their respective stylesheets.",
       "Do keep the small-screen sequencer horizontally scrollable inside its own track."
     ],
     "donts": [
       "Don't introduce decorative kickers or eyebrows as a reusable heading pattern; compact labels belong to actual controls or product metadata.",
       "Don't use orange as an all-over equipment background.",
-      "Don't present a browser demonstration as the desktop interface, replace its working controls with a static mockup, or trigger audio automatically.",
+      "Don't replace the real renderer with a separately styled simplified demo, represent browser-only availability as native capability, or trigger audio automatically.",
       "Don't invent app UI in product imagery or substitute glyphs for the website’s SVG icons. Authentic app captures are supported.",
       "Don't turn the website's exact first-page composition into a rule for every future surface."
     ]
