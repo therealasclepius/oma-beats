@@ -99,4 +99,4 @@ This is a standalone beatmaking app, not a VST3/AU plugin or a full multitrack D
 
 ## Source and dependency licenses
 
-This private project is not currently offered under an open-source license (`UNLICENSED`). Third-party dependencies retain their own licenses. Packaged Electron distributions include Electron/Chromium license notices. Imported samples retain their publishers' licenses and are deliberately excluded from source control and app packaging.
+The source is publicly viewable, but is not currently offered under an open-source license (`UNLICENSED`). Third-party dependencies retain their own licenses. Packaged Electron distributions include Electron/Chromium license notices. Imported samples retain their publishers' licenses and are deliberately excluded from source control and app packaging.
