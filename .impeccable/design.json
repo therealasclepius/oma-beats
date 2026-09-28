@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-28T23:08:27.247546+00:00",
+  "generatedAt": "2026-09-28T23:19:11.257113+00:00",
   "title": "Design System: Oma Beats",
   "extensions": {
     "colorMeta": {
@@ -256,6 +256,11 @@
         "name": "step-on",
         "value": "inset 0 -3px 0 #36492b",
         "purpose": "Enabled sequence step."
+      },
+      {
+        "name": "app-preview",
+        "value": "0 12px 36px #29342224",
+        "purpose": "Separates an authentic renderer capture from the paper page."
       }
     ],
     "motion": [
@@ -303,8 +308,8 @@
     {
       "name": "Primary action",
       "kind": "button",
-      "description": "Website installation action.",
-      "html": "<a class=\"ds-primary\" href=\"#install\">Get the desktop app<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "description": "Direct release download action; platform and version are stated alongside it.",
+      "html": "<a class=\"ds-primary\" href=\"https://github.com/therealasclepius/oma-beats/releases/download/v0.2.0/Oma-Beats-0.2.0-linux-x86_64.AppImage\">Download Oma Beats<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
       "css": ".ds-primary{font-family:Barlow,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:34px;padding:17px 24px;font-weight:600;font-size:16px;text-decoration:none;border-radius:5px;background:var(--orange,#b73d1e);color:#fff;transition:background .18s}.ds-primary:hover{background:#963219}.ds-primary:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}",
       "refersTo": "button-primary"
     },
@@ -327,7 +332,7 @@
     {
       "name": "Tempo readout",
       "kind": "input",
-      "description": "Editable tempo, 60\u2013180 BPM.",
+      "description": "Editable tempo, 60–180 BPM.",
       "html": "<label class=\"ds-tempo\">TEMPO<span><input type=\"number\" min=\"60\" max=\"180\" value=\"86\" aria-label=\"Tempo in beats per minute\"> BPM</span></label>",
       "css": ".ds-tempo{font-family:Barlow,sans-serif;color:var(--ink,#2c342d);font-size:12px;letter-spacing:.08em;font-weight:600;display:grid;gap:1px}.ds-tempo span{display:flex;align-items:baseline;font-size:12px}.ds-tempo input{font-family:Barlow,sans-serif;background:transparent;color:var(--ink,#2c342d);border:0;border-bottom:1px solid #94a184;font-size:29px;font-weight:600;width:67px;padding:0;appearance:textfield}.ds-tempo input::-webkit-inner-spin-button{appearance:none}.ds-tempo input:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}",
       "refersTo": "tempo-input"
@@ -335,14 +340,14 @@
     {
       "name": "Website navigation",
       "kind": "nav",
-      "description": "Editorial anchor navigation; smallest screens retain installation.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><a href=\"#instrument\">Try a beat</a><a href=\"#inside\">The app</a><a class=\"ds-nav-install\" href=\"#install\">Get Oma Beats<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"M12 4v15m-6-6 6 6 6-6\"/></svg></a></nav>",
+      "description": "Editorial anchor navigation; smallest screens retain the hero download link.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><a href=\"#instrument\">Try a beat</a><a href=\"#inside\">The app</a><a class=\"ds-nav-install\" href=\"#download\">Download<svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"M12 4v15m-6-6 6 6 6-6\"/></svg></a></nav>",
       "css": ".ds-nav{font-family:Barlow,sans-serif;display:flex;align-items:center;gap:34px;font-size:15px;font-weight:600;color:var(--ink,#2c342d)}.ds-nav a{color:inherit;text-decoration:none}.ds-nav a:hover{color:var(--orange,#b73d1e)}.ds-nav-install{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--ink,#2c342d);padding-block:10px}.ds-nav a:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(max-width:560px){.ds-nav{gap:0}.ds-nav>a:not(.ds-nav-install){display:none}.ds-nav-install{font-size:12px;gap:6px}}"
     },
     {
       "name": "Instrument shell",
       "kind": "card",
-      "description": "Sage equipment container; editorial cards do not inherit its depth.",
+      "description": "Sage equipment container inside the optional browser demo; editorial cards do not inherit its depth.",
       "html": "<section class=\"ds-instrument\"><h2>Take a little loop.</h2><p>Then make it yours. This is a playable browser demo.</p></section>",
       "css": ".ds-instrument{font-family:Barlow,sans-serif;padding:30px 34px 20px;background:var(--sage,#c4cdb6);color:var(--ink,#2c342d);border-radius:14px;box-shadow:0 8px 24px #29342218,inset 0 -6px 0 #8b987e}.ds-instrument h2{font-size:29px;letter-spacing:-.025em;margin:0 0 6px;font-weight:600}.ds-instrument p{margin:0;font-size:14px;color:#44513d}@media(max-width:560px){.ds-instrument{padding:22px 17px 16px;border-radius:10px}.ds-instrument h2{font-size:25px}.ds-instrument p{font-size:13px;line-height:1.5;max-width:27ch}}",
       "refersTo": "instrument"
@@ -369,16 +374,23 @@
       "description": "Small sage action on the dark installation field.",
       "html": "<button class=\"ds-copy\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V4H4v12h4\"/></svg>Copy</button>",
       "css": ".ds-copy{font-family:Barlow,sans-serif;background:var(--sage,#c4cdb6);color:var(--dark,#28322b);padding:10px 12px;border:0;border-radius:3px;display:flex;align-items:center;gap:9px;font-size:12px;cursor:pointer}.ds-copy:hover{background:#e0e8d6}.ds-copy:focus-visible{outline:3px solid #e89a70;outline-offset:5px}"
+    },
+    {
+      "name": "Optional browser demo disclosure",
+      "kind": "custom",
+      "description": "Closed native disclosure for the secondary browser demo; the site stops playback when closed and gates shortcuts to its open, visible state.",
+      "html": "<details class=\"ds-demo-disclosure\"><summary><span>Try a quick beat in your browser</span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></summary><p>This is a playable browser demo.</p></details>",
+      "css": ".ds-demo-disclosure{font-family:Barlow,sans-serif;color:var(--ink,#2c342d);border-block:1px solid var(--line,#c5c7b8)}.ds-demo-disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 0;font-size:20px;font-weight:600;list-style:none;cursor:pointer}.ds-demo-disclosure>summary::-webkit-details-marker{display:none}.ds-demo-disclosure svg{color:var(--orange,#b73d1e)}.ds-demo-disclosure[open]>summary svg{transform:rotate(180deg)}.ds-demo-disclosure>summary:focus-visible{outline:3px solid var(--orange,#b73d1e);outline-offset:5px}@media(max-width:560px){.ds-demo-disclosure>summary{font-size:18px}}"
     }
   ],
   "narrative": {
     "northStar": "A record sleeve you can play",
-    "overview": "The website expresses Oma Beats as a record sleeve that opens into a working instrument: broad cream paper, a sage control surface, dark olive text, and orange actions. Condensed display lettering creates the expressive scale; quiet body typography leaves room for a dense, usable music interface. The shared brand commitment is the established cream, sage, and orange identity.\n\nThis record scopes its normative tokens and component rules to `site/index.html`, `site/style.css`, `site/fonts.css`, and `site/site.js`. The desktop app under `app/` is a separate incumbent surface: it retains Inter/Liberation Sans, monospace readouts, cream gradients, sage LCDs, and its own controls and depth. Do not treat the website's Barlow pairing, size ramp, or exact colors as a migration instruction for the app.",
+    "overview": "The website expresses Oma Beats as a record sleeve around authentic product evidence and an optional working instrument: broad cream paper, a sage control surface, dark olive text, and orange actions. Condensed display lettering creates the expressive scale; quiet body typography leaves room for a dense, usable music interface. The shared brand commitment is the established cream, sage, and orange identity.\n\nThis record scopes its normative tokens and component rules to `site/index.html`, `site/style.css`, `site/fonts.css`, and `site/site.js`. The desktop app under `app/` is a separate incumbent surface: it retains Inter/Liberation Sans, monospace readouts, cream gradients, sage LCDs, and its own controls and depth. Do not treat the website's Barlow pairing, size ramp, or exact colors as a migration instruction for the app.",
     "keyCharacteristics": [
       "Cream editorial space around a sage instrument.",
       "Condensed display type paired with readable Barlow controls.",
       "Orange for emphasis, actions, and active playback.",
-      "Code-drawn music diagrams, SVG icons, and real interactive states."
+      "Authentic app captures, code-drawn music diagrams, SVG icons, and real interactive states."
     ],
     "rules": [
       {
@@ -393,13 +405,14 @@
       },
       {
         "name": "The Equipment Depth Rule",
-        "body": "Reserve tactile inset edges and soft shadows for the instrument and its playable parts; keep editorial rows flat.",
+        "body": "Reserve tactile inset edges for the instrument and its playable parts; soft shadows may also separate an authentic app preview from the page. Keep editorial rows flat.",
         "section": "elevation"
       }
     ],
     "dos": [
       "Do preserve the cream, sage, and orange brand relationship across surfaces.",
       "Do use the website tokens only within the website scope unless an app change is explicitly requested.",
+      "Do use authentic renderer captures for product previews, with intrinsic proportions, descriptive alt text, and a full-size link.",
       "Do use inline SVG icons and code-drawn waveform, pad-bank, and keyboard diagrams.",
       "Do preserve visible focus, accessible control names, and immediate reduced-motion playback indicators.",
       "Do keep the small-screen sequencer horizontally scrollable inside its own track."
@@ -407,8 +420,8 @@
     "donts": [
       "Don't introduce decorative kickers or eyebrows as a reusable heading pattern; compact labels belong to actual controls or product metadata.",
       "Don't use orange as an all-over equipment background.",
-      "Don't replace working controls with a static mockup or trigger audio automatically.",
-      "Don't add raster decoration to this code-led website or substitute glyphs for its SVG icons.",
+      "Don't present a browser demonstration as the desktop interface, replace its working controls with a static mockup, or trigger audio automatically.",
+      "Don't invent app UI in product imagery or substitute glyphs for the website’s SVG icons. Authentic app captures are supported.",
       "Don't turn the website's exact first-page composition into a rule for every future surface."
     ]
   }

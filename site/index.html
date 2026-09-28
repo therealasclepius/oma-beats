@@ -35,8 +35,8 @@
       >
       <nav aria-label="Main">
         <a href="#instrument">Try a beat</a><a href="#inside">The app</a
-        ><a class="nav-install" href="#install"
-          >Get Oma Beats
+        ><a class="nav-install" href="#download"
+          >Download
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 4v15m-6-6 6 6 6-6" /></svg
         ></a>
@@ -45,114 +45,155 @@
     <main id="main">
       <section class="hero wrap" aria-labelledby="title">
         <h1 id="title">Make room<br />for the <em>beat.</em></h1>
-        <div class="hero-intro">
+        <div class="hero-intro" id="download">
           <p>
             A hands-on desktop sampler and sequencer. <br />Chop a sample. Play it your way.
             <br />Find the loop you can’t leave alone.
           </p>
-          <a class="button primary" href="#install"
-            >Get the desktop app
+          <a
+            class="button primary"
+            href="https://github.com/therealasclepius/oma-beats/releases/download/v0.2.0/Oma-Beats-0.2.0-linux-x86_64.AppImage"
+            >Download Oma Beats
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M5 12h14m-6-6 6 6-6 6" /></svg></a
-          ><span class="availability">Linux · Windows · macOS</span>
+          ><span class="availability">Linux x86_64 · AppImage · v0.2.0</span>
+          <div class="platform-links" aria-label="More install options">
+            <a
+              href="https://github.com/therealasclepius/oma-beats/releases/download/v0.2.0/Oma-Beats-0.2.0-win-x64.exe"
+              >Windows</a
+            >
+            <a
+              href="https://github.com/therealasclepius/oma-beats/releases/download/v0.2.0/Oma-Beats-0.2.0-mac-arm64.dmg"
+              >macOS</a
+            >
+            <a href="#install">Omarchy install command</a>
+          </div>
         </div>
       </section>
-      <section class="instrument wrap" id="instrument" aria-labelledby="demo-heading">
-        <div class="instrument-shell">
-          <div class="instrument-top">
-            <div>
-              <h2 id="demo-heading">Take a little loop.</h2>
-              <p>Then make it yours. This is a playable browser demo.</p>
-            </div>
-            <div class="model-label" aria-hidden="true">OMA / PLAY</div>
-          </div>
-          <div class="transport">
-            <div class="transport-left">
-              <button id="play" class="play" disabled>
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path class="play-shape" d="m8 5 11 7-11 7z" /></svg
-                ><span>Play beat</span></button
-              ><label class="tempo"
-                >TEMPO
-                <span
-                  ><input
-                    id="tempo"
-                    type="number"
-                    min="60"
-                    max="180"
-                    value="86"
-                    aria-label="Tempo in beats per minute"
-                  />
-                  BPM</span
-                ></label
-              >
-            </div>
-            <div class="styles" role="group" aria-label="Demo style">
-              <button class="selected" data-style="trap" aria-pressed="true">
-                After hours <span>TRAP</span></button
-              ><button data-style="house" aria-pressed="false">
-                Side street <span>HOUSE</span></button
-              ><button data-style="mellow" aria-pressed="false">
-                Soft focus <span>MELLOW</span>
-              </button>
-            </div>
-          </div>
-          <div class="demo-body">
-            <div class="pad-section">
-              <div class="module-heading"><span>PLAY THE PADS</span><span>A / 01—16</span></div>
-              <div id="pads" class="pads"></div>
-              <p class="pad-hint">
-                Click a pad or use <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd>
-              </p>
-            </div>
-            <div class="sequencer-section">
-              <div class="module-heading">
-                <span>CHANGE THE PATTERN</span
-                ><button id="reset" class="text-button">Reset loop</button>
-              </div>
-              <p class="scroll-hint">
-                Swipe to see all 16 steps
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M3 12h18M7 8l-4 4 4 4m10-8 4 4-4 4" />
-                </svg>
-              </p>
-              <div
-                class="sequencer-scroll"
-                tabindex="0"
-                aria-label="16-step sequencer, scroll horizontally on small screens"
-              >
-                <div id="sequencer" class="sequencer"></div>
-              </div>
-              <div class="sequencer-footer">
-                <span id="demo-status" role="status">Ready when you are.</span
-                ><label class="volume"
-                  >Volume
-                  <input
-                    id="volume"
-                    aria-label="Demo volume"
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value="0.45"
-                /></label>
-              </div>
-            </div>
-          </div>
-          <div class="machine-foot">
-            <span><i class="status-dot"></i> ORIGINAL SYNTHESIZED SOUNDS</span
-            ><span>Click a step to add or remove a hit.</span><span>16 STEPS / 1 BAR</span>
-          </div>
-        </div>
-        <p class="demo-caption">
-          A taste of the workflow. <a href="#install">The desktop app is where you go deeper.</a
-          ><span>Your demo edits stay in this tab.</span>
-        </p>
-        <noscript
-          ><p>
-            Enable JavaScript to play the demo. You can still download the desktop app below.
-          </p></noscript
+      <figure class="app-preview wrap" id="app-preview">
+        <a
+          href="./assets/oma-beats-app.jpg"
+          target="_blank"
+          rel="noopener"
+          aria-label="View the Oma Beats interface at full size"
         >
+          <img
+            src="./assets/oma-beats-app.jpg"
+            width="945"
+            height="1406"
+            fetchpriority="high"
+            alt="Oma Beats app with 16 performance pads, eight pad banks, a green sample waveform display, sample controls, and a 16-step drum pattern."
+          />
+        </a>
+        <figcaption>
+          <span>Oma Beats 0.2.0. The actual app, ready for your next idea.</span
+          ><a href="./assets/oma-beats-app.jpg" target="_blank" rel="noopener">View full size</a>
+        </figcaption>
+      </figure>
+      <section class="instrument wrap" id="instrument" aria-labelledby="demo-heading">
+        <details id="demo-disclosure" class="demo-disclosure">
+          <summary>
+            <span>Try a quick beat in your browser</span
+            ><svg class="disclosure-icon icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </summary>
+          <div class="instrument-shell">
+            <div class="instrument-top">
+              <div>
+                <h2 id="demo-heading">Take a little loop.</h2>
+                <p>Then make it yours. This is a playable browser demo.</p>
+              </div>
+              <div class="model-label" aria-hidden="true">OMA / PLAY</div>
+            </div>
+            <div class="transport">
+              <div class="transport-left">
+                <button id="play" class="play" disabled>
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path class="play-shape" d="m8 5 11 7-11 7z" /></svg
+                  ><span>Play beat</span></button
+                ><label class="tempo"
+                  >TEMPO
+                  <span
+                    ><input
+                      id="tempo"
+                      type="number"
+                      min="60"
+                      max="180"
+                      value="86"
+                      aria-label="Tempo in beats per minute"
+                    />
+                    BPM</span
+                  ></label
+                >
+              </div>
+              <div class="styles" role="group" aria-label="Demo style">
+                <button class="selected" data-style="trap" aria-pressed="true">
+                  After hours <span>TRAP</span></button
+                ><button data-style="house" aria-pressed="false">
+                  Side street <span>HOUSE</span></button
+                ><button data-style="mellow" aria-pressed="false">
+                  Soft focus <span>MELLOW</span>
+                </button>
+              </div>
+            </div>
+            <div class="demo-body">
+              <div class="pad-section">
+                <div class="module-heading"><span>PLAY THE PADS</span><span>A / 01—16</span></div>
+                <div id="pads" class="pads"></div>
+                <p class="pad-hint">
+                  Click a pad or use <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd>
+                </p>
+              </div>
+              <div class="sequencer-section">
+                <div class="module-heading">
+                  <span>CHANGE THE PATTERN</span
+                  ><button id="reset" class="text-button">Reset loop</button>
+                </div>
+                <p class="scroll-hint">
+                  Swipe to see all 16 steps
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 12h18M7 8l-4 4 4 4m10-8 4 4-4 4" />
+                  </svg>
+                </p>
+                <div
+                  class="sequencer-scroll"
+                  tabindex="0"
+                  aria-label="16-step sequencer, scroll horizontally on small screens"
+                >
+                  <div id="sequencer" class="sequencer"></div>
+                </div>
+                <div class="sequencer-footer">
+                  <span id="demo-status" role="status">Ready when you are.</span
+                  ><label class="volume"
+                    >Volume
+                    <input
+                      id="volume"
+                      aria-label="Demo volume"
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value="0.45"
+                  /></label>
+                </div>
+              </div>
+            </div>
+            <div class="machine-foot">
+              <span><i class="status-dot"></i> ORIGINAL SYNTHESIZED SOUNDS</span
+              ><span>Click a step to add or remove a hit.</span><span>16 STEPS / 1 BAR</span>
+            </div>
+          </div>
+          <p class="demo-caption">
+            A taste of the workflow. <a href="#install">The desktop app is where you go deeper.</a
+            ><span>Your demo edits stay in this tab.</span>
+          </p>
+          <noscript
+            ><p>
+              Enable JavaScript to play the demo. You can still download the desktop app below.
+            </p></noscript
+          >
+        </details>
       </section>
       <section class="inside wrap" id="inside" aria-labelledby="inside-heading">
         <div class="inside-heading">

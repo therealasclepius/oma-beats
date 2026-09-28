@@ -117,7 +117,7 @@ components:
 
 **Creative North Star: "A record sleeve you can play"**
 
-The website expresses Oma Beats as a record sleeve that opens into a working instrument: broad cream paper, a sage control surface, dark olive text, and orange actions. Condensed display lettering creates the expressive scale; quiet body typography leaves room for a dense, usable music interface. The shared brand commitment is the established cream, sage, and orange identity.
+The website expresses Oma Beats as a record sleeve around authentic product evidence and an optional working instrument: broad cream paper, a sage control surface, dark olive text, and orange actions. Condensed display lettering creates the expressive scale; quiet body typography leaves room for a dense, usable music interface. The shared brand commitment is the established cream, sage, and orange identity.
 
 This record scopes its normative tokens and component rules to `site/index.html`, `site/style.css`, `site/fonts.css`, and `site/site.js`. The desktop app under `app/` is a separate incumbent surface: it retains Inter/Liberation Sans, monospace readouts, cream gradients, sage LCDs, and its own controls and depth. Do not treat the website's Barlow pairing, size ramp, or exact colors as a migration instruction for the app.
 
@@ -126,7 +126,7 @@ This record scopes its normative tokens and component rules to `site/index.html`
 - Cream editorial space around a sage instrument.
 - Condensed display type paired with readable Barlow controls.
 - Orange for emphasis, actions, and active playback.
-- Code-drawn music diagrams, SVG icons, and real interactive states.
+- Authentic app captures, code-drawn music diagrams, SVG icons, and real interactive states.
 
 ## Colors
 
@@ -179,13 +179,14 @@ At 850px and below, the pad section and feature diagrams are hidden, the instrum
 
 ## Elevation & Depth
 
-Paper sections and feature rows are flat. The instrument uses a soft cast shadow plus a shallow inset bottom edge; pads repeat that physical cue at a smaller scale. Enabled sequence steps use inset depth. These are equipment affordances, not hard offset decorative shadows.
+Paper sections and feature rows are flat. The app preview uses a soft cast shadow to separate its authentic window from the page. The optional instrument uses a soft cast shadow plus a shallow inset bottom edge; pads repeat that physical cue at a smaller scale. Enabled sequence steps use inset depth. These are product and equipment affordances, not hard offset decorative shadows.
 
+- **App preview:** `0 12px 36px #29342224`.
 - **Instrument shell:** `0 8px 24px #29342218, inset 0 -6px 0 #8b987e`.
 - **Pad:** `0 3px 4px #46523924, inset 0 -3px 0 #acb69f`.
 - **Enabled step:** `inset 0 -3px 0 #36492b`; a sounding enabled step changes its inset edge to `#ab4225`.
 
-**The Equipment Depth Rule.** Reserve tactile inset edges and soft shadows for the instrument and its playable parts; keep editorial rows flat.
+**The Equipment Depth Rule.** Reserve tactile inset edges for the instrument and its playable parts; soft shadows may also separate an authentic app preview from the page. Keep editorial rows flat.
 
 ## Shapes
 
@@ -195,7 +196,7 @@ Controls are firm rectangles with gently softened corners. Small sequence cells,
 
 ### Buttons
 
-The primary installation action is an orange rectangle with white text and an SVG arrow. Its hover darkens; the background transitions over 0.18s. The play control rests in olive ink, uses cream text, and becomes orange while playing. The command-copy button is sage on the dark installation surface. Text actions use underlines rather than a filled container.
+The primary download action is an orange rectangle with white text and an SVG arrow. In the current hero it links directly to the Linux release asset, with platform, package, and version below; underlined Windows, macOS, and Omarchy command links form the secondary options. Its hover darkens; the background transitions over 0.18s. The play control rests in olive ink, uses cream text, and becomes orange while playing. The command-copy button is sage on the dark installation surface. Text actions use underlines rather than a filled container.
 
 All interactive controls receive a 3px orange focus outline with a 5px offset; the dark installation section changes the outline to a lighter orange (`#e89a70`). Disabled buttons use 0.6 opacity and a waiting cursor.
 
@@ -205,7 +206,7 @@ These are three demo choices, not generic decorative chips. The chosen option ha
 
 ### Cards / Containers
 
-The instrument is the principal contained surface. Feature explanations are divided rows; the supporting save note is a quiet sage strip. The install command uses a dark inset field with a thin green border. Do not spread the instrument's tactile shadow to these flat editorial containers.
+The authentic app preview is the primary product visual on this landing page; the playable instrument is a secondary contained surface inside an optional disclosure. Feature explanations are divided rows; the supporting save note is a quiet sage strip. The install command uses a dark inset field with a thin green border. Do not spread the instrument's tactile shadow to these flat editorial containers.
 
 ### Inputs / Fields
 
@@ -213,15 +214,19 @@ Tempo is an exposed number input with a transparent background, a thin bottom bo
 
 ### Navigation
 
-The compact Barlow wordmark combines medium and bold text with a filled orange pad-grid SVG. Navigation uses 15px semibold links with orange hover; the installation link retains an underline rule and downward arrow. At the smallest breakpoint it is the only navigation item shown. The skip link becomes visible on keyboard focus.
+The compact Barlow wordmark combines medium and bold text with a filled orange pad-grid SVG. Navigation uses 15px semibold links with orange hover; the Download link retains an underline rule and downward arrow and targets the hero download options. At the smallest breakpoint it is the only navigation item shown. The skip link becomes visible on keyboard focus.
 
 ### Playable pads and sequencer
 
 Pads show a number and sound name, form a four-column grid, and change sage shade by sound group. A hit turns orange and depresses 2px, with an 0.08s transition. Enabled steps are olive with a small light indicator; the current step receives a warm playhead color and turns bright orange when enabled. State is synchronized to playback after user activation. Functional text labels remain in Barlow.
 
+### Authentic app preview
+
+Use an unaltered capture of the actual renderer when depicting the app; preserve the app’s own typography, controls, and proportions rather than styling them as website components. The current JPEG is displayed at its intrinsic aspect ratio, scales to its container, and links to the full-size image. Its frame has 14px corners and the preview shadow above. A quiet 14px caption identifies the app/version and repeats the full-size link. Keep descriptive alt text and embedded capture provenance with the asset. This is product evidence, not decorative raster imagery.
+
 ### Disclosures and motion
 
-FAQ rows use native `details` and `summary`, a fine divider, and an inline SVG chevron that rotates on opening. Motion otherwise serves control feedback; there is no ambient animation. Reduced motion disables transitions, animation, smooth scrolling, and pad displacement while preserving instantaneous state changes.
+The browser demo and FAQ use native `details` and `summary`, fine dividers, and inline SVG chevrons that rotate on opening. The demo starts closed; its summary is 20px semibold, or 18px below 560px, with 24px vertical padding. The “Try a beat” navigation action opens it. Closing the disclosure stops playback, and keyboard pad/transport shortcuts are available only while it is open and visible. Motion otherwise serves control feedback; there is no ambient animation. Reduced motion disables transitions, animation, smooth scrolling, and pad displacement while preserving instantaneous state changes.
 
 ## Do's and Don'ts
 
@@ -229,6 +234,7 @@ FAQ rows use native `details` and `summary`, a fine divider, and an inline SVG c
 
 - **Do** preserve the cream, sage, and orange brand relationship across surfaces.
 - **Do** use the website tokens only within the website scope unless an app change is explicitly requested.
+- **Do** use authentic renderer captures for product previews, with intrinsic proportions, descriptive alt text, and a full-size link.
 - **Do** use inline SVG icons and code-drawn waveform, pad-bank, and keyboard diagrams.
 - **Do** preserve visible focus, accessible control names, and immediate reduced-motion playback indicators.
 - **Do** keep the small-screen sequencer horizontally scrollable inside its own track.
@@ -237,8 +243,8 @@ FAQ rows use native `details` and `summary`, a fine divider, and an inline SVG c
 
 - **Don't** introduce decorative kickers or eyebrows as a reusable heading pattern; compact labels belong to actual controls or product metadata.
 - **Don't** use orange as an all-over equipment background.
-- **Don't** replace working controls with a static mockup or trigger audio automatically.
-- **Don't** add raster decoration to this code-led website or substitute glyphs for its SVG icons.
+- **Don't** present a browser demonstration as the desktop interface, replace its working controls with a static mockup, or trigger audio automatically.
+- **Don't** invent app UI in product imagery or substitute glyphs for the website’s SVG icons. Authentic app captures are supported.
 - **Don't** turn the website's exact first-page composition into a rule for every future surface.
 
 Source basis: final website HTML/CSS/JS, local font declarations, the website direction contract, and `app/style.css` for the scope boundary. Unused website declarations such as `--sage-deep` and the removed hero metadata strip are not promoted to tokens or patterns. Incumbent app eyebrows and system typography are not canonized into the website system; the app is outside this documentation pass's migration scope.

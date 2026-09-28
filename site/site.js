@@ -274,6 +274,7 @@
   });
   document.addEventListener('keydown', (e) => {
     if (
+      !$('demo-disclosure').open ||
       e.repeat ||
       e.ctrlKey ||
       e.metaKey ||
@@ -297,6 +298,12 @@
     if (document.hidden) stop();
   });
   window.addEventListener('pagehide', stop);
+  $('demo-disclosure').addEventListener('toggle', () => {
+    if (!$('demo-disclosure').open) stop();
+  });
+  document.querySelector('nav a[href="#instrument"]').addEventListener('click', () => {
+    $('demo-disclosure').open = true;
+  });
   $('copy').addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText($('install-command').textContent);
