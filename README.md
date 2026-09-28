@@ -119,13 +119,13 @@ The source is publicly viewable, but is not currently offered under an open-sour
 
 ## Public website
 
-`site/` contains a static, responsive product page and an original synthesized beat demo. It makes no network requests for audio, never autoplays, and stores demo edits only in memory. The desktop app is a separate download.
+`site/` contains the responsive product page. Its playable preview and `/play/` route use the same interface and audio engine as the desktop app: six synthesized drum kits, twelve synths, eight pad banks, patterns, undo, local audio chopping, project files, and WAV export. Audio starts only after interaction. Browser sessions autosave locally and stay separate from the installed app; portable projects work in both. YouTube and pack-folder imports require the desktop app.
 
 ```sh
 npm run build:site
 python -m http.server 18745 --bind 127.0.0.1 --directory dist/site
 ```
 
-The Pages workflow publishes only `site/` and `install.sh`, excluding design briefs, private sounds, projects, and app data. Fonts are self-hosted Barlow and Barlow Condensed under their included SIL Open Font Licenses.
+The website build copies `site/`, `install.sh`, and an explicit allowlist of public app renderer files into `dist/site/play/`. A browser host adapter replaces the native bridge and server-dependent library controls. Private sounds, projects, app data, and native desktop code are excluded. Fonts are self-hosted Barlow and Barlow Condensed under their included SIL Open Font Licenses.
 
 The production website is hosted on Vercel with GitHub deployment integration. `vercel.json` builds `dist/site`; `.vercelignore` excludes desktop code, personal data, and local design evidence from CLI uploads. GitHub Pages is also available as a mirror.

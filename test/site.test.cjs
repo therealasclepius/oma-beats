@@ -1,43 +1,42 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const demo = require('../site/demo-engine.js');
-test('original website sounds are finite, bounded and fade to silence', () => {
-  for (const kind of [
-    'kick',
-    'clap',
-    'hat',
-    'perc',
-    'bass',
-    'keys',
-    'open',
-    'rim',
-    'tom',
-    'shaker'
-  ]) {
-    const data = demo.render(kind, 196);
-    assert(data.length > 3000, kind);
-    let peak = 0;
-    for (const value of data) {
-      assert(Number.isFinite(value));
-      peak = Math.max(peak, Math.abs(value));
-    }
-    assert(peak > 0.01 && peak <= 1, `${kind}: ${peak}`);
-    assert.equal(Math.abs(data[0]), 0);
-    assert.equal(Math.abs(data.at(-1)), 0);
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { buildSite, rendererFiles } = require('../scripts/build-site.cjs');
+test('website build ships the actual renderer without native bridge or private samples', (t) => {
+  const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'oma-public-build-'));
+  t.after(() => fs.rmSync(fixture, { recursive: true, force: true }));
+  fs.mkdirSync(path.join(fixture, 'site'));
+  fs.mkdirSync(path.join(fixture, 'app/packs'), { recursive: true });
+  fs.writeFileSync(path.join(fixture, 'site/index.html'), 'public marketing page');
+  fs.writeFileSync(path.join(fixture, 'site/browser-preview.js'), 'browser host');
+  fs.writeFileSync(path.join(fixture, 'site/browser-preview.css'), 'browser guidance');
+  fs.writeFileSync(path.join(fixture, 'install.sh'), 'installer');
+  fs.writeFileSync(path.join(fixture, 'app/packs/catalog.json'), 'private catalog');
+  fs.writeFileSync(path.join(fixture, 'app/packs/purchased.wav'), 'private sample');
+  fs.writeFileSync(path.join(fixture, 'app/desktop.js'), 'native bridge');
+  fs.writeFileSync(path.join(fixture, 'app/session.omabeats'), 'personal project');
+  const realRoot = path.resolve(__dirname, '..');
+  fs.copyFileSync(path.join(realRoot, 'app/index.html'), path.join(fixture, 'app/index.html'));
+  for (const name of rendererFiles) {
+    fs.copyFileSync(path.join(realRoot, 'app', name), path.join(fixture, 'app', name));
   }
-});
-test('each demo is a complete independent editable six-track pattern', () => {
-  for (const id of Object.keys(demo.styles)) {
-    const a = demo.pattern(id),
-      b = demo.pattern(id);
-    assert.equal(a.length, 6);
-    a.forEach((row) => {
-      assert.equal(row.length, 16);
-      assert(row.some(Boolean));
-    });
-    a[0][0] = !a[0][0];
-    assert.notDeepEqual(a, b);
-    assert(demo.styles[id].bpm >= 60 && demo.styles[id].bpm <= 180);
+  const out = buildSite(fixture);
+  assert.deepEqual(
+    fs.readdirSync(path.join(out, 'play')).sort(),
+    [...rendererFiles, 'index.html', 'browser-preview.js', 'browser-preview.css'].sort()
+  );
+  const html = fs.readFileSync(path.join(out, 'play/index.html'), 'utf8');
+  assert(!html.includes('src="desktop.js"'));
+  assert(html.indexOf('src="browser-preview.js"') < html.indexOf('src="app.js"'));
+  for (const name of rendererFiles) {
+    assert.deepEqual(
+      fs.readFileSync(path.join(out, 'play', name)),
+      fs.readFileSync(path.join(realRoot, 'app', name)),
+      `${name} must use the real renderer`
+    );
   }
+  assert(!fs.existsSync(path.join(out, 'browser-preview.js')));
 });

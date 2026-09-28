@@ -2,7 +2,8 @@ name: Publish website
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'install.sh', 'scripts/build-site.cjs', '.github/workflows/pages.yml']
+    paths:
+      ['site/**', 'app/**', 'install.sh', 'scripts/build-site.cjs', '.github/workflows/pages.yml']
   workflow_dispatch:
 permissions:
   contents: read

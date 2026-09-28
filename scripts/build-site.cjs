@@ -1,11 +1,48 @@
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');
-const root = path.resolve(__dirname, '..');
-const out = path.join(root, 'dist/site');
-fs.rmSync(out, { recursive: true, force: true });
-fs.mkdirSync(out, { recursive: true });
-fs.cpSync(path.join(root, 'site'), out, { recursive: true });
-fs.copyFileSync(path.join(root, 'install.sh'), path.join(out, 'install.sh'));
-fs.writeFileSync(path.join(out, '.nojekyll'), '');
-console.log('Built public website in dist/site (only site/ and install.sh).');
+const rendererFiles = [
+  'style.css',
+  'icon.svg',
+  'synth-engine.js',
+  'synth.js',
+  'history.js',
+  'packs.js',
+  'importer.js',
+  'chop.js',
+  'kits.js',
+  'app.js'
+];
+function buildSite(root = path.resolve(__dirname, '..'), out = path.join(root, 'dist/site')) {
+  fs.rmSync(out, { recursive: true, force: true });
+  fs.mkdirSync(out, { recursive: true });
+  fs.cpSync(path.join(root, 'site'), out, { recursive: true });
+  fs.copyFileSync(path.join(root, 'install.sh'), path.join(out, 'install.sh'));
+  fs.writeFileSync(path.join(out, '.nojekyll'), '');
+  const play = path.join(out, 'play');
+  fs.mkdirSync(play, { recursive: true });
+  // Explicit public renderer allowlist: never copy app data, sample packs, or the native bridge.
+  for (const file of rendererFiles) {
+    fs.copyFileSync(path.join(root, 'app', file), path.join(play, file));
+  }
+  const html = fs
+    .readFileSync(path.join(root, 'app/index.html'), 'utf8')
+    .replace('    <script src="desktop.js"></script>\n', '')
+    .replace(
+      '<link rel="stylesheet" href="style.css" />',
+      '<link rel="stylesheet" href="style.css" /><link rel="stylesheet" href="browser-preview.css" />'
+    )
+    .replace(
+      '    <script src="app.js"></script>',
+      '    <script src="browser-preview.js"></script>\n    <script src="app.js"></script>'
+    );
+  fs.writeFileSync(path.join(play, 'index.html'), html);
+  fs.renameSync(path.join(out, 'browser-preview.js'), path.join(play, 'browser-preview.js'));
+  fs.renameSync(path.join(out, 'browser-preview.css'), path.join(play, 'browser-preview.css'));
+  return out;
+}
+if (require.main === module) {
+  buildSite();
+  console.log('Built public website with allowlisted browser renderer in dist/site.');
+}
+module.exports = { buildSite, rendererFiles };

@@ -1,0 +1,12 @@
+/* Browser-only guidance; the app retains its own visual system. */
+.browser-scroll-hint {
+  display: none;
+}
+@media (max-width: 600px) {
+  .browser-scroll-hint {
+    display: block;
+    font-size: 12px;
+    color: #42483e;
+    margin: 0 0 12px;
+  }
+}
