@@ -21,6 +21,12 @@ protocol.registerSchemesAsPrivileged([
 ]);
 app.setName('Oma Beats');
 app.setAppUserModelId('com.oma.beats');
+// Isolate the smoke-test profile before acquiring the application lock.
+if (smoke) {
+  smokeRoot = require('node:fs').mkdtempSync(path.join(os.tmpdir(), 'oma-beats-smoke-'));
+  app.setPath('userData', smokeRoot);
+  app.setPath('sessionData', smokeRoot);
+}
 if (!app.requestSingleInstanceLock()) app.quit();
 else {
   app.on('second-instance', () => {
@@ -48,9 +54,6 @@ function trusted(event) {
 }
 async function start() {
   if (smoke) {
-    smokeRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'oma-beats-smoke-'));
-    app.setPath('userData', smokeRoot);
-    app.setPath('sessionData', smokeRoot);
     smokeTimer = setTimeout(() => {
       console.error('Renderer did not become ready');
       app.exit(1);
@@ -170,6 +173,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      additionalArguments: smoke ? ['--oma-smoke-test'] : [],
       backgroundThrottling: false
     }
   });
@@ -186,8 +190,9 @@ function createWindow() {
     console.error('Renderer exited:', details.reason);
     if (smoke) app.exit(1);
   });
-  window.webContents.on('console-message', (_event, details) => {
+  window.webContents.on('console-message', (details) => {
     if (details.level === 'error') console.error('Renderer:', details.message);
+    else if (smoke && details.message.startsWith('PASS:')) console.log(details.message);
   });
   window.webContents.session.on('will-download', (_event, item) => {
     item.setSaveDialogOptions({

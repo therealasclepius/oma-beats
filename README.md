@@ -6,7 +6,7 @@ A standalone desktop sampler and beat sequencer. Build a drum pattern, chop a sa
 
 - 128 pads across banks A–H; four 16-step patterns with tempo, swing, and quantized recording.
 - All-bank playback or a single active bank, with independent mono/choke mode per bank.
-- Six synthesized starter kits that work offline without an account.
+- Six synthesized starter kits and 12 melodic instruments: bass, leads, keys, and pads. Everything works offline without an account.
 - Sample workshop with transient detection, even/random slices, manual markers, zoom, exact cue boundaries, pitch, filter, attack, release, gain, and reverse.
 - Local audio import, drag-and-drop, searchable sample packs, and a native **Import pack folder** picker.
 - Optional bounded YouTube clip import and a local clip library.
@@ -57,6 +57,14 @@ On a headless Linux machine, run the smoke check with `xvfb-run -a npm run smoke
 6. Use **Save project** for a portable backup; **Export WAV** renders four repetitions of the selected pattern with a tail.
 
 **Undo:** Ctrl+Z / Cmd+Z. **Redo:** Ctrl+Shift+Z / Cmd+Shift+Z. The workshop has its own Undo while cue edits are pending.
+
+## Built-in synths
+
+Choose a pad bank and click **Synths**, or choose an instrument from the kit menu. Start with one of 12 presets, choose a root note, octave and scale, then adjust the oscillator, filter/resonance, ADSR envelope, note length and detune. Preview only plays when you click a preview control.
+
+**Load instrument into bank** assigns 16 generated notes to that bank and preserves its sequencer patterns. Bass presets default to mono; other instruments are polyphonic. The operation supports Undo/Redo. Reopen Synths to edit that bank's patch and apply again.
+
+Notes are rendered to samples with the chosen note length and release. Keyboard presses trigger those complete notes; key-up does not gate the envelope. Generated audio and patch settings are embedded in project files, so projects and WAV exports need no plugin downloads. Loading a new instrument replaces the selected bank's sounds.
 
 ## Your sounds and projects
 

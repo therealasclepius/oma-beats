@@ -41,7 +41,7 @@ function restoreHistory(snapshot) {
   stop();
   stopPreview();
   stopPackPreview();
-  for (const id of ['chopEditor', 'packBrowser', 'sampleImporter']) $(id).close();
+  for (const id of ['chopEditor', 'packBrowser', 'sampleImporter', 'synthEditor']) $(id).close();
   state = structuredClone(snapshot.state);
   Object.assign(buffers, snapshot.buffers);
   pattern = state.pattern;

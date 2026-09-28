@@ -59,6 +59,7 @@ class AudioMock {
 }
 function engine() {
   const context = vm.createContext({
+    SynthEngine: require('../app/synth-engine.js'),
     AudioContext: AudioMock,
     console,
     setTimeout: () => 1,

@@ -1,6 +1,7 @@
 'use strict';
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('omaDesktop', {
+  smokeTest: process.argv.includes('--oma-smoke-test'),
   importPackFolder: () => ipcRenderer.invoke('packs:import-folder'),
   ready: (healthy) => ipcRenderer.send('app:ready', healthy === true),
   onBeforeClose: (callback) =>

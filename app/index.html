@@ -72,7 +72,7 @@
       </section>
       <section class="source-strip">
         <div><b>FIND YOUR NEXT FLIP</b><span>YouTube clip or local audio → chops → pads</span></div>
-        <button id="resumeWorkshop">Last sample</button
+        <button id="openSynth">♫ Synths</button><button id="resumeWorkshop">Last sample</button
         ><button id="browsePacks">Browse packs</button
         ><button id="getSamples" class="orange">＋ Get samples</button>
       </section>
@@ -80,7 +80,7 @@
         <section class="pad-section">
           <div class="section-label">
             <h2>PERFORMANCE PADS</h2>
-            <select id="kitSelect" aria-label="Drum kit"></select>
+            <select id="kitSelect" aria-label="Drum kit or instrument"></select>
           </div>
           <div class="bank-selector">
             <span>PAD BANK</span>
@@ -364,6 +364,138 @@
         <a id="packSourceLink" target="_blank" rel="noreferrer">Publisher & license ↗</a>
       </p>
     </dialog>
+    <dialog id="synthEditor" aria-labelledby="synthTitle">
+      <div class="synth-heading">
+        <div>
+          <span class="eyebrow" id="synthBankLabel"></span>
+          <h2 id="synthTitle">Make it melodic.</h2>
+        </div>
+        <button id="closeSynth">Cancel / close</button>
+      </div>
+      <div class="synth-preset-row">
+        <label>INSTRUMENT<select id="synthPreset" aria-label="Instrument preset"></select></label
+        ><button id="synthReset">Reset preset</button>
+      </div>
+      <div class="synth-tuning">
+        <label>ROOT<select id="synth-root" aria-label="Root note"></select></label
+        ><label
+          >OCTAVE<select id="synth-octave" aria-label="Instrument octave">
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select></label
+        ><label
+          >SCALE<select id="synth-scale" aria-label="Instrument scale">
+            <option value="minor">Minor</option>
+            <option value="major">Major</option>
+            <option value="pentatonic">Minor pentatonic</option>
+            <option value="chromatic">Chromatic</option>
+          </select></label
+        ><label
+          >OSCILLATOR<select id="synth-wave" aria-label="Oscillator">
+            <option value="sine">Sine</option>
+            <option value="triangle">Triangle</option>
+            <option value="sawtooth">Saw</option>
+            <option value="square">Square</option>
+            <option value="fm">FM keys</option>
+            <option value="organ">Organ</option>
+            <option value="bell">FM bell</option>
+          </select></label
+        >
+      </div>
+      <div class="synth-sound">
+        <label
+          >FILTER<input
+            id="synth-cutoff"
+            aria-label="Synth filter"
+            type="range"
+            min="80"
+            max="18000"
+            step="10" /><output id="synth-cutoff-value"></output
+        ></label>
+        <label
+          >RESONANCE<input
+            id="synth-resonance"
+            aria-label="Synth resonance"
+            type="range"
+            min="0.5"
+            max="8"
+            step="0.1" /><output id="synth-resonance-value"></output
+        ></label>
+        <label
+          >ATTACK<input
+            id="synth-attack"
+            aria-label="Synth attack"
+            type="range"
+            min="0.003"
+            max="2"
+            step="0.001" /><output id="synth-attack-value"></output
+        ></label>
+        <label
+          >DECAY<input
+            id="synth-decay"
+            aria-label="Synth decay"
+            type="range"
+            min="0.01"
+            max="2"
+            step="0.01" /><output id="synth-decay-value"></output
+        ></label>
+        <label
+          >SUSTAIN<input
+            id="synth-sustain"
+            aria-label="Synth sustain"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01" /><output id="synth-sustain-value"></output
+        ></label>
+        <label
+          >RELEASE<input
+            id="synth-release"
+            aria-label="Synth release"
+            type="range"
+            min="0.02"
+            max="3"
+            step="0.01" /><output id="synth-release-value"></output
+        ></label>
+        <label
+          >NOTE LENGTH<input
+            id="synth-gate"
+            aria-label="Synth note length"
+            type="range"
+            min="0.08"
+            max="4"
+            step="0.01" /><output id="synth-gate-value"></output
+        ></label>
+        <label
+          >DETUNE<input
+            id="synth-detune"
+            aria-label="Synth detune"
+            type="range"
+            min="0"
+            max="35"
+            step="1" /><output id="synth-detune-value"></output
+        ></label>
+      </div>
+      <div class="synth-preview-heading">
+        <span id="synthRange"></span><span>Click a note to preview</span>
+      </div>
+      <div id="synthNotes" aria-label="Instrument note previews"></div>
+      <div class="synth-preview-actions">
+        <button id="synthPreview">▶ Preview root</button
+        ><button id="synthStop">■ Stop preview</button
+        ><label><input id="synth-mono" type="checkbox" /> Mono bank</label>
+      </div>
+      <p id="synthHint"></p>
+      <div class="synth-apply-row">
+        <span id="synthStatus" role="status"></span
+        ><button id="synthApply" class="orange">Load instrument</button>
+      </div>
+    </dialog>
+    <script src="synth-engine.js"></script>
+    <script src="synth.js"></script>
     <script src="desktop.js"></script>
     <script src="history.js"></script>
     <script src="packs.js"></script>

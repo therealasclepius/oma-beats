@@ -116,12 +116,18 @@ function renderKitSelector() {
     }
     select.append(group);
   }
+  const instruments = document.createElement('optgroup');
+  instruments.label = 'Built-in instruments';
+  for (const preset of SynthEngine.presets)
+    instruments.append(new Option(preset.family + ' · ' + preset.name, 'synth:' + preset.id));
+  select.append(instruments);
   select.add(new Option('Custom / chopped', 'custom'));
   const pads = state.pads.slice(bankOffset(), bankOffset() + 16),
     matched = KITS.find((k) =>
       pads.every((p, i) => p.sample === (k.external ? 'sample-' + k.samples[i] : kitKey(k.id, i)))
     );
-  select.value = matched?.id || 'custom';
+  const instrument = currentInstrument();
+  select.value = instrument ? 'synth:' + instrument.patch.preset : matched?.id || 'custom';
 }
 async function loadKit(id) {
   const kit = KITS.find((k) => k.id === id);
@@ -190,7 +196,13 @@ async function loadKit(id) {
   }
 }
 function connectKits() {
-  $('kitSelect').onchange = () => loadKit($('kitSelect').value);
+  $('kitSelect').onchange = () => {
+    const id = $('kitSelect').value;
+    if (id.startsWith('synth:')) {
+      showSynth(id.slice(6));
+      renderKitSelector();
+    } else loadKit(id);
+  };
   for (let i = 0; i < 16; i++) {
     const option = new Option(String(i + 1).padStart(2, '0'), i);
     $('chopDestination').append(option);

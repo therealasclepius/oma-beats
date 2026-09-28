@@ -629,6 +629,7 @@ function restoreSamples(samples) {
 function validate(s, samples) {
   const bounded = (v, min, max) =>
     typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max;
+  SynthEngine.validateBanks(s?.synthBanks);
   const count = s?.version === 1 ? 16 : 128;
   if (
     !s ||
@@ -1001,7 +1002,8 @@ function connectControls() {
       $('guide').open ||
       $('chopEditor').open ||
       $('sampleImporter').open ||
-      $('packBrowser').open
+      $('packBrowser').open ||
+      $('synthEditor').open
     )
       return;
     if (e.code === 'Space') {
@@ -1020,6 +1022,7 @@ function connectControls() {
   connectImporter();
   connectPackBrowser();
   connectHistory();
+  connectSynth();
   window.addEventListener('resize', drawWave);
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {

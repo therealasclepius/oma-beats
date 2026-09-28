@@ -1,5 +1,5 @@
 'use strict';
-function connectDesktop() {
+async function connectDesktop() {
   if (!window.omaDesktop) return;
   const button = document.getElementById('importPackFolder');
   button.hidden = false;
@@ -34,6 +34,15 @@ function connectDesktop() {
   if (document.querySelectorAll('#pads .pad').length !== 16 || !db || ctx.state !== 'suspended') {
     window.omaDesktop.ready(false);
     return;
+  }
+  if (window.omaDesktop.smokeTest) {
+    try {
+      await runSynthSmoke();
+    } catch (error) {
+      console.error(error);
+      window.omaDesktop.ready(false);
+      return;
+    }
   }
   window.omaDesktop.ready(true);
 }
