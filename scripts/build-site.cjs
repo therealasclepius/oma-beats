@@ -25,9 +25,20 @@ function buildSite(root = path.resolve(__dirname, '..'), out = path.join(root, '
   for (const file of rendererFiles) {
     fs.copyFileSync(path.join(root, 'app', file), path.join(play, file));
   }
+  const sharedHead =
+    fs
+      .readFileSync(path.join(root, 'site/index.html'), 'utf8')
+      .match(/<!-- Shared identity -->([\s\S]*?)<!-- \/Shared identity -->/)?.[1] || '';
   const html = fs
     .readFileSync(path.join(root, 'app/index.html'), 'utf8')
     .replace('    <script src="desktop.js"></script>\n', '')
+    .replace('<link rel="icon" href="icon.svg" type="image/svg+xml" />', '')
+    .replace(
+      '</head>',
+      sharedHead.replaceAll('href="./', 'href="../') +
+        '<meta property="og:url" content="https://oma-beats.vercel.app/play/" />' +
+        '<link rel="canonical" href="https://oma-beats.vercel.app/play/" /></head>'
+    )
     .replace(
       '<link rel="stylesheet" href="style.css" />',
       '<link rel="stylesheet" href="style.css" /><link rel="stylesheet" href="browser-preview.css" />'

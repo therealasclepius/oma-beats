@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./fonts.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #eae7dc;
+        color: #2c342d;
+      }
+      body {
+        font-family: Barlow, sans-serif;
+        display: grid;
+        grid-template-columns: 660px 1fr;
+        padding: 52px 54px;
+        gap: 22px;
+      }
+      .copy {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 39px;
+        letter-spacing: -1px;
+        font-weight: 500;
+      }
+      .brand img {
+        width: 40px;
+        height: 40px;
+      }
+      .brand b {
+        font-weight: 700;
+      }
+      h1 {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 96px;
+        line-height: 0.96;
+        letter-spacing: -0.025em;
+        font-weight: 700;
+        margin: 54px 0 26px;
+        text-transform: uppercase;
+      }
+      h1 em {
+        color: #b73d1e;
+        font-style: normal;
+      }
+      p {
+        font-size: 25px;
+        line-height: 1.4;
+        margin: 0;
+      }
+      .url {
+        margin-top: auto;
+        font-size: 19px;
+        color: #59614f;
+      }
+      .app {
+        align-self: center;
+        justify-self: end;
+        width: 350px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 14px 32px #29342224;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="copy">
+      <div class="brand">
+        <img src="./favicon.svg" alt="" /><span>oma<b>beats</b></span>
+      </div>
+      <h1>Make room<br />for the <em>beat.</em></h1>
+      <p>Play in your browser.<br />Make it on your desktop.</p>
+      <div class="url">oma-beats.vercel.app</div>
+    </div>
+    <img class="app" src="./assets/oma-beats-app.jpg" alt="Actual Oma Beats interface" />
+  </body>
+</html>
