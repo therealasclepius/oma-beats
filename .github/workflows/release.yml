@@ -1,0 +1,45 @@
+name: Publish desktop release
+on:
+  workflow_dispatch:
+    inputs:
+      build_run:
+        description: Successful Build and test run ID
+        required: true
+      tag:
+        description: Existing draft release tag
+        required: true
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify build and download installers
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BUILD_RUN: ${{ inputs.build_run }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          [[ "$BUILD_RUN" =~ ^[0-9]+$ ]]
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          gh run view "$BUILD_RUN" --json name,conclusion,headBranch,event --jq 'select(.name=="Build and test" and .conclusion=="success" and .headBranch=="main" and .event=="push") | .conclusion' | grep -qx success
+          gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft | grep -qx true
+          gh run download "$BUILD_RUN" -D artifacts
+      - name: Upload verified build artifacts and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          mkdir release
+          find artifacts -type f \( -name '*.AppImage' -o -name '*.exe' -o -name '*.dmg' -o -name '*.zip' \) -exec cp {} release/ \;
+          cd release
+          version="${RELEASE_TAG#v}"
+          for suffix in linux-x86_64.AppImage win-x64.exe mac-arm64.dmg mac-arm64.zip; do
+            test -s "Oma-Beats-$version-$suffix"
+          done
+          sha256sum Oma-Beats-* > SHA256SUMS
+          gh release upload "$RELEASE_TAG" Oma-Beats-* SHA256SUMS --clobber
+          gh release edit "$RELEASE_TAG" --draft=false --latest
