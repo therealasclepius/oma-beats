@@ -48,12 +48,14 @@
           >SWING <input id="swing" type="range" min="0" max="60" value="0" /><output id="swingValue"
             >0%</output
           ></label
-        ><label class="scope-control"
-          >PLAY<select id="playScope" aria-label="Sequencer playback scope">
-            <option value="bank">This bank</option>
-            <option value="all">All banks</option>
-          </select></label
         >
+        <div class="scope-control">
+          <span>PLAY</span>
+          <div id="playScope" role="group" aria-label="Sequencer playback scope">
+            <button id="playThisBank" type="button" aria-pressed="true">This bank</button>
+            <button id="playAllBanks" type="button" aria-pressed="false">All banks</button>
+          </div>
+        </div>
         <div class="patterns">
           <span>SEQUENCE</span>
           <div id="patterns"></div>

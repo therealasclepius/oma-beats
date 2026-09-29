@@ -10,6 +10,10 @@ class AudioMock {
     this.currentTime = 0;
     this.sources = [];
   }
+  resume() {
+    this.state = 'running';
+    return Promise.resolve();
+  }
   suspend() {
     return Promise.resolve();
   }
@@ -58,10 +62,46 @@ class AudioMock {
   }
 }
 function engine() {
+  const elements = new Map();
+  const element = () => ({
+    value: '',
+    textContent: '',
+    classList: { add() {}, remove() {}, toggle() {} },
+    attributes: {},
+    setAttribute(name, value) {
+      this.attributes[name] = value;
+    }
+  });
+  const intervals = new Set();
   const context = vm.createContext({
     SynthEngine: require('../app/synth-engine.js'),
     AudioContext: AudioMock,
     console,
+    document: {
+      getElementById(id) {
+        if (!elements.has(id)) elements.set(id, element());
+        return elements.get(id);
+      },
+      querySelectorAll: () => [],
+      addEventListener() {}
+    },
+    window: { addEventListener() {} },
+    connectChopper() {},
+    connectKits() {},
+    connectImporter() {},
+    connectPackBrowser() {},
+    connectHistory() {},
+    connectSynth() {},
+    recordEdit() {},
+    setInterval() {
+      const id = {};
+      intervals.add(id);
+      return id;
+    },
+    clearInterval(id) {
+      intervals.delete(id);
+    },
+    intervals,
     setTimeout: () => 1,
     clearTimeout() {},
     structuredClone
@@ -120,4 +160,41 @@ test('project validation rejects corrupt sample references and bank modes', () =
     () => run("state=defaults();state.bankMono=['yes'];validate(state,{})"),
     /Invalid bank/
   );
+});
+
+test('playback buttons switch running audio between all banks and the selected bank', async () => {
+  const run = engine();
+  run(`connectControls();
+    state.pads[16]={...state.pads[0]};
+    state.patterns[0][0][0]=1;
+    state.patterns[0][16][0]=1;
+    state.padBank=1;`);
+  await run('togglePlay()');
+  assert.deepEqual(Array.from(run('ctx.sources.map(s=>s.omaBank)')), [1]);
+  await run("$('playAllBanks').onclick();");
+  assert.equal(run('state.playScope'), 'all');
+  assert.equal(run("$('playAllBanks').attributes['aria-pressed']"), 'true');
+  assert.equal(run("$('playThisBank').attributes['aria-pressed']"), 'false');
+  assert.equal(run('playing'), true);
+  assert.equal(run('ctx.sources[0].stops.length'), 1);
+  assert.deepEqual(Array.from(run('ctx.sources.slice(1).map(s=>s.omaBank)')), [0, 1]);
+  await run("$('playThisBank').onclick();");
+  assert.equal(run('state.playScope'), 'bank');
+  assert.equal(run("$('playThisBank').attributes['aria-pressed']"), 'true');
+  assert.equal(run("$('playAllBanks').attributes['aria-pressed']"), 'false');
+  assert.equal(run('ctx.sources.at(-1).omaBank'), 1);
+  assert.equal(run('intervals.size'), 1);
+  run('stop()');
+  assert.equal(run('intervals.size'), 0);
+});
+
+test('scope buttons save the idle selection without starting audio', () => {
+  const run = engine();
+  run("connectControls();$('playAllBanks').onclick();");
+  assert.equal(run('sessionData().state.playScope'), 'all');
+  assert.equal(run('playing'), false);
+  assert.equal(run('ctx.sources.length'), 0);
+  const revision = run('revision');
+  run("$('playAllBanks').onclick();");
+  assert.equal(run('revision'), revision);
 });

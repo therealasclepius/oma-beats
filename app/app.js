@@ -368,7 +368,7 @@ function paintPosition(step) {
     .forEach((el) => el.classList.toggle('current', Number(el.dataset.step) === step));
 }
 function render() {
-  $('playScope').value = state.playScope || 'bank';
+  renderPlayScope();
   $('projectName').value = state.name;
   $('bpm').value = state.bpm;
   $('swing').value = state.swing;
@@ -867,14 +867,28 @@ async function exportWav() {
     button.textContent = 'Export WAV ↗';
   }
 }
+function renderPlayScope() {
+  for (const [id, scope] of [
+    ['playThisBank', 'bank'],
+    ['playAllBanks', 'all']
+  ]) {
+    const active = (state.playScope || 'bank') === scope;
+    $(id).classList.toggle('active', active);
+    $(id).setAttribute('aria-pressed', String(active));
+  }
+}
+function setPlayScope(scope) {
+  if ((state.playScope || 'bank') === scope) return;
+  const wasPlaying = playing;
+  if (wasPlaying) stop();
+  state.playScope = scope;
+  renderPlayScope();
+  changed();
+  if (wasPlaying) return togglePlay();
+}
 function connectControls() {
-  $('playScope').onchange = () => {
-    const wasPlaying = playing;
-    if (wasPlaying) stop();
-    state.playScope = $('playScope').value;
-    changed();
-    if (wasPlaying) togglePlay();
-  };
+  $('playThisBank').onclick = () => setPlayScope('bank');
+  $('playAllBanks').onclick = () => setPlayScope('all');
   $('play').onclick = togglePlay;
   $('record').onclick = () => {
     recording = !recording;
@@ -999,6 +1013,7 @@ function connectControls() {
       e.metaKey ||
       e.altKey ||
       ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) ||
+      e.target.closest?.('#playScope') ||
       $('guide').open ||
       $('chopEditor').open ||
       $('sampleImporter').open ||
