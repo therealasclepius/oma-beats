@@ -394,7 +394,15 @@
         <button id="closeSynth">Cancel / close</button>
       </div>
       <div class="synth-preset-row">
-        <label>INSTRUMENT<select id="synthPreset" aria-label="Instrument preset"></select></label
+        <label
+          >INSTRUMENT<button
+            id="synthPreset"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="kitBrowser"
+          >
+            Choose sound
+          </button></label
         ><button id="synthReset">Reset preset</button>
       </div>
       <div class="synth-tuning">
@@ -423,6 +431,9 @@
             <option value="fm">FM keys</option>
             <option value="organ">Organ</option>
             <option value="bell">FM bell</option>
+            <option value="supersaw">Supersaw</option>
+            <option value="pulse">Pulse blend</option>
+            <option value="growl">FM growl</option>
           </select></label
         >
       </div>

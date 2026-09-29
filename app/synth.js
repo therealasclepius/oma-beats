@@ -40,7 +40,8 @@ function showSynth(id) {
   renderSynth();
 }
 function renderSynth() {
-  $('synthPreset').value = synthDraft.preset;
+  $('synthPreset').textContent =
+    SynthEngine.presets.find((p) => p.id === synthDraft.preset).name + ' · Change';
   for (const key of synthControls) {
     const el = $('synth-' + key);
     if (key === 'mono') el.checked = synthDraft[key];
@@ -53,7 +54,8 @@ function renderSynth() {
     SynthEngine.noteName(notes[0]) + ' → ' + SynthEngine.noteName(notes.at(-1));
   $('synthApply').textContent = 'Load instrument into bank ' + bank;
   $('synthHint').textContent =
-    'Replaces the 16 sounds in bank ' +
+    (SynthEngine.presets.find((p) => p.id === synthDraft.preset).description || '') +
+    ' · Replaces the 16 sounds in bank ' +
     bank +
     '. Its patterns stay in place. Each hit plays the chosen note length plus release.';
   $('synthNotes').replaceChildren(
@@ -185,13 +187,6 @@ async function applySynth() {
   }
 }
 function connectSynth() {
-  for (const family of ['Bass', 'Leads', 'Keys', 'Pads']) {
-    const group = document.createElement('optgroup');
-    group.label = family;
-    for (const p of SynthEngine.presets.filter((p) => p.family === family))
-      group.append(new Option(p.name, p.id));
-    $('synthPreset').append(group);
-  }
   SynthEngine.names.forEach((name, i) => $('synth-root').add(new Option(name, i)));
   $('openSynth').onclick = () => showSynth();
   $('closeSynth').onclick = () => {
@@ -199,11 +194,10 @@ function connectSynth() {
     $('synthEditor').close();
   };
   $('synthEditor').addEventListener('cancel', cancelSynth);
-  $('synthPreset').onchange = () => {
-    synthGeneration++;
-    stopSynthPreview();
-    synthDraft = SynthEngine.preset($('synthPreset').value);
-    renderSynth();
+  $('synthPreset').onclick = () => {
+    cancelSynth();
+    $('synthEditor').close();
+    showKitBrowser(true);
   };
   for (const key of synthControls)
     $('synth-' + key).oninput = () => {
@@ -238,21 +232,39 @@ async function runSynthSmoke() {
     const patch = SynthEngine.preset(preset.id),
       notes = SynthEngine.notes(patch);
     for (const note of [notes[0], notes.at(-1)]) {
-      const buffer = await SynthEngine.renderNote(patch, note, OfflineAudioContext),
-        data = buffer.getChannelData(0);
-      let energy = 0,
-        peak = 0;
-      for (const v of data) {
-        expect(Number.isFinite(v), 'finite audio');
-        energy += v * v;
-        peak = Math.max(peak, Math.abs(v));
+      const buffer = await SynthEngine.renderNote(patch, note, OfflineAudioContext);
+      expect(buffer.numberOfChannels === (patch.spread ? 2 : 1), 'channel count ' + preset.name);
+      for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+        const data = buffer.getChannelData(channel);
+        let energy = 0,
+          peak = 0;
+        for (const v of data) {
+          expect(Number.isFinite(v), 'finite audio');
+          energy += v * v;
+          peak = Math.max(peak, Math.abs(v));
+        }
+        expect(energy > 0.01, 'audible ' + preset.name);
+        expect(peak <= 0.851, 'safe peak ' + preset.name);
+        expect(
+          data.slice(-100).every((v) => Math.abs(v) < 1e-5),
+          'release reaches silence'
+        );
+        if (patch.delayMix)
+          expect(
+            data
+              .slice(Math.ceil(SynthEngine.envelope(patch).end * buffer.sampleRate))
+              .some((v) => Math.abs(v) > 1e-5),
+            'echo tail ' + preset.name
+          );
       }
-      expect(energy > 0.01, 'audible ' + preset.name);
-      expect(peak <= 0.851, 'safe peak ' + preset.name);
-      expect(
-        data.slice(-100).every((v) => Math.abs(v) < 1e-5),
-        'release reaches silence'
-      );
+      if (patch.spread) {
+        const left = buffer.getChannelData(0),
+          right = buffer.getChannelData(1);
+        expect(
+          left.some((v, i) => Math.abs(v - right[i]) > 1e-4),
+          'real stereo width ' + preset.name
+        );
+      }
     }
   }
   const firstPad = state.pads[0].sample;
@@ -260,7 +272,20 @@ async function runSynthSmoke() {
   selected = 16;
   state.patterns[0][16][0] = 0.7;
   changed();
-  showSynth('reese');
+  showSynth('sub');
+  $('synthPreset').click();
+  expect(
+    $('kitBrowser').open && !$('synthEditor').open,
+    'preset chooser opens without native dropdown'
+  );
+  $('kitSearch').value = 'Skyline';
+  $('kitSearch').dispatchEvent(new Event('input'));
+  $('kitChoices').querySelector('button').click();
+  expect(
+    $('synthEditor').open && synthDraft.preset === 'skyline',
+    'new preset selected from chooser'
+  );
+  synthDraft.mono = true;
   synthDraft.cutoff = 1230;
   await applySynth();
   expect(state.pads[0].sample === firstPad, 'other banks stay unchanged');
@@ -281,6 +306,10 @@ async function runSynthSmoke() {
     audio = restoreSamples(restored.samples);
   validate(restored.state, audio);
   expect(Object.keys(audio).length === 16, 'all notes embedded in project');
+  expect(
+    Object.values(audio).every((b) => b.numberOfChannels === 2),
+    'stereo survives project round trip'
+  );
   expect(restored.state.synthBanks[1].patch.cutoff === 1230, 'project patch round trip');
   const offline = new OfflineAudioContext(2, 44100, 44100);
   voice(offline, offline.destination, state.pads[16], 0, 1, false, 1);
@@ -293,6 +322,8 @@ async function runSynthSmoke() {
   );
   expect(ctx.state === 'suspended', 'no live playback during checks');
   console.log(
-    'PASS: 12 synth presets, note maps, bank isolation, undo/redo, project round trip and WAV audio'
+    'PASS: ' +
+      SynthEngine.presets.length +
+      ' synth presets, stereo, note maps, bank isolation, undo/redo, project round trip and WAV audio'
   );
 }

@@ -20,7 +20,7 @@ A standalone Electron desktop app with an HTML/CSS/Web Audio interface. Public s
 
 ## Capabilities and Constraints
 
-128 pads in eight banks, four 16-step patterns, per-bank mono playback, sample workshop, undo/redo, local pack import, six synthesized drum kits, and twelve synth presets with editable envelopes and filters. Synth notes are rendered samples. Optional YouTube importing requires external yt-dlp and FFmpeg. No VST hosting, MIDI input, song arrangement, or independent time stretching. Builds are unsigned previews. Third-party packs and personal projects are not bundled or published. Public source is UNLICENSED, not open source.
+128 pads in eight banks, four 16-step patterns, per-bank mono playback, sample workshop, undo/redo, local pack import, six synthesized drum kits, and 36 synth presets with editable envelopes and filters. Synth notes are rendered samples. Optional YouTube importing requires external yt-dlp and FFmpeg. No VST hosting, MIDI input, song arrangement, or independent time stretching. Builds are unsigned previews. Third-party packs and personal projects are not bundled or published. Public source is UNLICENSED, not open source.
 
 ## Brand Commitments
 

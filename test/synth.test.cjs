@@ -18,7 +18,7 @@ test('instrument note maps follow key, scale and octave across all sixteen pads'
   assert.equal(synth.notes(p).at(-1), 107);
 });
 test('presets cover four instrument families with valid finite envelopes', () => {
-  assert.equal(synth.presets.length, 12);
+  assert.equal(synth.presets.length, 36);
   assert.equal(new Set(synth.presets.map((p) => p.family)).size, 4);
   for (const p of synth.presets) {
     const patch = synth.preset(p.id);
@@ -49,4 +49,29 @@ test('untrusted project instrument data cannot inject invalid graphs or huge ren
   );
   synth.validateBanks(undefined);
   synth.validateBanks(Array(8).fill(null));
+});
+
+test('character parameters reject invalid values and older projects still validate', () => {
+  const legacy = synth.preset('reese');
+  for (const key of [
+    'filterEnv',
+    'filterRate',
+    'filterDepth',
+    'pitchSweep',
+    'drive',
+    'sub',
+    'spread',
+    'fmRatio',
+    'fmIndex',
+    'delayMix',
+    'delayTime'
+  ]) {
+    for (const value of [NaN, Infinity, '1', 1000])
+      assert.throws(() => synth.validate({ ...legacy, [key]: value }));
+    delete legacy[key];
+  }
+  synth.validate(legacy);
+  assert.equal(new Set(synth.presets.map((p) => p.id)).size, synth.presets.length);
+  assert.ok(synth.presets.some((p) => p.patch.wave === 'supersaw' && p.patch.spread));
+  assert.ok(synth.presets.some((p) => p.patch.wave === 'growl' && p.patch.filterRate));
 });

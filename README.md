@@ -119,7 +119,7 @@ The source is publicly viewable, but is not currently offered under an open-sour
 
 ## Public website
 
-`site/` contains the responsive product page. Its playable preview and `/play/` route use the same interface and audio engine as the desktop app: six synthesized drum kits, twelve synths, eight pad banks, patterns, undo, local audio chopping, project files, and WAV export. Audio starts only after interaction. Browser sessions autosave locally and stay separate from the installed app; portable projects work in both. YouTube and pack-folder imports require the desktop app.
+`site/` contains the responsive product page. Its playable preview and `/play/` route use the same interface and audio engine as the desktop app: six synthesized drum kits, 36 synths, eight pad banks, patterns, undo, local audio chopping, project files, and WAV export. Audio starts only after interaction. Browser sessions autosave locally and stay separate from the installed app; portable projects work in both. YouTube and pack-folder imports require the desktop app.
 
 ```sh
 npm run build:site

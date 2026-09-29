@@ -102,7 +102,8 @@ function makeExtraKits() {
 let kitPickerSession,
   kitPickerBank = 0,
   kitLoadGeneration = 0,
-  kitLoading = false;
+  kitLoading = false,
+  kitInstrumentsOnly = false;
 function renderKitSelector() {
   const button = $('kitSelect');
   if (!button) return;
@@ -118,14 +119,17 @@ function renderKitSelector() {
   button.title = 'Choose drum kit or instrument: ' + name;
   button.setAttribute('aria-label', 'Choose drum kit or instrument. Current: ' + name);
 }
-function showKitBrowser() {
+function showKitBrowser(instrumentsOnly = false) {
+  kitInstrumentsOnly = instrumentsOnly === true;
   kitPickerSession = state;
   kitPickerBank = state.padBank;
   kitLoading = false;
   kitLoadGeneration++;
   $('kitSearch').value = '';
   $('kitLoadStatus').textContent = '';
-  $('kitBrowserTitle').textContent = 'Choose a kit for bank ' + 'ABCDEFGH'[kitPickerBank];
+  $('kitBrowserTitle').textContent =
+    (kitInstrumentsOnly ? 'Choose an instrument for bank ' : 'Choose a kit for bank ') +
+    'ABCDEFGH'[kitPickerBank];
   $('kitBrowserHint').textContent =
     'Loading a kit replaces the 16 sounds in this bank. Your patterns and other banks stay. You can Undo the change.';
   renderKitChoices();
@@ -142,11 +146,15 @@ function renderKitChoices() {
   list.replaceChildren();
   let count = 0;
   const groups = [
-    ['Downloaded sample kits', KITS.filter((k) => k.external)],
-    ['Starter kits', KITS.filter((k) => !k.external)],
+    ['Downloaded sample kits', KITS.filter((k) => !kitInstrumentsOnly && k.external)],
+    ['Starter kits', KITS.filter((k) => !kitInstrumentsOnly && !k.external)],
     [
       'Built-in instruments',
-      SynthEngine.presets.map((p) => ({ id: 'synth:' + p.id, name: p.name, description: p.family }))
+      SynthEngine.presets.map((p) => ({
+        id: 'synth:' + p.id,
+        name: p.name,
+        description: p.family + (p.description ? ' · ' + p.description : '')
+      }))
     ]
   ];
   for (const [label, items] of groups) {
