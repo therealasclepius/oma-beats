@@ -15,7 +15,7 @@ A standalone desktop sampler and beat sequencer. Build a drum pattern, chop a sa
 
 ## Run the desktop app
 
-Download a build from [Releases](https://github.com/therealasclepius/oma-beats/releases/tag/v0.2.0), or visit the [Oma Beats website](https://oma-beats.vercel.app/) to try the browser demo. Linux builds are portable AppImages, Windows builds are NSIS installers, and macOS builds are DMGs/ZIPs.
+Download a build from [Releases](https://github.com/therealasclepius/oma-beats/releases/tag/v0.2.1), or visit the [Oma Beats website](https://oma-beats.vercel.app/) to try the browser demo. Linux builds are portable AppImages, Windows builds are NSIS installers, and macOS builds are DMGs/ZIPs.
 
 On Omarchy or another Linux x86_64 desktop, the user-local installer verifies the AppImage checksum and adds a launcher entry:
 
