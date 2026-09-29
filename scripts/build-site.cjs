@@ -31,7 +31,7 @@ function buildSite(root = path.resolve(__dirname, '..'), out = path.join(root, '
       .match(/<!-- Shared identity -->([\s\S]*?)<!-- \/Shared identity -->/)?.[1] || '';
   const html = fs
     .readFileSync(path.join(root, 'app/index.html'), 'utf8')
-    .replace('    <script src="desktop.js"></script>\n', '')
+    .replace('<script src="desktop.js"></script>', '')
     .replace('<link rel="icon" href="icon.svg" type="image/svg+xml" />', '')
     .replace(
       '</head>',

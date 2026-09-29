@@ -19,7 +19,11 @@ test('website build ships the actual renderer without native bridge or private s
   fs.writeFileSync(path.join(fixture, 'app/desktop.js'), 'native bridge');
   fs.writeFileSync(path.join(fixture, 'app/session.omabeats'), 'personal project');
   const realRoot = path.resolve(__dirname, '..');
-  fs.copyFileSync(path.join(realRoot, 'app/index.html'), path.join(fixture, 'app/index.html'));
+  // Windows checkouts use CRLF; native bridge removal must not depend on line endings.
+  fs.writeFileSync(
+    path.join(fixture, 'app/index.html'),
+    fs.readFileSync(path.join(realRoot, 'app/index.html'), 'utf8').replace(/\r?\n/g, '\r\n')
+  );
   for (const name of rendererFiles) {
     fs.copyFileSync(path.join(realRoot, 'app', name), path.join(fixture, 'app', name));
   }
