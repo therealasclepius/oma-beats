@@ -99,35 +99,96 @@ function makeExtraKits() {
     }
 }
 
+let kitPickerSession,
+  kitPickerBank = 0,
+  kitLoadGeneration = 0,
+  kitLoading = false;
 function renderKitSelector() {
-  const select = $('kitSelect');
-  if (!select) return;
-  select.replaceChildren();
-  for (const [label, external] of [
-    ['Downloaded sample kits', true],
-    ['Synthesized starter kits', false]
-  ]) {
-    const group = document.createElement('optgroup');
-    group.label = label;
-    for (const kit of KITS.filter((k) => !!k.external === external)) {
-      const option = new Option(kit.name, kit.id);
-      option.title = kit.description;
-      group.append(option);
-    }
-    select.append(group);
-  }
-  const instruments = document.createElement('optgroup');
-  instruments.label = 'Built-in instruments';
-  for (const preset of SynthEngine.presets)
-    instruments.append(new Option(preset.family + ' · ' + preset.name, 'synth:' + preset.id));
-  select.append(instruments);
-  select.add(new Option('Custom / chopped', 'custom'));
+  const button = $('kitSelect');
+  if (!button) return;
   const pads = state.pads.slice(bankOffset(), bankOffset() + 16),
     matched = KITS.find((k) =>
       pads.every((p, i) => p.sample === (k.external ? 'sample-' + k.samples[i] : kitKey(k.id, i)))
     );
   const instrument = currentInstrument();
-  select.value = instrument ? 'synth:' + instrument.patch.preset : matched?.id || 'custom';
+  const name = instrument
+    ? SynthEngine.presets.find((p) => p.id === instrument.patch.preset)?.name || 'Instrument'
+    : matched?.name || 'Custom / chopped';
+  button.textContent = name + ' · Change';
+  button.title = 'Choose drum kit or instrument: ' + name;
+  button.setAttribute('aria-label', 'Choose drum kit or instrument. Current: ' + name);
+}
+function showKitBrowser() {
+  kitPickerSession = state;
+  kitPickerBank = state.padBank;
+  kitLoading = false;
+  kitLoadGeneration++;
+  $('kitSearch').value = '';
+  $('kitLoadStatus').textContent = '';
+  $('kitBrowserTitle').textContent = 'Choose a kit for bank ' + 'ABCDEFGH'[kitPickerBank];
+  $('kitBrowserHint').textContent =
+    'Loading a kit replaces the 16 sounds in this bank. Your patterns and other banks stay. You can Undo the change.';
+  renderKitChoices();
+  $('kitBrowser').showModal();
+}
+function cancelKitBrowser() {
+  kitLoadGeneration++;
+  kitLoading = false;
+  $('kitBrowser').close();
+}
+function renderKitChoices() {
+  const query = $('kitSearch').value.trim().toLowerCase();
+  const list = $('kitChoices');
+  list.replaceChildren();
+  let count = 0;
+  const groups = [
+    ['Downloaded sample kits', KITS.filter((k) => k.external)],
+    ['Starter kits', KITS.filter((k) => !k.external)],
+    [
+      'Built-in instruments',
+      SynthEngine.presets.map((p) => ({ id: 'synth:' + p.id, name: p.name, description: p.family }))
+    ]
+  ];
+  for (const [label, items] of groups) {
+    const matches = items.filter((k) =>
+      (k.name + ' ' + (k.description || '')).toLowerCase().includes(query)
+    );
+    if (!matches.length) continue;
+    const heading = document.createElement('h3');
+    heading.textContent = label;
+    list.append(heading);
+    for (const item of matches) {
+      count++;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'kit-choice';
+      button.disabled = kitLoading;
+      const text = document.createElement('span'),
+        name = document.createElement('strong'),
+        description = document.createElement('small'),
+        action = document.createElement('span');
+      name.textContent = item.name;
+      description.textContent = item.description || '';
+      text.append(name, description);
+      action.textContent = item.id.startsWith('synth:') ? 'Configure' : 'Load';
+      button.append(text, action);
+      button.onclick = () => {
+        if (kitLoading || kitPickerSession !== state) return;
+        if (item.id.startsWith('synth:')) {
+          $('kitBrowser').close();
+          showSynth(item.id.slice(6));
+          return;
+        }
+        return loadKit(item.id);
+      };
+      list.append(button);
+    }
+  }
+  if (!count) {
+    const empty = document.createElement('p');
+    empty.textContent = 'No matching kits. Try another search.';
+    list.append(empty);
+  }
 }
 async function loadKit(id) {
   const kit = KITS.find((k) => k.id === id);
@@ -135,28 +196,20 @@ async function loadKit(id) {
     renderKitSelector();
     return;
   }
-  const offset = bankOffset(),
-    bank = 'ABCDEFGH'[state.padBank],
-    session = state;
-  if (
-    !confirm(
-      'Load ' +
-        kit.name +
-        ' into bank ' +
-        bank +
-        '? Only this bank’s sounds will be replaced. Your patterns and other banks stay.'
-    )
-  ) {
-    renderKitSelector();
-    return;
-  }
-  $('kitSelect').disabled = true;
+  if (kitLoading || kitPickerSession !== state) return;
+  const offset = kitPickerBank * 16,
+    bank = 'ABCDEFGH'[kitPickerBank],
+    session = state,
+    generation = ++kitLoadGeneration;
+  kitLoading = true;
+  $('kitLoadStatus').textContent = 'Loading ' + kit.name + '…';
+  renderKitChoices();
   try {
     let pads;
     if (kit.external) {
       const items = kit.samples.map((id) => packMap.get(id)),
         audio = await Promise.all(items.map(getPackAudio));
-      if (session !== state) return;
+      if (session !== state || generation !== kitLoadGeneration) return;
       items.forEach((item, i) => (buffers[packKey(item)] = audio[i]));
       pads = items.map((item) => ({
         name: item.name.slice(0, 100),
@@ -187,24 +240,61 @@ async function loadKit(id) {
     pruneBuffers();
     render();
     changed();
+    $('kitBrowser').close();
     toast(kit.name + ' loaded into bank ' + bank);
   } catch (error) {
-    toast('Kit could not load: ' + error.message);
-    renderKitSelector();
+    if (session === state && generation === kitLoadGeneration)
+      $('kitLoadStatus').textContent = 'Kit could not load: ' + error.message;
   } finally {
-    $('kitSelect').disabled = false;
+    if (generation === kitLoadGeneration) {
+      kitLoading = false;
+      renderKitChoices();
+    }
   }
 }
 function connectKits() {
-  $('kitSelect').onchange = () => {
-    const id = $('kitSelect').value;
-    if (id.startsWith('synth:')) {
-      showSynth(id.slice(6));
-      renderKitSelector();
-    } else loadKit(id);
-  };
+  $('kitSelect').onclick = showKitBrowser;
+  $('closeKitBrowser').onclick = cancelKitBrowser;
+  $('kitBrowser').addEventListener('cancel', cancelKitBrowser);
+  $('kitSearch').oninput = renderKitChoices;
   for (let i = 0; i < 16; i++) {
     const option = new Option(String(i + 1).padStart(2, '0'), i);
     $('chopDestination').append(option);
   }
+}
+
+async function runKitSmoke() {
+  const expect = (condition, message) => {
+    if (!condition) throw Error('Kit chooser smoke: ' + message);
+  };
+  // Match the fresh state created by New without invoking a native confirmation dialog.
+  state = defaults();
+  pattern = selected = 0;
+  render();
+  initHistory();
+  $('kitSelect').click();
+  expect($('kitBrowser').open, 'chooser opens in a new project');
+  $('kitSearch').value = '808 nights';
+  $('kitSearch').dispatchEvent(new Event('input'));
+  const choice = $('kitChoices').querySelector('button');
+  expect(choice?.textContent.includes('808 nights'), 'search finds kit');
+  await choice.onclick();
+  expect(!$('kitBrowser').open && state.pads[0].sample === 'kit-808-0', 'kit loads');
+  expect($('kitSelect').textContent.includes('808 nights'), 'current kit label updates');
+  undoEdit();
+  expect(state.pads[0].sample === 'kit0', 'undo restores classic kit');
+  state.padBank = 1;
+  selected = 16;
+  state.patterns[0][16][0] = 0.8;
+  render();
+  $('kitSelect').click();
+  await loadKit('club');
+  expect(state.pads[0].sample === 'kit0', 'other banks preserved');
+  expect(state.pads[16].sample === 'kit-club-0', 'target bank loaded');
+  expect(state.patterns[0][16][0] === 0.8, 'pattern preserved');
+  $('kitSelect').click();
+  $('closeKitBrowser').click();
+  expect(!$('kitBrowser').open, 'cancel closes chooser');
+  expect(ctx.state === 'suspended', 'no live audio during checks');
+  console.log('PASS: new-project kit chooser, search, loading, undo, bank isolation and cancel');
 }

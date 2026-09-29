@@ -1013,8 +1013,9 @@ function connectControls() {
       e.metaKey ||
       e.altKey ||
       ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) ||
-      e.target.closest?.('#playScope') ||
+      e.target.closest?.('#playScope, #kitSelect') ||
       $('guide').open ||
+      $('kitBrowser').open ||
       $('chopEditor').open ||
       $('sampleImporter').open ||
       $('packBrowser').open ||

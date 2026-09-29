@@ -82,7 +82,13 @@
         <section class="pad-section">
           <div class="section-label">
             <h2>PERFORMANCE PADS</h2>
-            <select id="kitSelect" aria-label="Drum kit or instrument"></select>
+            <button
+              id="kitSelect"
+              type="button"
+              aria-haspopup="dialog"
+              aria-controls="kitBrowser"
+              aria-label="Choose drum kit or instrument"
+            ></button>
           </div>
           <div class="bank-selector">
             <span>PAD BANK</span>
@@ -159,6 +165,19 @@
       accept=".omabeats,.json,application/json"
       hidden
     />
+    <dialog id="kitBrowser" aria-labelledby="kitBrowserTitle">
+      <div class="chop-header">
+        <h2 id="kitBrowserTitle">Choose a kit</h2>
+        <button id="closeKitBrowser" type="button">Cancel</button>
+      </div>
+      <p id="kitBrowserHint"></p>
+      <label class="kit-search"
+        >Find a kit or instrument
+        <input id="kitSearch" type="search" placeholder="Search kits and synths" />
+      </label>
+      <p id="kitLoadStatus" role="status" aria-live="polite"></p>
+      <div id="kitChoices"></div>
+    </dialog>
     <dialog id="guide">
       <h2>Your beat starts here.</h2>
       <p>

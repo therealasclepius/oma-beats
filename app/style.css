@@ -1327,3 +1327,68 @@ footer {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Kit selection stays inside the app, without a native popup menu. */
+#kitSelect {
+  overflow: hidden;
+  white-space: nowrap;
+}
+#kitBrowser {
+  width: min(640px, calc(100% - 32px));
+}
+#kitBrowser .chop-header h2 {
+  margin: 0;
+}
+.kit-search {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+}
+.kit-search input {
+  padding: 10px;
+  width: 100%;
+  min-width: 0;
+  background: #efede5;
+  border: 1px solid var(--edge);
+  border-radius: 5px;
+  color: #292b2a;
+}
+#kitChoices {
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 4px;
+}
+#kitChoices h3 {
+  font-size: 13px;
+  margin: 20px 0 8px;
+}
+#kitChoices h3:first-child {
+  margin-top: 0;
+}
+.kit-choice {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  text-align: left;
+  margin-bottom: 5px;
+}
+.kit-choice > span:first-child {
+  min-width: 0;
+}
+.kit-choice strong,
+.kit-choice small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.kit-choice small {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+#kitLoadStatus {
+  min-height: 1.4em;
+  font-size: 13px;
+}
