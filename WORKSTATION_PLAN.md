@@ -16,3 +16,5 @@ Not part of this scope: third-party VST hosting, commercial sample redistributio
 Verification caveats: MIDI event handling is exercised programmatically; physical controller testing is pending. CUA currently reports no connected browsers, so final screenshot review is pending.
 
 Released as v0.4.0. Build matrix 37060109993 and publication 37060878243 passed. The public Linux AppImage was checksum-verified and installed without opening or closing the user’s session.
+
+Final patch v0.4.1: note repeat stays on its selected interval and cancels unplayed recorded hits on release. Build 37063770247 and publication 37064049940 passed, including MIDI note-on/off and repeat checks.
