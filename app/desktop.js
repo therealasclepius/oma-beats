@@ -40,6 +40,7 @@ async function connectDesktop() {
       await runSynthSmoke();
       await runKitSmoke();
       await runStudioSmoke();
+      await runSamplerSmoke();
     } catch (error) {
       console.error(error);
       window.omaDesktop.ready(false);

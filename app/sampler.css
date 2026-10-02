@@ -1,0 +1,269 @@
+#chopEditor {
+  width: min(1250px, 97vw);
+  max-width: 1250px;
+  padding: 22px;
+  border: 1px solid #f4f1e5;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px #0008;
+}
+#chopEditor .chop-header {
+  padding-bottom: 14px;
+}
+#chopEditor .chop-header h2 {
+  font-size: 20px;
+}
+#chopEditor .sampler-transport {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: -22px;
+  z-index: 3;
+  background: #e3e1d7;
+  padding: 14px 0;
+  border-bottom: 1px solid #babcaf;
+}
+#samplerStatus {
+  margin-left: auto;
+  font: 10px monospace;
+  letter-spacing: 0.08em;
+  color: #546b45;
+}
+.sampler-help {
+  padding: 10px 16px;
+  background: #c1ccb047;
+  border: 1px solid #a9b49a;
+  border-radius: 6px;
+  margin: 12px 0;
+}
+.sampler-help p {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 5px 0;
+}
+#chopEditor .chop-tools {
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 12px 0;
+}
+#chopEditor .chop-tools label {
+  margin-left: 0;
+}
+#chopEditor .chop-tools label input {
+  width: 100px;
+}
+#chopEditor .chop-tools button {
+  padding: 7px 10px;
+}
+#chopWave {
+  height: clamp(150px, 23vh, 255px);
+}
+#chopEditor .chop-wave-wrap {
+  border: 5px solid #546049;
+  padding: 8px;
+  border-radius: 8px;
+}
+#chopEditor #chopOverview {
+  height: 40px;
+  margin-bottom: 9px;
+}
+#chopEditor .chop-navigation {
+  margin: 9px 0;
+}
+.sampler-edit-focus {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 14px;
+}
+.sampler-edit-focus button {
+  font-size: 11px;
+  padding: 9px 3px;
+}
+.sampler-edit-hint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0 14px;
+  font: 11px monospace;
+  color: #61724f;
+}
+.sampler-edit-hint b {
+  color: #bc4925;
+}
+.sampler-edit-hint span:last-child {
+  margin-left: auto;
+}
+.sampler-deck {
+  display: grid;
+  grid-template-columns: minmax(270px, 0.85fr) minmax(400px, 1.4fr);
+  gap: 24px;
+  border-top: 1px solid #babcaf;
+  padding-top: 17px;
+}
+.sampler-panel-title {
+  font: 10px monospace;
+  letter-spacing: 0.1em;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #44543b;
+}
+.sampler-panel-title span {
+  font-size: 9px;
+  color: #748069;
+}
+#chopEditor #cueList {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  margin: 12px 0 0;
+}
+#chopEditor .cue-button {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  text-align: left;
+  gap: 7px;
+  min-height: 62px;
+  padding: 8px;
+  border-top: 3px solid var(--cue);
+  background: #bcc3af;
+  box-shadow: 0 4px 0 #8e9686;
+  min-width: 0;
+  font: 10px monospace;
+}
+#chopEditor .cue-button.selected {
+  background: #e9eadb;
+  outline: 2px solid #d6512e;
+  outline-offset: 1px;
+}
+#chopEditor .cue-button kbd {
+  grid-column: 2;
+  color: #69735d;
+  font-size: 10px;
+}
+#chopEditor .cue-button span {
+  grid-column: 1;
+  grid-row: 1;
+  color: #394534;
+}
+#chopEditor .cue-button small {
+  grid-column: 1/-1;
+  font: 9px monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #5b6750;
+}
+#chopEditor .cue-edit {
+  border-top: 0;
+  padding-top: 0;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#chopEditor .cue-edit button {
+  font-size: 11px;
+  padding: 7px 9px;
+}
+#chopEditor .cue-edit label:first-of-type {
+  margin-left: 0;
+}
+#chopEditor .cue-edit label {
+  margin-top: 8px;
+  flex: 1;
+}
+#chopEditor .cue-edit input {
+  width: 100%;
+  font-size: 15px;
+  padding: 9px;
+  color: #3f5833;
+  background: #d0dabb;
+}
+#chopEditor .cue-sound {
+  margin-top: 15px;
+  padding-top: 12px;
+}
+#chopEditor .cue-knobs {
+  gap: 15px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-top: 10px;
+}
+#chopEditor .cue-knobs label {
+  font-size: 9px;
+  letter-spacing: 0.05em;
+}
+#chopEditor .chop-bottom {
+  margin-top: 16px;
+  padding-top: 12px;
+  flex-wrap: wrap;
+}
+.sampler-target {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 11px monospace;
+}
+.sampler-target button {
+  padding: 6px 10px !important;
+}
+#chopEditor #samplerShortcuts[aria-expanded='true'] {
+  background: #c5d1b6;
+}
+#chopWave:focus-visible {
+  outline: 2px solid #f6c765;
+  outline-offset: 2px;
+}
+@media (max-width: 850px) {
+  .sampler-deck {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  #chopEditor {
+    padding: 14px;
+  }
+  #chopEditor .sampler-transport {
+    top: -14px;
+  }
+  .sampler-edit-focus {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .sampler-edit-hint {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sampler-edit-hint span:last-child {
+    margin-left: 0;
+  }
+  #samplerStatus {
+    width: 100%;
+    margin-left: 0;
+  }
+  #chopEditor .chop-header {
+    gap: 8px;
+  }
+  #chopEditor .chop-header h2 {
+    font-size: 16px;
+  }
+  #chopEditor .eyebrow {
+    font-size: 8px;
+  }
+  #chopEditor .cue-button {
+    min-height: 60px;
+  }
+  .sampler-transport button {
+    font-size: 11px;
+    padding: 8px;
+  }
+  #chopEditor .chop-bottom p {
+    width: 100%;
+    margin: 0;
+  }
+  #chopWave {
+    height: 180px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #chopEditor button {
+    transition: none;
+  }
+}

@@ -7,3 +7,7 @@ The transport remains visible while editing. A five-part navigation separates Pa
 Keyboard focus must remain visible. No critical setting depends on a native select popup. Pointer note editing must offer numerical alternatives. Wider views scroll internally instead of overflowing the chassis. Keep existing private sample libraries out of public builds.
 
 Verification: DOM/audio smoke coverage runs in an isolated, muted Electron profile. Screenshot critique is pending a working CUA browser connection; do not represent automated layout checks as a visual review.
+
+## Keyboard sampler refinement
+
+Make the workshop feel playable: a large waveform with a visible edit focus, a persistent audition transport, sixteen cue pads with keyboard legends, and a compact sound strip. Keep the cream/sage/orange palette and existing type. Space auditions the selected processed cue; Shift+Space auditions the source. Arrow keys edit the active parameter, function keys select it, and pads trigger cues directly. Loop audition makes changes audible without repeated clicking. All actions remain available through labeled controls; no shortcut should hijack text entry. No decorative motion; only playback cursor movement, with reduced-motion handling. Preserve non-destructive drafts and explicit application to pads. Browser visual capture remains unavailable at task start.

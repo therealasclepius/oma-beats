@@ -6,6 +6,7 @@
     <title>Oma Beats</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="studio.css" />
+    <link rel="stylesheet" href="sampler.css" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
   </head>
   <body>
@@ -322,32 +323,67 @@
       <p>Built-in sounds are synthesized locally. No account or internet needed.</p>
       <button id="closeHelp" class="orange">Let’s make a beat</button>
     </dialog>
-    <dialog id="chopEditor">
+    <dialog id="chopEditor" aria-labelledby="chopTitle">
       <div class="chop-header">
         <div>
-          <span class="eyebrow">SAMPLE WORKSHOP</span>
+          <span class="eyebrow">SAMPLE WORKSHOP / KEYBOARD READY</span>
           <h2 id="chopTitle">Chop your sample</h2>
         </div>
-        <span id="cueCount"></span><button id="closeChopper">Done / cancel</button>
+        <span id="cueCount"></span
+        ><button id="samplerShortcuts" aria-expanded="false" aria-controls="samplerHelp">
+          Key guide</button
+        ><button id="closeChopper">Close · Esc</button>
+      </div>
+      <div class="sampler-transport">
+        <button id="auditionCue" class="orange">▶ Play cue · Space</button
+        ><button id="samplerRetrigger">↻ Retrigger · Enter</button
+        ><button id="previewSample">▶ Source · Shift Space</button
+        ><button id="samplerStop">■ Stop</button><button id="samplerLoop">Loop · L</button
+        ><button id="samplerGate">Hold to play · H</button
+        ><span id="samplerStatus" role="status">READY</span>
+      </div>
+      <div id="samplerHelp" class="sampler-help" hidden>
+        <p>
+          <b>Play:</b> Space selected cue · Enter retrigger · Shift Space source · L loop · H hold
+          mode · 1234 / QWER / ASDF / ZXCV play cues.
+        </p>
+        <p>
+          <b>Edit:</b> F1–F8 choose a parameter · ← → adjust · Shift coarse · Alt fine · ↑ ↓ or [ ]
+          select cue · F9 reverse.
+        </p>
+        <p>
+          <b>Chop:</b> B find chops · U split evenly · M add cue at playhead · I set start at cursor
+          · P set end · Delete remove cue · N snap mode · T snap focused boundary.
+        </p>
+        <p>
+          <b>View & save:</b> + / − zoom · J fit cue · O whole sample · Home / End seek cue edges ·
+          Ctrl/Cmd Z undo · Ctrl/Cmd Shift Z redo · Ctrl/Cmd Enter apply.
+        </p>
       </div>
       <div class="chop-tools">
-        <button id="findChops" class="orange">✦ Find chops</button
-        ><button id="evenChops">Split evenly</button><button id="randomChops">Random</button
+        <button id="findChops" class="orange">✦ Find chops · B</button
+        ><button id="evenChops">Split evenly · U</button><button id="randomChops">Random</button
         ><label
-          >MAX CUES
-          <select id="chopCount">
+          >SLICES <button id="samplerCount">16 cues</button>
+          <select id="chopCount" hidden>
             <option>4</option>
             <option>8</option>
             <option selected>16</option>
           </select></label
         ><label
           >SENSITIVITY <input id="sensitivity" type="range" min="0" max="100" value="65" /></label
-        ><label><input id="snapChops" type="checkbox" checked /> Snap to transients</label
-        ><button id="undoChop">Undo</button>
+        ><label hidden><input id="snapChops" type="checkbox" checked /> Snap to transients</label
+        ><button id="samplerSnap">Snap: transient · N</button
+        ><button id="samplerSnapNow">Snap boundary · T</button><button id="undoChop">↶ Undo</button
+        ><button id="redoChop">↷ Redo</button>
       </div>
       <canvas id="chopOverview" aria-label="Full sample overview; click to navigate"></canvas>
       <div class="chop-wave-wrap">
-        <canvas id="chopWave" aria-label="Sample chop waveform"></canvas>
+        <canvas
+          id="chopWave"
+          tabindex="0"
+          aria-label="Sample waveform. F1 to F8 select an edit parameter; arrows adjust; Space auditions the cue."
+        ></canvas>
         <div class="wave-caption">
           <span id="chopTime"></span
           ><span>Click to seek · Shift-click / double-click to add · Drag markers</span>
@@ -363,61 +399,85 @@
           step="0.0001"
           value="0"
         /><button id="zoomOut" aria-label="Zoom out">−</button><span id="zoomReadout">1×</span
-        ><button id="zoomIn" aria-label="Zoom in">＋</button><button id="zoomFit">Fit</button>
+        ><button id="zoomIn" aria-label="Zoom in">＋</button
+        ><button id="zoomCue">Fit cue · J</button><button id="zoomFit">Whole · O</button>
       </div>
-      <div id="cueList"></div>
-      <div class="cue-edit">
-        <button id="previewSample">▶ Preview source</button
-        ><button id="auditionCue">▶ Selected cue</button
-        ><button id="addCue">＋ Cue at cursor</button><button id="deleteCue">Delete cue</button
-        ><label>START (SEC)<input id="cueStart" type="number" step="0.001" /></label
-        ><label>END (SEC)<input id="cueEnd" type="number" step="0.001" /></label>
+      <div class="sampler-edit-focus" role="group" aria-label="Keyboard edit parameter">
+        <button id="edit-cursor">F1 Cursor</button><button id="edit-start">F2 Start</button
+        ><button id="edit-end">F3 End</button><button id="edit-pitch">F4 Pitch</button
+        ><button id="edit-gain">F5 Level</button><button id="edit-cutoff">F6 Filter</button
+        ><button id="edit-attack">F7 Attack</button><button id="edit-release">F8 Release</button>
       </div>
-      <div class="cue-sound">
-        <div>
-          <span id="cueControlTitle">CUE 01</span><button id="cueReset">Reset sound</button>
+      <div class="sampler-edit-hint">
+        <b id="samplerFocus">Start</b><span id="samplerReadout"></span
+        ><span>↑ ↓ Select cue · M Drop cue</span>
+      </div>
+      <div class="sampler-deck">
+        <div class="sampler-pad-panel">
+          <div class="sampler-panel-title">
+            PLAY YOUR CHOPS <span>1234 / QWER / ASDF / ZXCV</span>
+          </div>
+          <div id="cueList"></div>
         </div>
-        <div class="cue-knobs">
-          <label
-            >LEVEL<input id="cue-gain" type="range" min="0" max="1.5" step="0.01" /><output
-              id="cue-gain-value"
-            ></output></label
-          ><label
-            >PITCH<input id="cue-pitch" type="range" min="-24" max="24" step="1" /><output
-              id="cue-pitch-value"
-            ></output></label
-          ><label
-            >LOW-PASS FILTER<input
-              id="cue-cutoff"
-              type="range"
-              min="0"
-              max="100"
-              step="0.1" /><output id="cue-cutoff-value"></output></label
-          ><label
-            >ATTACK / FADE IN<input
-              id="cue-attack"
-              type="range"
-              min="0"
-              max="2"
-              step="0.001" /><output id="cue-attack-value"></output></label
-          ><label
-            >RELEASE / FADE OUT<input
-              id="cue-release"
-              type="range"
-              min="0"
-              max="5"
-              step="0.001" /><output id="cue-release-value"></output></label
-          ><button id="cueReverse">⇄ Reverse</button>
+        <div class="sampler-sound-panel">
+          <div class="cue-edit">
+            <button id="addCue">＋ Cue at cursor</button><button id="deleteCue">Delete cue</button
+            ><button id="trimStart">Start here · I</button><button id="trimEnd">End here · P</button
+            ><label>START (SEC)<input id="cueStart" type="number" step="0.001" /></label
+            ><label>END (SEC)<input id="cueEnd" type="number" step="0.001" /></label>
+          </div>
+          <div class="cue-sound">
+            <div>
+              <span id="cueControlTitle">CUE 01</span><button id="cueReset">Reset sound</button>
+            </div>
+            <div class="cue-knobs">
+              <label
+                >LEVEL<input id="cue-gain" type="range" min="0" max="1.5" step="0.01" /><output
+                  id="cue-gain-value"
+                ></output></label
+              ><label
+                >PITCH<input id="cue-pitch" type="range" min="-24" max="24" step="1" /><output
+                  id="cue-pitch-value"
+                ></output></label
+              ><label
+                >LOW-PASS FILTER<input
+                  id="cue-cutoff"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="0.1" /><output id="cue-cutoff-value"></output></label
+              ><label
+                >ATTACK / FADE IN<input
+                  id="cue-attack"
+                  type="range"
+                  min="0"
+                  max="2"
+                  step="0.001" /><output id="cue-attack-value"></output></label
+              ><label
+                >RELEASE / FADE OUT<input
+                  id="cue-release"
+                  type="range"
+                  min="0"
+                  max="5"
+                  step="0.001" /><output id="cue-release-value"></output></label
+              ><button id="cueReverse">⇄ Reverse · F9</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="chop-bottom">
         <p>
-          Space previews · M drops a cue while listening.<br />Edits stay in this workshop until you
-          apply them.
+          Edits stay in this workshop until applied.<br />Applying replaces the target pads; project
+          Undo restores them.
         </p>
         <label
           >FIRST PAD IN THIS BANK
-          <select id="chopDestination"></select></label
+          <select id="chopDestination" hidden></select
+          ><span class="sampler-target"
+            ><button id="targetPrevious" aria-label="Previous destination pad">−</button
+            ><span id="samplerTarget"></span
+            ><button id="targetNext" aria-label="Next destination pad">＋</button></span
+          ></label
         ><button id="applyChops" class="orange">Apply chops to pads</button>
       </div>
     </dialog>
@@ -655,6 +715,7 @@
     <script src="packs.js"></script>
     <script src="importer.js"></script>
     <script src="chop.js"></script>
+    <script src="sampler.js"></script>
     <script src="kits.js"></script>
     <script src="studio-model.js"></script>
     <script src="studio-audio.js"></script>

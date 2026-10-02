@@ -4,6 +4,8 @@ const path = require('node:path');
 const rendererFiles = [
   'style.css',
   'studio.css',
+  'sampler.css',
+  'sampler.js',
   'studio-model.js',
   'studio-audio.js',
   'studio.js',

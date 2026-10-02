@@ -181,3 +181,147 @@ async function runStudioSmoke() {
     'PASS: workstation migration, eight-bar duplication, song, 36 live voices, mixer/stems, scope, resampling, stretch worker, live recording, MIDI repeat/release, piano roll and recovery'
   );
 }
+
+async function runSamplerSmoke() {
+  const expect = (v, m) => {
+    if (!v) throw Error('Sampler smoke: ' + m);
+  };
+  const key = (code, keyValue = code, extra = {}, target = $('chopWave')) =>
+    target.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        code,
+        key: keyValue,
+        bubbles: true,
+        cancelable: true,
+        ...extra
+      })
+    );
+  state = defaults();
+  pattern = 0;
+  selected = 0;
+  state.pads[0].pitch = -3;
+  state.pads[0].gain = 0.65;
+  render();
+  initHistory();
+  openChopper();
+  expect(
+    chopDraft.settings[0].pitch === -3 && chopDraft.settings[0].gain === 0.65,
+    'existing sound settings preserved'
+  );
+  const original = JSON.stringify(state.pads);
+  key('F2', 'F2');
+  key('ArrowRight', 'ArrowRight');
+  const boundary = chopDraft.markers[0];
+  expect(
+    Math.abs(boundary * buffers.kit0.duration - 0.001) < 1e-9,
+    'one millisecond boundary nudge'
+  );
+  key('ArrowRight', 'ArrowRight', { altKey: true });
+  expect(
+    Math.abs(chopDraft.markers[0] - boundary - 1 / buffers.kit0.length) < 1e-9,
+    'one sample fine nudge'
+  );
+  key('KeyZ', 'z', { ctrlKey: true });
+  expect(chopDraft.markers[0] === 0, 'grouped workshop undo');
+  key('KeyZ', 'z', { ctrlKey: true, shiftKey: true });
+  expect(chopDraft.markers[0] > 0, 'workshop redo');
+  expect(JSON.stringify(state.pads) === original, 'draft stays non-destructive');
+  $('chopCount').value = '4';
+  $('evenChops').click();
+  expect(chopDraft.markers.length === 5, 'split');
+  key('ArrowDown', 'ArrowDown');
+  expect(chopSelected === 1, 'cue navigation');
+  key('F4', 'F4');
+  key('ArrowRight', 'ArrowRight');
+  expect(chopDraft.settings[1].pitch === 1, 'keyboard pitch');
+  key('KeyL', 'l');
+  key('Space', ' ');
+  await new Promise((r) => setTimeout(r, 30));
+  expect(
+    Sampler.preview?.mode === 'cue' && Sampler.preview.source.loop,
+    'selected cue loop audition'
+  );
+  const meter = ctx.createAnalyser();
+  Sampler.preview.gain.connect(meter);
+  await new Promise((r) => setTimeout(r, 35));
+  const samples = new Float32Array(128);
+  meter.getFloatTimeDomainData(samples);
+  expect(
+    samples.every(Number.isFinite) && samples.some((v) => Math.abs(v) > 1e-6),
+    'audition produces real audio'
+  );
+  meter.disconnect();
+  const playingSource = Sampler.preview.source;
+  key('F6', 'F6');
+  key('ArrowLeft', 'ArrowLeft', { shiftKey: true });
+  expect(
+    Sampler.preview.source === playingSource && Sampler.preview.settings.cutoff < 20000,
+    'filter tweaks same playing voice'
+  );
+  key('F5', 'F5');
+  key('ArrowLeft', 'ArrowLeft');
+  expect(
+    Sampler.preview.source === playingSource && Sampler.preview.settings.gain === 0.79,
+    'live gain'
+  );
+  key('F3', 'F3');
+  key('ArrowLeft', 'ArrowLeft');
+  await new Promise((r) => setTimeout(r, 20));
+  expect(
+    Sampler.preview && Sampler.preview.source !== playingSource,
+    'boundary edit updates audition'
+  );
+  key('F9', 'F9');
+  await new Promise((r) => setTimeout(r, 20));
+  expect(Sampler.preview?.reverse, 'reverse audition');
+  key('KeyJ', 'j');
+  expect(chopView[1] - chopView[0] < 0.5, 'zoom to cue');
+  key('KeyO', 'o');
+  expect(chopView[0] === 0 && chopView[1] === 1, 'overview shortcut');
+  key('KeyH', 'h');
+  key('Digit1', '1');
+  await new Promise((r) => setTimeout(r, 20));
+  expect(chopSelected === 0 && Sampler.preview, 'cue pad shortcut');
+  $('chopWave').dispatchEvent(
+    new KeyboardEvent('keyup', { code: 'Digit1', key: '1', bubbles: true })
+  );
+  expect(!Sampler.preview, 'gate release');
+  key('Space', ' ', { shiftKey: true });
+  await new Promise((r) => setTimeout(r, 20));
+  expect(Sampler.preview?.mode === 'source', 'source preview');
+  key('Space', ' ', { shiftKey: true });
+  expect(!Sampler.preview, 'source stop');
+  const beforePitch = chopDraft.settings[0].pitch;
+  key('ArrowRight', 'ArrowRight', {}, $('cueStart'));
+  expect(chopDraft.settings[0].pitch === beforePitch, 'numeric entry keeps native keys');
+  expect(
+    $('chopEditor').scrollWidth <= $('chopEditor').clientWidth + 1,
+    'sampler stays inside dialog'
+  );
+  const b = buffers.kit0;
+  const peaks = Sampler.peaks(b, 0, 1, 200);
+  expect(peaks.low.length === 200 && peaks.high.some((v) => v > 0), 'cached waveform peaks');
+  expect(Sampler.peaks(b, 0, 1, 200) === peaks, 'peaks reused during cursor animation');
+  key('Enter', 'Enter', { ctrlKey: true });
+  expect(
+    !$('chopEditor').open && state.pads[1].sample === 'kit0' && state.chop.markers.length === 5,
+    'keyboard apply'
+  );
+  undoEdit();
+  expect(state.pads[1].sample === 'kit1', 'project undo restores replaced pads');
+  openChopper();
+  const pending = Sampler.cue(true);
+  closeChopper();
+  await pending;
+  expect(!Sampler.preview, 'close cancels pending audition');
+  await new Promise((r) => setTimeout(r, 25));
+  await ctx.suspend();
+  state = defaults();
+  pattern = 0;
+  selected = 0;
+  render();
+  initHistory();
+  console.log(
+    'PASS: sampler keyboard edits, sample-level nudges, undo/redo, live loop/filter/gain/reverse, cue keys/gate, apply and async cancellation'
+  );
+}

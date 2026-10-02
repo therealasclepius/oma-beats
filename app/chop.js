@@ -21,8 +21,6 @@ let chopDraft = null,
   chopUndo = [],
   chopDrag = null,
   previewSource = null,
-  previewOrigin = 0,
-  previewOffset = 0,
   previewAnimation = 0;
 const cueColors = [
   '#eb7952',
@@ -39,10 +37,12 @@ function cueGap() {
   return Math.max(1 / buffers[chopDraft.sample].length, 0.003 / buffers[chopDraft.sample].duration);
 }
 function rememberChop() {
+  if (typeof Sampler !== 'undefined') Sampler.clearRedo();
   chopUndo.push({
     markers: chopDraft.markers.slice(),
     settings: structuredClone(chopDraft.settings || []),
-    selected: chopSelected
+    selected: chopSelected,
+    cursor: chopCursor
   });
   if (chopUndo.length > 40) chopUndo.shift();
 }
@@ -56,69 +56,38 @@ function openChopper() {
   chopDraft =
     saved?.sample === pad.sample
       ? structuredClone(saved)
-      : { sample: pad.sample, name: pad.name, markers: [pad.start, pad.end] };
-  chopSelected = 0;
-  chopCursor = chopDraft.markers[0];
+      : {
+          sample: pad.sample,
+          name: pad.name,
+          markers: [pad.start, pad.end],
+          settings: [
+            Object.fromEntries(
+              Object.entries(defaultCueSettings()).map(([key, value]) => [key, pad[key] ?? value])
+            )
+          ]
+        };
+  chopSelected = Math.max(
+    0,
+    chopDraft.markers.slice(0, -1).findIndex((m) => Math.abs(m - pad.start) < 1e-8)
+  );
+  chopCursor = chopDraft.markers[chopSelected];
   chopView = [chopDraft.markers[0], chopDraft.markers.at(-1)];
   chopUndo = [];
   $('chopDestination').value = '0';
+  stop();
   $('chopEditor').showModal();
   renderChopper();
+  $('chopWave').focus();
 }
 function stopPreview() {
-  cancelAnimationFrame(previewAnimation);
-  if (previewSource) {
-    try {
-      previewSource.stop();
-    } catch {}
-    previewSource = null;
-  }
-  $('previewSample').textContent = '▶ Preview source';
+  return Sampler.stop();
 }
 function closeChopper() {
   stopPreview();
   $('chopEditor').close();
 }
-function previewTick() {
-  if (!previewSource) return;
-  chopCursor = clamp(
-    previewOffset + (ctx.currentTime - previewOrigin) / buffers[chopDraft.sample].duration,
-    chopDraft.markers[0],
-    chopDraft.markers.at(-1)
-  );
-  drawChopper();
-  previewAnimation = requestAnimationFrame(previewTick);
-}
 async function previewSample() {
-  if (previewSource) {
-    stopPreview();
-    return;
-  }
-  await unlock();
-  const source = ctx.createBufferSource(),
-    gain = ctx.createGain();
-  source.buffer = buffers[chopDraft.sample];
-  gain.gain.value = 0.65;
-  source.connect(gain).connect(master);
-  const end = chopDraft.markers.at(-1);
-  if (chopCursor >= end - cueGap()) chopCursor = chopDraft.markers[0];
-  previewOffset = chopCursor;
-  previewOrigin = ctx.currentTime;
-  source.start(
-    ctx.currentTime,
-    chopCursor * source.buffer.duration,
-    (end - chopCursor) * source.buffer.duration
-  );
-  previewSource = source;
-  activeSources.add(source);
-  source.onended = () => {
-    activeSources.delete(source);
-    source.disconnect();
-    gain.disconnect();
-    if (previewSource === source) stopPreview();
-  };
-  $('previewSample').textContent = '■ Stop preview';
-  previewTick();
+  return Sampler.source();
 }
 function addCue(position = chopCursor) {
   const marks = chopDraft.markers,
@@ -241,16 +210,25 @@ function renderChopper() {
     const b = document.createElement('button');
     b.className = 'cue-button' + (i === chopSelected ? ' selected' : '');
     b.style.setProperty('--cue', cueColors[i % 8]);
-    b.textContent = String(i + 1).padStart(2, '0') + ' · ' + (marks[i] * duration).toFixed(2) + 's';
+    const key = document.createElement('kbd'),
+      name = document.createElement('span'),
+      time = document.createElement('small');
+    key.textContent = KEYS[i].toUpperCase();
+    name.textContent = 'CUE ' + String(i + 1).padStart(2, '0');
+    time.textContent =
+      (marks[i] * duration).toFixed(3) + ' — ' + (marks[i + 1] * duration).toFixed(3) + ' s';
+    b.append(key, name, time);
     b.setAttribute('aria-label', 'Select cue ' + (i + 1));
     b.onclick = () => {
+      if (typeof Sampler !== 'undefined') return Sampler.select(i, true);
       chopSelected = i;
       chopCursor = marks[i];
       renderChopper();
     };
     $('cueList').append(b);
   }
-  $('applyChops').textContent = 'Apply ' + (marks.length - 1) + ' chops to pads';
+  $('applyChops').textContent = 'Apply ' + (marks.length - 1) + ' chops · Ctrl Enter';
+  if (typeof Sampler !== 'undefined') Sampler.render();
   drawChopper();
 }
 function drawChopper() {
@@ -278,27 +256,19 @@ function drawChopper() {
   g.strokeStyle = '#b9d4c1';
   g.lineWidth = dpr;
   g.beginPath();
+  const peaks = Sampler.peaks(buffer, start, end, w);
   for (let px = 0; px < w; px++) {
-    const a = Math.floor((start + (px / w) * span) * data.length),
-      b = Math.min(
-        data.length,
-        Math.max(a + 1, Math.floor((start + ((px + 1) / w) * span) * data.length))
-      );
-    let min = 0,
-      max = 0;
-    for (let j = a; j < b; j++) {
-      min = Math.min(min, data[j]);
-      max = Math.max(max, data[j]);
-    }
-    g.moveTo(px, h / 2 + min * h * 0.35);
-    g.lineTo(px, h / 2 + max * h * 0.35);
+    g.moveTo(px, h / 2 + peaks.low[px] * h * 0.4);
+    g.lineTo(px, h / 2 + peaks.high[px] * h * 0.4);
   }
   g.stroke();
   g.font = 11 * dpr + 'px monospace';
   for (let i = 0; i < marks.length; i++) {
     const px = x(marks[i]);
     g.strokeStyle = cueColors[i % 8];
-    g.lineWidth = (i === chopSelected ? 3 : 1) * dpr;
+    const activeBoundary = i === chopSelected + (Sampler.focus === 'end' ? 1 : 0);
+    g.lineWidth = (activeBoundary ? 3 : 1) * dpr;
+    if (activeBoundary && ['start', 'end'].includes(Sampler.focus)) g.strokeStyle = '#fff3c2';
     g.beginPath();
     g.moveTo(px, 0);
     g.lineTo(px, h);
@@ -326,7 +296,7 @@ function drawChopper() {
 }
 function changeZoom(factor) {
   const oldSpan = chopView[1] - chopView[0],
-    span = clamp(oldSpan / factor, 0.005, 1),
+    span = clamp(oldSpan / factor, Math.max(8 / buffers[chopDraft.sample].length, 0.00001), 1),
     center = clamp(chopCursor, chopView[0], chopView[1]),
     start = clamp(center - span / 2, 0, 1 - span);
   chopView = [start, start + span];
@@ -340,18 +310,6 @@ function applyChops() {
     toast('These chops need ' + count + ' pads. Choose an earlier starting pad.');
     return;
   }
-  if (
-    !confirm(
-      'Replace bank ' +
-        'ABCDEFGH'[state.padBank] +
-        ' pads ' +
-        (local + 1) +
-        '–' +
-        (local + count) +
-        ' with these chops? Existing patterns stay.'
-    )
-  )
-    return;
   stop();
   const original = { ...state.pads[selected] };
   for (let i = 0; i < count; i++)
@@ -417,24 +375,7 @@ function connectChopper() {
     }
   };
   $('previewSample').onclick = previewSample;
-  $('auditionCue').onclick = async () => {
-    stopPreview();
-    await unlock();
-    const p = {
-      ...state.pads[selected],
-      sample: chopDraft.sample,
-      start: chopDraft.markers[chopSelected],
-      end: chopDraft.markers[chopSelected + 1],
-      ...chopDraft.settings[chopSelected]
-    };
-    previewSource = voice(ctx, master, p, ctx.currentTime);
-    const s = previewSource,
-      ended = s.onended;
-    s.onended = () => {
-      ended?.();
-      if (previewSource === s) stopPreview();
-    };
-  };
+  $('auditionCue').onclick = () => Sampler.cue();
   $('applyChops').onclick = applyChops;
   $('zoomIn').onclick = () => changeZoom(2);
   $('zoomOut').onclick = () => changeZoom(0.5);
@@ -511,38 +452,12 @@ function connectChopper() {
   canvas.onpointerup = () => {
     if (chopDrag !== null && $('snapChops').checked) {
       const marks = chopDraft.markers,
-        i = chopDrag,
-        buffer = buffers[chopDraft.sample],
-        at = marks[i];
-      const data = buffer.getChannelData(0),
-        center = Math.floor(at * buffer.length),
-        radius = Math.round(buffer.sampleRate * 0.025),
-        hop = Math.max(1, Math.round(buffer.sampleRate * 0.001));
-      let strongest = 0,
-        nearest;
-      for (
-        let sample = Math.max(hop, center - radius);
-        sample < Math.min(data.length - hop, center + radius);
-        sample += hop
-      ) {
-        let before = 0,
-          after = 0;
-        for (let n = 0; n < hop; n++) {
-          before += data[sample - hop + n] ** 2;
-          after += data[sample + n] ** 2;
-        }
-        const flux = after - before;
-        if (flux > strongest) {
-          strongest = flux;
-          nearest = sample / buffer.length;
-        }
-      }
-      if (nearest !== undefined)
-        marks[i] = clamp(
-          nearest,
-          i ? marks[i - 1] + cueGap() : 0,
-          i < marks.length - 1 ? marks[i + 1] - cueGap() : 1
-        );
+        i = chopDrag;
+      marks[i] = clamp(
+        Sampler.snapPoint(marks[i]),
+        i ? marks[i - 1] + cueGap() : 0,
+        i < marks.length - 1 ? marks[i + 1] - cueGap() : 1
+      );
       renderChopper();
     }
     chopDrag = null;
@@ -617,11 +532,12 @@ function renderCueControls() {
   }
   $('cueReverse').classList.toggle('active', settings.reverse);
   $('cueReverse').setAttribute('aria-pressed', settings.reverse);
+  if (typeof Sampler !== 'undefined') Sampler.render();
 }
 function connectCueControls() {
   for (const key of ['gain', 'pitch', 'cutoff', 'attack', 'release']) {
     const input = $('cue-' + key);
-    input.onpointerdown = rememberChop;
+    input.onpointerdown = () => rememberChop();
     input.onkeydown = (e) => {
       if (e.key.startsWith('Arrow')) rememberChop();
     };
@@ -688,13 +604,12 @@ function drawChopOverview() {
     marks = chopDraft.markers;
   g.fillStyle = '#151c1d';
   g.fillRect(0, 0, w, h);
+  const peaks = Sampler.peaks(buffers[chopDraft.sample], 0, 1, w);
   let cue = 0;
   for (let x = 0; x < w; x++) {
     const pos = x / w;
     while (cue < marks.length - 2 && pos >= marks[cue + 1]) cue++;
-    let peak = 0;
-    for (let i = Math.floor(pos * data.length); i < Math.floor(((x + 1) / w) * data.length); i++)
-      peak = Math.max(peak, Math.abs(data[i]));
+    const peak = Math.max(Math.abs(peaks.low[x]), Math.abs(peaks.high[x]));
     g.fillStyle = cueColors[cue % 8];
     g.fillRect(x, h / 2 - peak * h * 0.43, dpr, Math.max(dpr, peak * h * 0.86));
   }

@@ -88,6 +88,7 @@ function engine() {
     },
     window: { addEventListener() {} },
     connectChopper() {},
+    Sampler: { init() {} },
     connectKits() {},
     connectImporter() {},
     connectPackBrowser() {},

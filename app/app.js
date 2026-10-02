@@ -1070,6 +1070,7 @@ function connectControls() {
     }
   });
   connectChopper();
+  Sampler.init();
   connectKits();
   connectImporter();
   connectPackBrowser();
