@@ -136,11 +136,12 @@ async function runStudioSmoke() {
   await new Promise((r) => setTimeout(r, 90));
   await Studio.press(0, 1, null, 'repeat-cancel');
   Studio.release('repeat-cancel');
+  const releasedBeat = ((ctx.currentTime - playStart) * state.bpm) / 60;
   Studio.stop();
   recording = false;
   expect(
-    state.studio.sequences[0].notes.length === 0,
-    'released repeat removes unplayed lookahead hits'
+    state.studio.sequences[0].notes.every((n) => n.time <= releasedBeat),
+    'released repeat removes unplayed lookahead hits while preserving any hit already started'
   );
   state.studio.sequences[0].notes.push(note);
   state.studio.performance.repeat = 0;
