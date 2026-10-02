@@ -242,13 +242,17 @@ async function runSamplerSmoke() {
     'selected cue loop audition'
   );
   const meter = ctx.createAnalyser();
+  meter.fftSize = 256;
   Sampler.preview.gain.connect(meter);
-  await new Promise((r) => setTimeout(r, 35));
-  const samples = new Float32Array(128);
-  meter.getFloatTimeDomainData(samples);
+  const samples = new Float32Array(256),
+    deadline = performance.now() + 2000;
+  do {
+    await new Promise((r) => setTimeout(r, 25));
+    meter.getFloatTimeDomainData(samples);
+  } while (!samples.some((v) => Math.abs(v) > 1e-6) && performance.now() < deadline);
   expect(
     samples.every(Number.isFinite) && samples.some((v) => Math.abs(v) > 1e-6),
-    'audition produces real audio'
+    'audition produces real audio after analyser warm-up'
   );
   meter.disconnect();
   const playingSource = Sampler.preview.source;
