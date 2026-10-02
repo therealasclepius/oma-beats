@@ -2,9 +2,9 @@
 # Oma Beats user-local installer for Omarchy / Linux x86_64.
 # No sudo, no auto-launch, and no changes to projects or sample libraries.
 set -euo pipefail
-version=0.3.0
+version=0.4.0
 asset="Oma-Beats-${version}-linux-x86_64.AppImage"
-expected_sha256=549a8d0e4999e399c5d79a934d8f42f64e2ef0978945d470d6a49d22d88a862a
+expected_sha256=44ed2048f6808c0ef69e16f0ccf5d0b8cb3090dc0062022217964af155434603
 repo=https://github.com/therealasclepius/oma-beats
 if [[ "$(uname -s)" != Linux || "$(uname -m)" != x86_64 ]]; then
   printf '%s\n' 'This installer supports Linux x86_64. Other builds:' "$repo/releases/tag/v$version" >&2
