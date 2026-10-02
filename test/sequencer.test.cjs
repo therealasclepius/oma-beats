@@ -75,6 +75,7 @@ function engine() {
   const intervals = new Set();
   const context = vm.createContext({
     SynthEngine: require('../app/synth-engine.js'),
+    StudioModel: require('../app/studio-model.js'),
     AudioContext: AudioMock,
     console,
     document: {

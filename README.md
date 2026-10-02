@@ -4,13 +4,17 @@ A standalone desktop sampler and beat sequencer. Build a drum pattern, chop a sa
 
 ## Features
 
-- 128 pads across banks A–H; four 16-step patterns with tempo, swing, and quantized recording.
+- 128 pads across banks A–H, eight named tracks, and up to 64 named sequences of 1–16 bars. Duplicate sequences and arrange them into songs.
 - All-bank playback or a single active bank, with independent mono/choke mode per bank.
-- Six synthesized starter kits and 12 melodic instruments: bass, leads, keys, and pads. Everything works offline without an account.
+- Six synthesized starter kits and 36 melodic instruments: bass, leads, keys, and pads. Everything works offline without an account.
 - Sample workshop with transient detection, even/random slices, manual markers, zoom, exact cue boundaries, pitch, filter, attack, release, gain, and reverse.
 - Local audio import, drag-and-drop, searchable sample packs, and a native **Import pack folder** picker.
 - Optional bounded YouTube clip import and a local clip library.
 - Undo/redo, autosave, portable `.omabeats` projects including their audio, and stereo WAV export.
+- MIDI notes and pad controllers, velocity curves, note repeat/triplets, count-in, metronome, overdub/replace, and adjustable quantization strength.
+- Piano roll with draggable notes, resize handles, velocity/timing edits, live synth sustain, glide, pitch bend, chords, and arpeggiation.
+- Eight-channel mixer with pan/mute/solo, three-band EQ, compression, saturation, shared reverb/delay sends, trigger-based sidechain ducking, volume/pan automation, and individual stereo stems.
+- Pitch-preserving sample stretching from ½×–2× duration, per-pad choke groups, gated samples, sequence resampling and five rotating recovery backups.
 - A resizable native window. No browser launcher or Python server is required.
 
 ## Run the desktop app
@@ -62,17 +66,31 @@ On a headless Linux machine, run the smoke check with `xvfb-run -a npm run smoke
 3. Switch pad banks A–H. Set **Play → All banks** to hear their patterns together.
 4. Use **Mono bank** when a new hit should cut off the preceding sound in that bank.
 5. Choose **Get samples → Load audio**, or drop an audio file onto a pad. Open **Chop editor**, find or place cues, adjust them, and apply the chops.
-6. Use **Save project** for a portable backup; **Export WAV** renders four repetitions of the selected pattern with a tail.
+6. Use **Save project** for a portable backup; **Export WAV** renders the selected sequence or arranged song with mixer effects and tails. Use **Play song** to export the arrangement.
 
 **Undo:** Ctrl+Z / Cmd+Z. **Redo:** Ctrl+Shift+Z / Cmd+Shift+Z. The workshop has its own Undo while cue edits are pending.
 
 ## Built-in synths
 
-Choose a pad bank and click **Synths**, or choose an instrument from the kit menu. Start with one of 12 presets, choose a root note, octave and scale, then adjust the oscillator, filter/resonance, ADSR envelope, note length and detune. Preview only plays when you click a preview control.
+Choose a pad bank and click **Synths**, or choose an instrument from the kit menu. Start with one of 36 presets, choose a root note, octave and scale, then adjust the oscillator, filter/resonance, ADSR envelope, note length and detune. Preview only plays when you click a preview control.
 
 **Load instrument into bank** assigns 16 generated notes to that bank and preserves its sequencer patterns. Bass presets default to mono; other instruments are polyphonic. The operation supports Undo/Redo. Reopen Synths to edit that bank's patch and apply again.
 
-Notes are rendered to samples with the chosen note length and release. Keyboard presses trigger those complete notes; key-up does not gate the envelope. Generated audio and patch settings are embedded in project files, so projects and WAV exports need no plugin downloads. Loading a new instrument replaces the selected bank's sounds.
+Instrument banks use live synth voices: hold a pad/key to sustain and release it to follow the envelope. Piano-roll note lengths control playback and export. Rendered notes remain embedded as portable audio fallbacks. Generated audio and patch settings are embedded in project files, so projects and WAV exports need no plugin downloads. Loading a new instrument replaces the selected bank's sounds.
+
+## Workstation workflow
+
+- Name your sequence, choose 1/2/4/8/16 bars, then use the bar buttons below Pads to edit later bars. **Duplicate** makes a complete independent copy.
+- Use the track buttons above the views to move between banks without leaving the piano roll or mixer. **This bank / All banks** affects playback and export.
+- Open **Performance & MIDI → Connect MIDI**, choose the device, and select **MIDI → pads** or **MIDI → notes**. Pad mode starts at MIDI note 36 by default; note mode plays a loaded instrument chromatically. Pitch bend spans two semitones. SysEx is not enabled.
+- Arm **Record** before Play for count-in. Overdub adds notes; Replace clears that track on its first recorded hit each pass. Strength controls how far hits move toward the selected timing grid.
+- **Piano roll:** click an empty lane to draw, drag notes to move, drag their right edge to resize, and use the inspector for precise timing/velocity. Double-click deletes a note. Octave buttons navigate the instrument range.
+- **Mixer:** adjust eight tracks, choose a sidechain trigger track for ducking, and record volume/pan moves while Record is armed. Automation points can also be added or edited numerically. Each **Export stem** creates one stereo WAV with that track's effects.
+- **Song:** select a sequence, add it, set repetitions, and move sections up/down. **Play song** plays the arrangement once, including the final sound tails. Sequence mode loops.
+- **Chop:** press M or Shift-click to place cues while listening. Drag a marker with transient snap enabled to align nearby attacks.
+- **Match tempo:** enter the audio's source BPM and stretch the selected pad region to the project BPM without changing pitch. This creates a new sample and supports Undo. Large stretch ratios can sound textured, especially on complex material.
+- **Resample sequence → pad** prints the current sequence and mixer into the selected pad. Choose an empty destination to retain the original sound; Undo can restore it. Samples remain limited to two minutes; song exports are limited to fifteen minutes.
+- **All sound off** stops playback, held voices and previews. Held notes release when the app loses focus or a MIDI device disconnects.
 
 ## Your sounds and projects
 
@@ -86,7 +104,7 @@ The native app stores its session and imported library under Electron's per-user
 - macOS: `~/Library/Application Support/Oma Beats/`
 - Windows: `%APPDATA%\Oma Beats\`
 
-Autosave keeps the current session; **Save project** keeps a named, portable backup. Back up that file before starting a new project.
+Autosave keeps the current session; **Backups** keeps up to five recent recovery points and preserves the session before New/Open. **Save project** creates a named portable backup. Version 3 projects read older files, but require Oma Beats 0.4.0 or newer to reopen after saving.
 
 ### Move from the browser prototype
 
@@ -119,7 +137,7 @@ The source is publicly viewable, but is not currently offered under an open-sour
 
 ## Public website
 
-`site/` contains the responsive product page. Its playable preview and `/play/` route use the same interface and audio engine as the desktop app: six synthesized drum kits, 36 synths, eight pad banks, patterns, undo, local audio chopping, project files, and WAV export. Audio starts only after interaction. Browser sessions autosave locally and stay separate from the installed app; portable projects work in both. YouTube and pack-folder imports require the desktop app.
+`site/` contains the responsive product page. Its playable preview and `/play/` route use the same interface and audio engine as the desktop app: six synthesized drum kits, 36 synths, eight pad banks, longer sequences, piano roll, mixer, song arrangement, undo, local audio chopping, project files, and WAV export. Audio starts only after interaction. Browser sessions autosave locally and stay separate from the installed app; portable projects work in both. YouTube and pack-folder imports require the desktop app.
 
 ```sh
 npm run build:site

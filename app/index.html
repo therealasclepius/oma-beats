@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Oma Beats</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="studio.css" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
   </head>
   <body>
@@ -30,8 +31,8 @@
             <button id="undoEdit" title="Undo (Ctrl+Z)">↶ Undo</button
             ><button id="redoEdit" title="Redo (Ctrl+Shift+Z)">↷ Redo</button>
           </div>
-          <button id="newProject">New</button><button id="openProject">Open</button
-          ><button id="saveProject">Save project</button
+          <button id="backups">Backups</button><button id="newProject">New</button
+          ><button id="openProject">Open</button><button id="saveProject">Save project</button
           ><button class="orange" id="export">Export WAV ↗</button>
         </div>
       </header>
@@ -56,6 +57,7 @@
             <button id="playAllBanks" type="button" aria-pressed="false">All banks</button>
           </div>
         </div>
+        <span id="position" class="transport-position">STOPPED</span>
         <div class="patterns">
           <span>SEQUENCE</span>
           <div id="patterns"></div>
@@ -72,85 +74,194 @@
             value="0.7"
         /></label>
       </section>
-      <section class="source-strip">
-        <div><b>FIND YOUR NEXT FLIP</b><span>YouTube clip or local audio → chops → pads</span></div>
-        <button id="openSynth">♫ Synths</button><button id="resumeWorkshop">Last sample</button
-        ><button id="browsePacks">Browse packs</button
-        ><button id="getSamples" class="orange">＋ Get samples</button>
+      <nav id="studioTabs" class="studio-tabs" aria-label="Workstation views">
+        <button id="tab-pads" class="active">01 Pads</button><button id="tab-chop">02 Chop</button
+        ><button id="tab-piano">03 Piano roll</button><button id="tab-mixer">04 Mixer</button
+        ><button id="tab-song">05 Song</button>
+        <button id="panic" title="Stop all sound">■ All sound off</button>
+      </nav>
+      <section class="sequence-tools" aria-label="Sequence and track settings">
+        <label>SEQUENCE NAME<input id="sequenceName" maxlength="60" /></label>
+        <div id="sequenceBars" role="group" aria-label="Sequence length"></div>
+        <button id="newSequence">＋ Sequence</button
+        ><button id="duplicateSequence">Duplicate</button
+        ><label>TRACK / BANK<input id="trackName" maxlength="60" /></label
+        ><button id="songMode">Play sequence</button>
       </section>
-      <div class="workspace">
-        <section class="pad-section">
-          <div class="section-label">
-            <h2>PERFORMANCE PADS</h2>
-            <button
-              id="kitSelect"
-              type="button"
-              aria-haspopup="dialog"
-              aria-controls="kitBrowser"
-              aria-label="Choose drum kit or instrument"
-            ></button>
+      <div id="studioBanks" class="studio-banks" role="group" aria-label="Select track bank"></div>
+      <details class="performance-panel">
+        <summary>
+          Performance & MIDI <span>Note repeat · chords · quantize · controller setup</span>
+        </summary>
+        <div class="performance-controls">
+          <button id="recordMode"></button><button id="quantizeMode"></button
+          ><label
+            >Quantize strength<input
+              id="quantizeStrength"
+              type="range"
+              min="0"
+              max="1"
+              step=".05" /></label
+          ><button id="countInMode"></button><button id="metroMode">Metronome</button
+          ><button id="repeatMode"></button><button id="tripletMode">Triplets</button
+          ><button id="chordMode"></button><button id="arpMode">Arpeggiator</button
+          ><label
+            >Glide (seconds)<input id="glideTime" type="number" min="0" max="1" step=".01" /></label
+          ><label
+            >Velocity curve<input id="velocityCurve" type="range" min=".25" max="3" step=".05"
+          /></label>
+        </div>
+        <div class="midi-controls">
+          <button id="connectMidi">Connect MIDI</button><button id="midiMode"></button
+          ><label>First pad MIDI note<input id="midiBase" type="number" min="0" max="112" /></label
+          ><span id="midiStatus">Connect your keyboard or pad controller</span>
+          <div id="midiDevices"></div>
+        </div>
+      </details>
+      <div id="view-pads">
+        <section class="source-strip">
+          <div>
+            <b>FIND YOUR NEXT FLIP</b><span>YouTube clip or local audio → chops → pads</span>
           </div>
-          <div class="bank-selector">
-            <span>PAD BANK</span>
-            <div id="padBanks"></div>
-            <span>128 SLOTS</span>
-          </div>
-          <div id="pads" class="pads"></div>
-          <div class="pad-footer">
-            <span>Click or play with your keyboard</span><button id="demo">Load demo beat</button>
-          </div>
+          <button id="openSynth">♫ Synths</button><button id="resumeWorkshop">Last sample</button
+          ><button id="browsePacks">Browse packs</button
+          ><button id="getSamples" class="orange">＋ Get samples</button>
         </section>
-        <section class="sample-section">
-          <div class="lcd">
-            <div class="lcd-top">
-              <span id="padNumber">PAD 01</span><span id="audioState">READY TO PLAY</span>
+        <div class="workspace">
+          <section class="pad-section">
+            <div class="section-label">
+              <h2>PERFORMANCE PADS</h2>
+              <button
+                id="kitSelect"
+                type="button"
+                aria-haspopup="dialog"
+                aria-controls="kitBrowser"
+                aria-label="Choose drum kit or instrument"
+              ></button>
             </div>
-            <h2 id="sampleName">Deep kick</h2>
-            <canvas id="waveform" aria-label="Selected sample waveform"></canvas>
-            <div class="lcd-bottom">
-              <span id="sampleInfo"></span><span id="position">01 / 16</span>
+            <div class="bank-selector">
+              <span>PAD BANK</span>
+              <div id="padBanks"></div>
+              <span>128 SLOTS</span>
+            </div>
+            <div id="pads" class="pads"></div>
+            <div class="pad-footer">
+              <span>Click or play with your keyboard</span><button id="demo">Load demo beat</button>
+            </div>
+          </section>
+          <section class="sample-section">
+            <div class="lcd">
+              <div class="lcd-top">
+                <span id="padNumber">PAD 01</span><span id="audioState">READY TO PLAY</span>
+              </div>
+              <h2 id="sampleName">Deep kick</h2>
+              <canvas id="waveform" aria-label="Selected sample waveform"></canvas>
+              <div class="lcd-bottom"><span id="sampleInfo"></span><span>SELECTED PAD</span></div>
+            </div>
+            <div class="sample-actions">
+              <button id="loadSample">＋ Load sample</button
+              ><button id="chop">Chop → 16 pads</button><button id="reverse">⇄ Reverse</button>
+            </div>
+            <div class="parameters">
+              <label
+                >LEVEL <input id="gain" type="range" min="0" max="1.5" step="0.01" /><output
+                  id="gainValue"
+                ></output></label
+              ><label
+                >PITCH <input id="pitch" type="range" min="-24" max="24" step="1" /><output
+                  id="pitchValue"
+                ></output></label
+              ><label
+                >START <input id="start" type="range" min="0" max="0.99" step="0.001" /><output
+                  id="startValue"
+                ></output></label
+              ><label
+                >END <input id="end" type="range" min="0.01" max="1" step="0.001" /><output
+                  id="endValue"
+                ></output
+              ></label>
+            </div>
+            <div class="chop-play-modes">
+              <button id="choke" title="In this bank, each pad cuts off the previous sound">
+                Mono bank</button
+              ><button id="chromatic">Keyboard → pads</button><button id="padGate">One shot</button
+              ><label
+                >Choke group
+                <input
+                  id="padChoke"
+                  type="number"
+                  min="0"
+                  max="16"
+                  value="0"
+                  title="0 = off; matching groups cut each other off within this bank"
+              /></label>
+            </div>
+            <div class="sample-operations">
+              <label
+                >Source BPM<input
+                  id="sourceBpm"
+                  type="number"
+                  value="90"
+                  min="20"
+                  max="480" /></label
+              ><button id="stretchSample">Match tempo</button
+              ><button id="resample">Resample sequence → pad</button>
+            </div>
+            <div class="sample-hint">
+              Drop audio onto a pad, then open the chop editor.<br />Find transients or place cues
+              by hand. Save project to keep your kit.
+            </div>
+          </section>
+        </div>
+        <section class="sequencer">
+          <div class="section-label">
+            <h2>STEP SEQUENCER <span id="patternLabel">/ A</span></h2>
+            <div class="bar-navigation">
+              <span>BAR</span>
+              <div id="barPages"></div>
+              <button id="clear">Clear sequence</button>
             </div>
           </div>
-          <div class="sample-actions">
-            <button id="loadSample">＋ Load sample</button><button id="chop">Chop → 16 pads</button
-            ><button id="reverse">⇄ Reverse</button>
-          </div>
-          <div class="parameters">
-            <label
-              >LEVEL <input id="gain" type="range" min="0" max="1.5" step="0.01" /><output
-                id="gainValue"
-              ></output></label
-            ><label
-              >PITCH <input id="pitch" type="range" min="-24" max="24" step="1" /><output
-                id="pitchValue"
-              ></output></label
-            ><label
-              >START <input id="start" type="range" min="0" max="0.99" step="0.001" /><output
-                id="startValue"
-              ></output></label
-            ><label
-              >END <input id="end" type="range" min="0.01" max="1" step="0.001" /><output
-                id="endValue"
-              ></output
-            ></label>
-          </div>
-          <div class="chop-play-modes">
-            <button id="choke" title="In this bank, each pad cuts off the previous sound">
-              Mono bank</button
-            ><button id="chromatic">Keyboard → pads</button>
-          </div>
-          <div class="sample-hint">
-            Drop audio onto a pad, then open the chop editor.<br />Find transients or place cues by
-            hand. Save project to keep your kit.
-          </div>
+          <div id="sequencer"></div>
         </section>
       </div>
-      <section class="sequencer">
+      <section id="view-piano" class="studio-view" hidden>
         <div class="section-label">
-          <h2>STEP SEQUENCER <span id="patternLabel">/ A</span></h2>
-          <div><span>1 BAR · 16 STEPS</span><button id="clear">Clear pattern</button></div>
+          <h2>PIANO ROLL <span> / CURRENT TRACK</span></h2>
+          <div>
+            <button id="rollDown">Octave −</button><button id="rollUp">Octave ＋</button
+            ><button id="quantizeNotes">Quantize recorded notes</button>
+          </div>
         </div>
-        <div id="sequencer"></div>
+        <p id="rollHint"></p>
+        <div class="roll-scroll"><div id="pianoRoll"></div></div>
+        <div id="noteInspector"></div>
+      </section>
+      <section id="view-mixer" class="studio-view" hidden>
+        <div class="section-label">
+          <h2>TRACK MIXER</h2>
+          <span>Record volume & pan while playing</span>
+        </div>
+        <div id="mixerTracks"></div>
+        <details class="automation-editor">
+          <summary>Automation points · current bank</summary>
+          <div class="automation-row">
+            <button id="addAutomation-volume">＋ Volume point</button
+            ><button id="addAutomation-pan">＋ Pan point</button>
+          </div>
+          <div id="automationPoints"></div>
+        </details>
+        <div class="automation-row">
+          <span id="automationCount"></span><button id="clearAutomation">Clear automation</button>
+        </div>
+      </section>
+      <section id="view-song" class="studio-view" hidden>
+        <div class="section-label">
+          <h2>SONG ARRANGEMENT</h2>
+          <button id="addToSong" class="orange">＋ Add selected sequence</button>
+        </div>
+        <p id="songLength"></p>
+        <div id="songList"></div>
       </section>
       <footer>
         <span><i></i> MADE FOR YOUR DESKTOP</span
@@ -165,6 +276,13 @@
       accept=".omabeats,.json,application/json"
       hidden
     />
+    <dialog id="backupDialog">
+      <div class="chop-header">
+        <h2>Recent project backups</h2>
+        <button id="closeBackups">Close</button>
+      </div>
+      <div id="backupList"></div>
+    </dialog>
     <dialog id="kitBrowser" aria-labelledby="kitBrowserTitle">
       <div class="chop-header">
         <h2 id="kitBrowserTitle">Choose a kit</h2>
@@ -185,8 +303,9 @@
         then press Space to play.
       </p>
       <p>
-        <b>Record:</b> turn on Record and start playback. Your pad hits are quantized to the nearest
-        step. Switch between patterns A–D to make variations.
+        <b>Record:</b> turn on Record and start playback. Your pad hits use the timing strength you
+        choose. Name and duplicate sequences, choose up to 16 bars, and arrange them in Song. Use
+        Performance & MIDI for count-in, note repeat, triplets, recording mode and timing strength.
       </p>
       <p>
         <b>Samples:</b> select a pad and load or drop an audio file. Adjust its start, end, pitch,
@@ -196,8 +315,9 @@
       </p>
       <p>
         <b>Save:</b> your session saves locally, including samples. Save project creates a portable
-        backup including your loaded samples. Export WAV renders four repetitions of the selected
-        pattern with an effect-free stereo mix and a tail.
+        backup including your loaded samples. Export WAV renders the selected sequence or song with
+        mixer effects and tails. Each mixer track can export its own stem. Backups keeps five recent
+        local recovery points.
       </p>
       <p>Built-in sounds are synthesized locally. No account or internet needed.</p>
       <button id="closeHelp" class="orange">Let’s make a beat</button>
@@ -222,6 +342,7 @@
           </select></label
         ><label
           >SENSITIVITY <input id="sensitivity" type="range" min="0" max="100" value="65" /></label
+        ><label><input id="snapChops" type="checkbox" checked /> Snap to transients</label
         ><button id="undoChop">Undo</button>
       </div>
       <canvas id="chopOverview" aria-label="Full sample overview; click to navigate"></canvas>
@@ -529,11 +650,15 @@
     <script src="synth-engine.js"></script>
     <script src="synth.js"></script>
     <script src="desktop.js"></script>
+    <script src="studio-smoke.js"></script>
     <script src="history.js"></script>
     <script src="packs.js"></script>
     <script src="importer.js"></script>
     <script src="chop.js"></script>
     <script src="kits.js"></script>
+    <script src="studio-model.js"></script>
+    <script src="studio-audio.js"></script>
+    <script src="studio.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

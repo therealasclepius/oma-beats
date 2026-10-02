@@ -3,6 +3,13 @@ const fs = require('node:fs');
 const path = require('node:path');
 const rendererFiles = [
   'style.css',
+  'studio.css',
+  'studio-model.js',
+  'studio-audio.js',
+  'studio.js',
+  'clock-worker.js',
+  'stretch.js',
+  'stretch-worker.js',
   'icon.svg',
   'synth-engine.js',
   'synth.js',
@@ -32,6 +39,7 @@ function buildSite(root = path.resolve(__dirname, '..'), out = path.join(root, '
   const html = fs
     .readFileSync(path.join(root, 'app/index.html'), 'utf8')
     .replace('<script src="desktop.js"></script>', '')
+    .replace('<script src="studio-smoke.js"></script>', '')
     .replace('<link rel="icon" href="icon.svg" type="image/svg+xml" />', '')
     .replace(
       '</head>',

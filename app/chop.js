@@ -481,7 +481,7 @@ function connectChopper() {
       tolerance = (8 / r.width) * (chopView[1] - chopView[0]),
       marks = chopDraft.markers,
       index = marks.findIndex((m) => Math.abs(m - pos) < tolerance);
-    stopPreview();
+    if (index < 0 && !e.shiftKey) stopPreview();
     chopCursor = pos;
     if (index >= 0) {
       rememberChop();
@@ -509,6 +509,42 @@ function connectChopper() {
     renderChopper();
   };
   canvas.onpointerup = () => {
+    if (chopDrag !== null && $('snapChops').checked) {
+      const marks = chopDraft.markers,
+        i = chopDrag,
+        buffer = buffers[chopDraft.sample],
+        at = marks[i];
+      const data = buffer.getChannelData(0),
+        center = Math.floor(at * buffer.length),
+        radius = Math.round(buffer.sampleRate * 0.025),
+        hop = Math.max(1, Math.round(buffer.sampleRate * 0.001));
+      let strongest = 0,
+        nearest;
+      for (
+        let sample = Math.max(hop, center - radius);
+        sample < Math.min(data.length - hop, center + radius);
+        sample += hop
+      ) {
+        let before = 0,
+          after = 0;
+        for (let n = 0; n < hop; n++) {
+          before += data[sample - hop + n] ** 2;
+          after += data[sample + n] ** 2;
+        }
+        const flux = after - before;
+        if (flux > strongest) {
+          strongest = flux;
+          nearest = sample / buffer.length;
+        }
+      }
+      if (nearest !== undefined)
+        marks[i] = clamp(
+          nearest,
+          i ? marks[i - 1] + cueGap() : 0,
+          i < marks.length - 1 ? marks[i + 1] - cueGap() : 1
+        );
+      renderChopper();
+    }
     chopDrag = null;
   };
   canvas.onpointercancel = () => {
@@ -519,6 +555,7 @@ function connectChopper() {
     const bank = state.padBank;
     monoVoices.get(ctx)?.delete(bank);
     state.bankMono[bank] = !state.bankMono[bank];
+    if (state.bankMono[bank] && typeof Studio !== 'undefined') Studio.cutBank(bank);
     if (state.bankMono[bank])
       for (const source of activeSources)
         if (source.omaBank === bank) {

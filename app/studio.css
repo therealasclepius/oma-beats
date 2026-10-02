@@ -1,0 +1,490 @@
+/* Oma Beats workstation: cream chassis, sage displays, orange performance state. */
+[hidden] {
+  display: none !important;
+}
+.transport {
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  background: #dedcd2;
+  box-shadow: 0 8px 14px #353c3210;
+  padding: 18px 0;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.patterns {
+  min-width: 100px;
+  max-width: 240px;
+}
+#patterns {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  max-width: 240px;
+  padding-bottom: 3px;
+}
+#patterns button {
+  flex: none;
+}
+.studio-tabs {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid #565e4429;
+}
+.studio-tabs button {
+  padding: 12px 18px;
+}
+.studio-tabs #panic {
+  margin-left: auto;
+  color: #555f4e;
+}
+.studio-tabs .active,
+button.active {
+  background: #d95127;
+  color: #fff;
+  border-color: #c64a22;
+}
+.sequence-tools {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+.sequence-tools label {
+  display: grid;
+  gap: 7px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.sequence-tools input {
+  width: 165px;
+  max-width: 100%;
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: 0;
+  border: 1px solid #8d968049;
+  background: #edede4;
+  border-radius: 5px;
+  padding: 9px;
+}
+.sequence-tools #sequenceBars {
+  display: flex;
+  gap: 3px;
+}
+.sequence-tools #sequenceBars button {
+  padding: 9px 10px;
+}
+.performance-panel {
+  border: 1px solid #8d968049;
+  border-radius: 7px;
+  margin-bottom: 18px;
+  background: #c1c9b63b;
+}
+.performance-panel summary {
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.performance-panel summary span {
+  color: #68745f;
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 14px;
+}
+.performance-controls,
+.midi-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  border-top: 1px solid #8d968030;
+}
+.performance-controls label,
+.midi-controls label {
+  display: grid;
+  gap: 6px;
+  font-size: 11px;
+}
+.performance-controls input[type='number'],
+.midi-controls input {
+  width: 80px;
+}
+#midiStatus {
+  font-size: 12px;
+  color: #5a6455;
+}
+#midiDevices {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.sample-operations {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.sample-operations label,
+.chop-play-modes label {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sample-operations input,
+.chop-play-modes input {
+  width: 64px;
+  padding: 7px;
+  border: 1px solid #a5ad9c;
+  background: #eeeee5;
+  border-radius: 4px;
+}
+.chop-play-modes {
+  flex-wrap: wrap;
+}
+.bar-navigation,
+#barPages {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#barPages button {
+  padding: 5px 8px;
+}
+.studio-view {
+  border-top: 1px solid #8d968049;
+  padding: 26px 0;
+  min-height: 480px;
+}
+.studio-view h2 {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
+.studio-view p {
+  font-size: 13px;
+  color: #616b58;
+}
+.roll-scroll {
+  overflow: auto;
+  max-height: 570px;
+  border: 1px solid #929d82;
+  border-radius: 7px;
+  background: #c3ccb7;
+}
+#pianoRoll {
+  position: relative;
+  min-width: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 11px,
+    #70806024 11px,
+    #70806024 12px
+  );
+  background-position: 84px 0;
+  touch-action: none;
+}
+.roll-lane {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 24px;
+  border-bottom: 1px solid #687c5024;
+}
+.roll-lane:nth-child(even) {
+  background: #f6f5df30;
+}
+.roll-key {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 84px;
+  height: 24px;
+  padding: 2px 5px;
+  border-radius: 0;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background: #e9e9dd;
+  text-align: left;
+}
+.roll-beat {
+  position: absolute;
+  top: 5px;
+  font-size: 11px;
+  color: #536747;
+}
+.roll-note {
+  position: absolute;
+  height: 21px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background: #d55228;
+  color: #fff;
+  border: 1px solid #ad3a15;
+  font: 10px monospace;
+  overflow: hidden;
+  min-width: 8px;
+  touch-action: none;
+  box-shadow: none;
+}
+.roll-note.selected {
+  outline: 2px solid #354831;
+  outline-offset: 1px;
+}
+.roll-note:after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 4px;
+  background: #fff6;
+  cursor: ew-resize;
+}
+#rollPlayhead {
+  position: absolute;
+  top: 28px;
+  bottom: 0;
+  width: 2px;
+  background: #354831;
+  pointer-events: none;
+  z-index: 3;
+}
+#noteInspector {
+  display: flex;
+  gap: 15px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  font-size: 13px;
+}
+#noteInspector label {
+  display: grid;
+  gap: 5px;
+}
+#noteInspector input {
+  width: 95px;
+}
+#mixerTracks {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(130px, 1fr));
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+.mixer-strip {
+  background: #c3cbb53b;
+  border: 1px solid #8d968049;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-content: start;
+  min-width: 0;
+}
+.mixer-strip > input {
+  width: 100%;
+  min-width: 0;
+  font-weight: bold;
+}
+.mixer-strip button {
+  font-size: 11px;
+  padding: 7px 9px;
+  flex: 1;
+}
+.mixer-strip meter {
+  width: 100%;
+  height: 12px;
+  margin: 8px 0;
+}
+.mixer-strip label {
+  width: 100%;
+  font-size: 11px;
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  gap: 5px;
+  margin: 6px 0;
+}
+.mixer-strip input[type='range'] {
+  width: 100%;
+  grid-column: 1/-1;
+  grid-row: 2;
+  min-width: 0;
+}
+.mixer-strip label input[type='number'] {
+  width: 100%;
+  grid-column: 1/-1;
+}
+.mixer-strip output {
+  text-align: right;
+  font: 10px monospace;
+}
+.automation-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  align-items: center;
+  font-size: 12px;
+  margin-top: 18px;
+}
+.song-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: #bdc7ad50;
+  border: 1px solid #8d968049;
+  border-radius: 7px;
+  margin: 10px 0;
+  padding: 16px;
+}
+.song-row > span {
+  flex: 1;
+}
+.song-row label {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.song-row input {
+  width: 60px;
+}
+#backupList {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0;
+}
+.studio-view input[type='number'],
+.performance-panel input[type='number'],
+.mixer-strip > input {
+  padding: 7px;
+  background: #eeeee5;
+  border: 1px solid #a5ad9c;
+  border-radius: 4px;
+  color: #343e2f;
+}
+.pad {
+  touch-action: none;
+}
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #627a50;
+  outline-offset: 3px;
+}
+.workspace {
+  min-width: 0;
+}
+.sample-section,
+.pad-section {
+  min-width: 0;
+}
+.lcd h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .studio-tabs {
+    flex-wrap: wrap;
+  }
+  .studio-tabs button {
+    padding: 10px;
+  }
+  .studio-tabs #panic {
+    margin-left: 0;
+  }
+  .performance-panel summary span {
+    display: block;
+    margin: 6px 0 0;
+  }
+  .transport {
+    top: 0;
+    gap: 12px;
+  }
+  .song-row {
+    flex-wrap: wrap;
+  }
+  .song-row > span {
+    flex-basis: 100%;
+  }
+  .sequence-tools {
+    gap: 8px;
+  }
+  .sequence-tools label {
+    flex: 1;
+  }
+  .sequence-tools input {
+    width: 100%;
+  }
+  .studio-view {
+    min-height: 360px;
+  }
+}
+.automation-editor {
+  margin-top: 18px;
+  border-top: 1px solid #8d968049;
+  padding-top: 16px;
+}
+.automation-editor summary {
+  cursor: pointer;
+  font-size: 13px;
+}
+.automation-editor .automation-row {
+  justify-content: start;
+  margin: 12px 0;
+}
+.automation-point {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px;
+  border-bottom: 1px solid #8d968029;
+  font-size: 12px;
+}
+.automation-point label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.automation-point input {
+  width: 80px;
+}
+.transport-position {
+  font: 11px monospace;
+  color: #546748;
+  min-width: 95px;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.studio-banks {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding: 0 0 14px;
+}
+.studio-banks button {
+  flex: 1;
+  min-width: 80px;
+  max-width: 200px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 12px;
+  padding: 9px;
+}
+.transport .patterns {
+  margin-left: 0;
+}

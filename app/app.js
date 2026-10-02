@@ -25,7 +25,7 @@ function migrateState(s) {
     s.playScope = 'bank';
   }
   if (!s.bankMono) s.bankMono = Array(8).fill(!!s.choke);
-  return s;
+  return StudioModel.upgrade(s);
 }
 const NAMES = [
   'Deep kick',
@@ -73,32 +73,33 @@ let buffers = {},
   playStart = 0;
 let persistChain = Promise.resolve(),
   revision = 0;
-const defaults = () => ({
-  version: 2,
-  padBank: 0,
-  playScope: 'bank',
-  bankMono: Array(8).fill(false),
-  name: 'Late night sketch',
-  kit: 'classic',
-  choke: false,
-  bpm: 90,
-  swing: 0,
-  master: 0.7,
-  pattern: 0,
-  pads: [
-    ...NAMES.map((name, i) => ({
-      name,
-      sample: 'kit' + i,
-      gain: 0.8,
-      pitch: 0,
-      start: 0,
-      end: 1,
-      reverse: false
-    })),
-    ...Array.from({ length: 112 }, emptyPad)
-  ],
-  patterns: Array.from({ length: 4 }, () => Array.from({ length: 128 }, () => Array(16).fill(0)))
-});
+const defaults = () =>
+  StudioModel.upgrade({
+    version: 2,
+    padBank: 0,
+    playScope: 'bank',
+    bankMono: Array(8).fill(false),
+    name: 'Late night sketch',
+    kit: 'classic',
+    choke: false,
+    bpm: 90,
+    swing: 0,
+    master: 0.7,
+    pattern: 0,
+    pads: [
+      ...NAMES.map((name, i) => ({
+        name,
+        sample: 'kit' + i,
+        gain: 0.8,
+        pitch: 0,
+        start: 0,
+        end: 1,
+        reverse: false
+      })),
+      ...Array.from({ length: 112 }, emptyPad)
+    ],
+    patterns: Array.from({ length: 4 }, () => Array.from({ length: 128 }, () => Array(16).fill(0)))
+  });
 function toast(message) {
   $('toast').textContent = message;
   $('toast').classList.add('show');
@@ -230,6 +231,13 @@ function voice(
   source.connect(filter).connect(gain).connect(destination);
   source.start(time, offset, Math.max(0.001, duration));
   source.omaBank = bank;
+  source.release = (at = audio.currentTime) => {
+    gain.gain.cancelAndHoldAtTime(at);
+    gain.gain.linearRampToValueAtTime(0, at + 0.008);
+    try {
+      source.stop(at + 0.008);
+    } catch {}
+  };
   if (state.bankMono?.[bank]) {
     let bankVoices = monoVoices.get(audio);
     if (!bankVoices) {
@@ -271,6 +279,7 @@ function flash(i) {
   setTimeout(() => el.classList.remove('hit'), 100);
 }
 async function hit(i) {
+  if (typeof Studio !== 'undefined') return Studio.tap(i);
   if (state.pads[i].sample === 'kit-empty') {
     selected = i;
     renderSelected();
@@ -330,6 +339,7 @@ function schedule() {
   }
 }
 async function togglePlay() {
+  if (typeof Studio !== 'undefined') return Studio.toggle();
   if (playing) {
     stop();
     return;
@@ -345,6 +355,7 @@ async function togglePlay() {
   scheduler = setInterval(schedule, 25);
 }
 function stop() {
+  if (typeof Studio !== 'undefined') return Studio.stop();
   playing = false;
   clearInterval(scheduler);
   visualTimers.forEach(clearTimeout);
@@ -376,12 +387,14 @@ function render() {
   $('master').value = state.master;
   master.gain.value = state.master;
   $('patterns').replaceChildren();
-  for (let p = 0; p < 4; p++) {
+  for (let p = 0; p < state.patterns.length; p++) {
     let b = document.createElement('button');
-    b.textContent = 'ABCD'[p];
+    b.textContent = String(p + 1);
+    b.title = state.studio.sequences[p].name;
     b.className = p === pattern ? 'active' : '';
-    b.setAttribute('aria-label', 'Pattern ' + 'ABCD'[p]);
+    b.setAttribute('aria-label', state.studio.sequences[p].name);
     b.onclick = () => {
+      stop();
       pattern = p;
       state.pattern = p;
       render();
@@ -410,7 +423,8 @@ function render() {
     name.className = 'pad-name';
     name.textContent = pad.name;
     b.append(top, name);
-    b.onclick = () => hit(i);
+    if (typeof Studio !== 'undefined') Studio.wirePad(b, i);
+    else b.onclick = () => hit(i);
     b.ondragover = (e) => {
       e.preventDefault();
       b.classList.add('drag');
@@ -427,6 +441,7 @@ function render() {
   renderSteps();
   renderChopControls();
   renderKitSelector();
+  if (typeof Studio !== 'undefined') Studio.renderControls();
 }
 function renderSelected() {
   const pad = state.pads[selected];
@@ -450,16 +465,21 @@ function renderSelected() {
   }
   $('reverse').classList.toggle('active', pad.reverse);
   drawWave();
+  if ($('padChoke')) {
+    $('padChoke').value = pad.chokeGroup || 0;
+    $('padGate').textContent = pad.playMode === 'gate' ? 'Gate: hold to play' : 'One shot';
+  }
 }
 function renderSteps() {
+  const offset = typeof Studio !== 'undefined' ? Studio.pageStart : 0;
   let grid = $('sequencer');
   grid.replaceChildren();
   grid.append(document.createElement('span'));
   for (let s = 0; s < 16; s++) {
     let n = document.createElement('span');
     n.className = 'step-number';
-    n.textContent = s + 1;
-    n.dataset.step = s;
+    n.textContent = offset + s + 1;
+    n.dataset.step = offset + s;
     grid.append(n);
   }
   state.pads.slice(bankOffset(), bankOffset() + 16).forEach((pad, local) => {
@@ -473,7 +493,7 @@ function renderSteps() {
       renderSelected();
     };
     grid.append(label);
-    for (let s = 0; s < 16; s++) {
+    for (let s = offset; s < offset + 16; s++) {
       let b = document.createElement('button');
       b.className =
         'step' + (s % 4 === 0 ? ' beat' : '') + (state.patterns[pattern][i][s] ? ' on' : '');
@@ -489,8 +509,9 @@ function renderSteps() {
       grid.append(b);
     }
   });
-  $('patternLabel').textContent = '/ ' + 'ABCD'[pattern] + ' · BANK ' + 'ABCDEFGH'[state.padBank];
-  paintPosition(lastStep);
+  $('patternLabel').textContent =
+    '/ ' + state.studio.sequences[pattern].name + ' · BANK ' + 'ABCDEFGH'[state.padBank];
+  if (typeof Studio === 'undefined') paintPosition(lastStep);
 }
 function drawWave() {
   if (!state) return;
@@ -585,6 +606,7 @@ function persist() {
           tx.objectStore('session').put(payload, 'current');
           tx.oncomplete = () => {
             if (rev === revision) $('saveState').textContent = 'SAVED ON THIS DEVICE';
+            if (typeof Studio !== 'undefined') Studio.backup(false, payload).catch(() => {});
             resolve(true);
           };
           tx.onerror = () => reject(tx.error);
@@ -633,17 +655,18 @@ function validate(s, samples) {
   const count = s?.version === 1 ? 16 : 128;
   if (
     !s ||
-    ![1, 2].includes(s.version) ||
-    (s.version === 2 && (!Number.isInteger(s.padBank) || !bounded(s.padBank, 0, 7))) ||
+    ![1, 2, 3].includes(s.version) ||
+    (s.version >= 2 && (!Number.isInteger(s.padBank) || !bounded(s.padBank, 0, 7))) ||
     typeof s.name !== 'string' ||
     s.name.length > 60 ||
     !bounded(s.bpm, 40, 240) ||
     !bounded(s.swing, 0, 60) ||
     !bounded(s.master, 0, 1) ||
     !Number.isInteger(s.pattern) ||
-    !bounded(s.pattern, 0, 3) ||
+    !bounded(s.pattern, 0, (s.patterns?.length || 0) - 1) ||
     s.pads?.length !== count ||
-    s.patterns?.length !== 4
+    !Array.isArray(s.patterns) ||
+    (s.version < 3 ? s.patterns.length !== 4 : s.patterns.length < 1 || s.patterns.length > 64)
   )
     throw Error('Not a valid Oma Beats project');
   if (
@@ -706,12 +729,16 @@ function validate(s, samples) {
     )
       throw Error('Invalid pad settings');
   }
-  for (const p of s.patterns)
+  if (s.version === 3) StudioModel.validate(s);
+  for (const [index, p] of s.patterns.entries())
     if (
       !Array.isArray(p) ||
       p.length !== count ||
       p.some(
-        (row) => !Array.isArray(row) || row.length !== 16 || row.some((v) => !bounded(v, 0, 1))
+        (row) =>
+          !Array.isArray(row) ||
+          row.length !== (s.version === 3 ? s.studio.sequences[index].bars * 16 : 16) ||
+          row.some((v) => !bounded(v, 0, 1))
       )
     )
       throw Error('Invalid pattern');
@@ -825,6 +852,7 @@ function wav(buffer) {
   return new Blob([ab], { type: 'audio/wav' });
 }
 async function exportWav() {
+  if (typeof Studio !== 'undefined') return Studio.exportAudio();
   const button = $('export');
   button.disabled = true;
   button.textContent = 'Rendering…';
@@ -939,8 +967,13 @@ function connectControls() {
     e.target.value = '';
   };
   $('clear').onclick = () => {
-    if (confirm('Clear pattern ' + 'ABCD'[pattern] + ' across all pad banks?')) {
+    if (
+      confirm('Clear sequence ' + state.studio.sequences[pattern].name + ' across all pad banks?')
+    ) {
+      stop();
       state.patterns[pattern].forEach((row) => row.fill(0));
+      state.studio.sequences[pattern].notes = [];
+      state.studio.sequences[pattern].automation = [];
       renderSteps();
       changed();
     }
@@ -954,9 +987,10 @@ function connectControls() {
     demo();
     toast('Demo loaded — press Play');
   };
-  $('newProject').onclick = () => {
+  $('newProject').onclick = async () => {
     if (!confirm('Start a new project? Save project first to keep this one.')) return;
     stop();
+    if (typeof Studio !== 'undefined') await Studio.backup(true).catch(() => {});
     state = defaults();
     pattern = 0;
     selected = 0;
@@ -989,6 +1023,7 @@ function connectControls() {
       validate(data.state, restored);
       if (!confirm('Open this project and replace the current session?')) return;
       stop();
+      if (typeof Studio !== 'undefined') await Studio.backup(true).catch(() => {});
       Object.assign(buffers, restored);
       state = migrateState(data.state);
       pattern = state.pattern;
@@ -1007,6 +1042,7 @@ function connectControls() {
   $('help').onclick = () => $('guide').showModal();
   $('closeHelp').onclick = () => $('guide').close();
   window.addEventListener('keydown', (e) => {
+    if (typeof Studio !== 'undefined') return;
     if (
       e.repeat ||
       e.ctrlKey ||
@@ -1039,6 +1075,7 @@ function connectControls() {
   connectPackBrowser();
   connectHistory();
   connectSynth();
+  if (typeof Studio !== 'undefined') Studio.init();
   window.addEventListener('resize', drawWave);
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
@@ -1065,6 +1102,8 @@ async function init() {
       const custom = restoreSamples(saved.samples);
       validate(saved.state, custom);
       Object.assign(buffers, custom);
+      if (saved.state.version < 3 && typeof Studio !== 'undefined')
+        await Studio.backup(true, structuredClone(saved));
       state = migrateState(saved.state);
       pattern = state.pattern;
       selected = bankOffset();

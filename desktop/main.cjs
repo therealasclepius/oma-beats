@@ -57,7 +57,7 @@ async function start() {
     smokeTimer = setTimeout(() => {
       console.error('Renderer did not become ready');
       app.exit(1);
-    }, 30000);
+    }, 90000);
   }
   backend = await createBackend({
     dataRoot: app.getPath('userData'),
@@ -69,10 +69,23 @@ async function start() {
       return new Response('Forbidden', { status: 403 });
     return backend.handle(request);
   });
-  session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) =>
-    callback(false)
+  // MIDI note messages only, from our trusted top-level renderer. Never SysEx.
+  session.defaultSession.setPermissionRequestHandler((contents, permission, callback, details) =>
+    callback(
+      permission === 'midi' &&
+        contents === window?.webContents &&
+        contents.getURL() === 'oma://app/' &&
+        details.isMainFrame === true
+    )
   );
-  session.defaultSession.setPermissionCheckHandler(() => false);
+  session.defaultSession.setPermissionCheckHandler(
+    (contents, permission, origin, details) =>
+      permission === 'midi' &&
+      contents === window?.webContents &&
+      contents.getURL() === 'oma://app/' &&
+      ['oma://app', 'oma://app/'].includes(origin) &&
+      details.isMainFrame === true
+  );
   ipcMain.handle('packs:import-folder', async (event) => {
     if (!trusted(event)) throw Error('Untrusted request');
     const result = await dialog.showOpenDialog(window, {
