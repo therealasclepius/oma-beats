@@ -316,7 +316,6 @@ const Studio = (() => {
       return null;
     }
     list.push(note);
-    changed('record');
     return { note, sequence: pos.sequence, at: when };
   }
   function single(pad, velocity, midi, time = ctx.currentTime, duration = null) {
@@ -351,7 +350,16 @@ const Studio = (() => {
   }
   async function press(pad, velocity = 1, midi = null, key = 'tap:' + pad) {
     if (held.has(key)) return;
-    const marker = { handles: [], records: [], released: false, timer: null, pad, midi, velocity };
+    const marker = {
+      handles: [],
+      records: [],
+      pendingRecords: [],
+      released: false,
+      timer: null,
+      pad,
+      midi,
+      velocity
+    };
     held.set(key, marker);
     await unlock();
     if (marker.released || held.get(key) !== marker) return;
@@ -375,6 +383,12 @@ const Studio = (() => {
     marker.next = ctx.currentTime + 0.005;
     const fire = () => {
       if (marker.released) return;
+      if (repeating && marker.next >= ctx.currentTime + 0.1) {
+        marker.timer = setTimeout(fire, 25);
+        return;
+      }
+      marker.pendingRecords = marker.pendingRecords.filter((r) => r.at > ctx.currentTime);
+      let recorded = false;
       // Schedule repeats on the audio clock; timer jitter does not alter note spacing.
       if (marker.next < ctx.currentTime - 0.1) marker.next = ctx.currentTime;
       do {
@@ -390,12 +404,16 @@ const Studio = (() => {
             marker.handles.push(h);
           }
           if (r) {
-            if (repeating) r.note.duration = interval * 0.85;
-            else marker.records.push(r);
+            recorded = true;
+            if (repeating) {
+              r.note.duration = interval * 0.85;
+              marker.pendingRecords.push(r);
+            } else marker.records.push(r);
           }
         }
         marker.next += seconds;
       } while (repeating && marker.next < ctx.currentTime + 0.1);
+      if (recorded) changed('record');
       if (repeating) marker.timer = setTimeout(fire, 25);
     };
     fire();
@@ -416,10 +434,17 @@ const Studio = (() => {
           } catch {}
         } else h?.release?.(now);
       }
+    let cancelled = false;
+    for (const r of item.pendingRecords)
+      if (r.at > now) {
+        const sequence = state.studio.sequences[r.sequence];
+        sequence.notes = sequence.notes.filter((n) => n !== r.note);
+        cancelled = true;
+      }
     for (const r of item.records) {
       r.note.duration = Math.max(1 / 960, Math.min(64, ((now - r.at) * state.bpm) / 60));
     }
-    if (item.records.length || recording) {
+    if (cancelled || item.records.length || recording) {
       changed('record');
       renderSteps();
       if (view === 'piano') renderRoll();

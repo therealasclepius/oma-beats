@@ -1,7 +1,7 @@
 {
   "name": "oma-beats",
   "productName": "Oma Beats",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A desktop sampler and beat sequencer with 128 pads and a hands-on chop editor.",
   "main": "desktop/main.cjs",
   "author": "therealasclepius",

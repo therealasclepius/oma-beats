@@ -115,6 +115,35 @@ async function runStudioSmoke() {
   expect(state.studio.sequences[0].notes.length === 1, 'live record');
   const note = state.studio.sequences[0].notes[0];
   expect(note.velocity === 0.6 && note.duration > 0, 'velocity and held duration');
+  // MIDI repeat must not run faster than its selected audio-clock interval or retain cancelled future hits.
+  state.studio.sequences[0].notes = [];
+  state.studio.performance.repeat = 1;
+  state.studio.performance.quantize = 0;
+  state.bpm = 120;
+  recording = true;
+  await Studio.toggle();
+  await new Promise((r) => setTimeout(r, 90));
+  Studio.midiMessage([0x90, 36, 80], 'smoke');
+  await new Promise((r) => setTimeout(r, 80));
+  expect(state.studio.sequences[0].notes.length === 1, 'MIDI repeat respects selected interval');
+  Studio.midiMessage([0x80, 36, 0], 'smoke');
+  Studio.stop();
+  expect(state.studio.sequences[0].notes.length === 1, 'MIDI note-off preserves played hit');
+  expect(Math.abs(state.studio.sequences[0].notes[0].velocity - 80 / 127) < 1e-8, 'MIDI velocity');
+  state.studio.sequences[0].notes = [];
+  state.studio.performance.repeat = 0.125;
+  await Studio.toggle();
+  await new Promise((r) => setTimeout(r, 90));
+  await Studio.press(0, 1, null, 'repeat-cancel');
+  Studio.release('repeat-cancel');
+  Studio.stop();
+  recording = false;
+  expect(
+    state.studio.sequences[0].notes.length === 0,
+    'released repeat removes unplayed lookahead hits'
+  );
+  state.studio.sequences[0].notes.push(note);
+  state.studio.performance.repeat = 0;
   Studio.setView('piano');
   expect($('pianoRoll').querySelectorAll('.roll-note').length >= 1, 'piano roll renders');
   Studio.setView('mixer');
@@ -148,6 +177,6 @@ async function runStudioSmoke() {
   render();
   initHistory();
   console.log(
-    'PASS: workstation migration, eight-bar duplication, song, 36 live voices, mixer/stems, scope, resampling, stretch worker, live recording, piano roll and recovery'
+    'PASS: workstation migration, eight-bar duplication, song, 36 live voices, mixer/stems, scope, resampling, stretch worker, live recording, MIDI repeat/release, piano roll and recovery'
   );
 }
